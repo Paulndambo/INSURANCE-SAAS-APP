@@ -1,0 +1,74 @@
+{
+    "50000": {
+        "value": 40,
+        "period": 1,
+        "age_tiers": {
+            "child-1": 27000,
+            "child-2": 18000,
+            "child-3": 12500,
+            "child-4": 12500,
+            "member-1": 50000,
+            "spouse-1": 35000
+        },
+        "period_frequency": "MONTH"
+    }
+}
+
+{
+    "child": {
+        "age_tiers": [
+            {
+                "age_max": 21,
+                "age_min": 14,
+                "tier_id": "child-1",
+                "age_metric": "years"
+            },
+            {
+                "age_max": 13,
+                "age_min": 6,
+                "tier_id": "child-2",
+                "age_metric": "years"
+            },
+            {
+                "age_max": 5,
+                "age_min": 1,
+                "tier_id": "child-3",
+                "age_metric": "years"
+            },
+            {
+                "age_max": 52,
+                "age_min": 28,
+                "tier_id": "child-4",
+                "age_metric": "weeks"
+            }
+        ],
+        "count_max": 10,
+        "count_min": 0,
+        "count_above": false
+    },
+    "member": {
+        "age_tiers": [
+            {
+                "age_max": 64,
+                "age_min": 18,
+                "tier_id": "member-1",
+                "age_metric": "years"
+            }
+        ],
+        "count_max": 1,
+        "count_min": 1
+    },
+    "spouse": {
+        "age_tiers": [
+            {
+                "age_max": 65,
+                "age_min": 18,
+                "tier_id": "spouse-1",
+                "age_metric": "years"
+            }
+        ],
+        "count_max": 1,
+        "count_min": 0,
+        "count_above": false
+    }
+}
