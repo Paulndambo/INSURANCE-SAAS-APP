@@ -108,7 +108,7 @@ class Profile(AbstractBaseModel):
 
 
 class PolicyHolder(AbstractBaseModel):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+    user = models.OneToOneField(User, on_delete=models.PROTECT)
     id_number = models.CharField(max_length=255)
     gender = models.CharField(max_length=255, choices=GENDER_CHOICES)
     marital_status = models.CharField(max_length=255)
@@ -121,3 +121,18 @@ class PolicyHolder(AbstractBaseModel):
 
     def __str__(self):
         return self.id_number
+
+
+class PolicyHolderRelative(AbstractBaseModel):
+    USE_TYPES = (
+        ('main_member', 'Main Member'),
+        ('dependent', 'Dependent'),
+        ('beneficiary', 'Beneficiary'),
+        ('parents', 'Parents'),
+        ('stillborn', 'Stillborn'),
+    )
+
+    relative_name = models.CharField(max_length=255)
+    relative_key = models.CharField(max_length=255, unique=True)
+    degree_of_separation = models.IntegerField()
+    use_type = models.CharField(max_length=128, choices=USE_TYPES, default='dependent')
