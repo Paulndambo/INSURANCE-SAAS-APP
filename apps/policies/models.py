@@ -1,6 +1,6 @@
 from django.db import models
 from apps.core.models import AbstractBaseModel
-#from apps.users.models import PolicyHolder
+from apps.users.models import PolicyHolder
 
 POLICY_STATUS_CHOICES = (
     ("active", "Active"),
@@ -16,7 +16,7 @@ POLICY_SUB_STATUS_CHOICES = (
 
 class Policy(AbstractBaseModel):
     policy_number = models.CharField(max_length=255)
-    #policy_holder = models.ForeignKey(PolicyHolder, on_delete=models.PROTECT)
+    policy_holder = models.ForeignKey(PolicyHolder, on_delete=models.CASCADE, null=True)
     status = models.CharField(max_length=255, choices=POLICY_STATUS_CHOICES)
     sub_status = models.CharField(max_length=255, null=True, choices=POLICY_SUB_STATUS_CHOICES)
     activation_date = models.DateField(null=True, blank=True)

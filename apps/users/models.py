@@ -7,30 +7,11 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import AbstractUser
 import uuid
 
+from apps.constants.choice_constants import ROLE_CHOICES, SUB_ROLE_CHOICES, GENDER_CHOICES
+
 
 class User(AbstractUser, AbstractBaseModel):
-    ROLE_CHOICES = (
-        ('None', 'Without role'),
-        ('admin', 'C2S Admin'),
-        ('insurer', 'Insurer'),
-        ('corporate', 'Corporate'),
-        ('merchant', 'Merchant'),
-        ('individual', 'Individual'),
-        ('report_user', 'Report User'),
-        ('technician_user', 'Technician User'),
-        ('foh_user', 'FOH User'),
-        ('customer_support_user', 'Customer Support User'),
-        ('funeral_validator', 'Funeral Validator'),
-        ('brokerage_admin', 'Brokerage Admin'),
-        ('broker', 'Broker'),
-        ('claim_validator', 'Claim Validator'),
-        ('retail_agent', 'Retail Agent'),
-    )
-    SUB_ROLE_CHOICES = (
-        ('dynamic_flow', 'Dynamic Flow'),
-        ('report_user', 'Report User'),
-        ('customer_support_user', 'Customer Support User'),
-    )
+
     PASSWORD_EXPIRATION_DAYS = 90
 
     token = models.CharField(null=True, max_length=255)
@@ -48,10 +29,7 @@ class User(AbstractUser, AbstractBaseModel):
         return self.username
 
 
-GENDER_CHOICES = (
-    ("male", "Male"),
-    ("female", "Female"),
-)
+
 
 MARITAL_STATUS_CHOICES = (
     ("single", "Single"),
