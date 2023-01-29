@@ -31,6 +31,8 @@ INSTALLED_APPS = [
     'apps.notifications',
     'apps.dependents',
     'apps.schemes',
+    'apps.prices',
+    'apps.claims',
 ]
 
 MIDDLEWARE = [
