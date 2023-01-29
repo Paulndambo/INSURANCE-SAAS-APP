@@ -17,7 +17,7 @@ PAYMENT_FREQUENCY_CHOICES = (
 
 class Product(models.Model):
     name = models.CharField(max_length=255)
-    type = models.CharField(max_length=255, choices=INSURANCE_TYPES)
+    product_type = models.CharField(max_length=255, choices=INSURANCE_TYPES)
     maximum_members_count = models.IntegerField(default=1)
     description = models.TextField(null=True, blank=True)
     insurer = models.ForeignKey(Insurer, on_delete=models.SET_NULL, null=True)

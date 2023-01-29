@@ -14,6 +14,10 @@ MARITAL_STATUS_CHOICES = (
     ("widowed", "Widowed"),
 )
 
+class Membership(AbstractBaseModel):
+    pass
+
+
 class PolicyHolder(AbstractBaseModel):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     id_number = models.CharField(max_length=255)

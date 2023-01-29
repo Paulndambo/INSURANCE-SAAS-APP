@@ -25,7 +25,7 @@ class Policy(AbstractBaseModel):
     policy_document = models.FileField(upload_to="policy_documents/", null=True, blank=True)
     policy_wording = models.FileField(upload_to="policy_wordings/", null=True, blank=True)
     welcome_letter = models.FileField(upload_to="welcome_letters/", null=True, blank=True)
-    payment_day = models.IntegerField()
+    payment_day = models.IntegerField(null=True, blank=True)
     dg_required = models.BooleanField(default=True)
 
     def __str__(self):
