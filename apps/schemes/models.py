@@ -2,11 +2,8 @@ from django.db import models
 from apps.core.models import AbstractBaseModel
 from apps.policies.models import Policy
 
+from apps.constants.choice_constants import PAYMENT_METHODS, PAYMENT_PERIOD_CHOICES, CYCLE_CHOICE_TYPES
 
-SCHEME_TYPE_CHOICES = (
-    ("retail", "Retail"),
-    ("group", "Group"),
-)
 
 class Scheme(AbstractBaseModel):
     name = models.CharField(max_length=255)
@@ -16,31 +13,6 @@ class Scheme(AbstractBaseModel):
 
     def __str__(self):
         return self.name
-
-
-PAYMENT_METHODS = (
-    ("cash", "Cash"),
-    ("debit_order", "Debit Order"),
-    ("stop_order", "Stop Order"),
-    ("manual", "Manual"),
-    ("off_platform", "Off Platform"),
-    ("payu", "Payu"),
-    ("paygate", "Pay Gate"),
-)
-
-
-PAYMENT_PERIOD_CHOICES = (
-    ("weekly", "Weekly"),
-    ("monthly", "Monthly"),
-    ("quarterly", "Quarterly"),
-    ("biannual", "Biannual"),
-    ("yearly", "Yearly")
-)
-
-CYCLE_CHOICE_TYPES = (
-    ("member", "Member"),
-    ("group", "Group"),
-)
 
 class SchemeGroup(AbstractBaseModel):
     scheme = models.ForeignKey(Scheme, on_delete=models.CASCADE)
