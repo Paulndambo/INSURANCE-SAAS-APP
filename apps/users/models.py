@@ -18,7 +18,7 @@ class User(AbstractUser, AbstractBaseModel):
     token_expiration_date = models.DateTimeField(null=True)
     activation_date = models.DateTimeField(null=True)
     email = models.EmailField(unique=True, error_messages={'unique': _('A user with that email already exists.')})
-    role = models.CharField(choices=ROLE_CHOICES, max_length=32)
+    role = models.CharField(choices=ROLE_CHOICES, max_length=32, default="individual")
     sub_role = models.CharField(choices=SUB_ROLE_CHOICES, max_length=32, null=True)
     image = models.ImageField(upload_to="user_images/", null=True)
     sent_emails = models.IntegerField(default=0)
@@ -27,7 +27,6 @@ class User(AbstractUser, AbstractBaseModel):
 
     def __str__(self):
         return self.username
-
 
 
 
@@ -58,14 +57,6 @@ class Membership(AbstractBaseModel):
 
 
 class Profile(AbstractBaseModel):
-    GENDER_FEMALE = "FEMALE"
-    GENDER_MALE = "MALE"
-
-    GENDER_CHOICES = (
-        (GENDER_FEMALE, "Female"),
-        (GENDER_MALE, "Male")
-    )
-
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profiles")
     first_name = models.CharField(max_length=255, blank=True)
     last_name = models.CharField(max_length=255, blank=True)

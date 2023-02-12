@@ -18,6 +18,7 @@ class Bank(AbstractBaseModel):
     def __str__(self):
         return self.name
 
+
 class BankStatement(AbstractBaseModel):
     BANK_STATEMENT_STATUS_CHOICES = (
         ('mapped', 'Mapped'),
