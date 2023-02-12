@@ -5,16 +5,19 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('users', '0003_policyholderrelative'),
-        ('policies', '0001_initial'),
+        ("users", "0003_policyholderrelative"),
+        ("policies", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='policy',
-            name='policy_holder',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='users.policyholder'),
+            model_name="policy",
+            name="policy_holder",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="users.policyholder",
+            ),
         ),
     ]

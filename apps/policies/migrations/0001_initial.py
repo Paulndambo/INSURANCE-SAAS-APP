@@ -5,83 +5,181 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Policy',
+            name="Policy",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created', models.DateTimeField(auto_now_add=True)),
-                ('modified', models.DateTimeField(auto_now=True)),
-                ('policy_number', models.CharField(max_length=255)),
-                ('status', models.CharField(choices=[('active', 'Active'), ('lapsed', 'Lapsed'), ('cancelled', 'Cancelled'), ('ntu', 'NTU'), ('awaiting_payment', 'Awaiting Payment')], max_length=255)),
-                ('sub_status', models.CharField(choices=[('lapse_pending', 'Lapse Pending')], max_length=255, null=True)),
-                ('activation_date', models.DateField(blank=True, null=True)),
-                ('start_date', models.DateField(blank=True, null=True)),
-                ('lapse_date', models.DateField(blank=True, null=True)),
-                ('policy_document', models.FileField(blank=True, null=True, upload_to='policy_documents/')),
-                ('policy_wording', models.FileField(blank=True, null=True, upload_to='policy_wordings/')),
-                ('welcome_letter', models.FileField(blank=True, null=True, upload_to='welcome_letters/')),
-                ('payment_day', models.IntegerField(blank=True, null=True)),
-                ('dg_required', models.BooleanField(default=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                ("modified", models.DateTimeField(auto_now=True)),
+                ("policy_number", models.CharField(max_length=255)),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[
+                            ("active", "Active"),
+                            ("lapsed", "Lapsed"),
+                            ("cancelled", "Cancelled"),
+                            ("ntu", "NTU"),
+                            ("awaiting_payment", "Awaiting Payment"),
+                        ],
+                        max_length=255,
+                    ),
+                ),
+                (
+                    "sub_status",
+                    models.CharField(
+                        choices=[("lapse_pending", "Lapse Pending")],
+                        max_length=255,
+                        null=True,
+                    ),
+                ),
+                ("activation_date", models.DateField(blank=True, null=True)),
+                ("start_date", models.DateField(blank=True, null=True)),
+                ("lapse_date", models.DateField(blank=True, null=True)),
+                (
+                    "policy_document",
+                    models.FileField(
+                        blank=True, null=True, upload_to="policy_documents/"
+                    ),
+                ),
+                (
+                    "policy_wording",
+                    models.FileField(
+                        blank=True, null=True, upload_to="policy_wordings/"
+                    ),
+                ),
+                (
+                    "welcome_letter",
+                    models.FileField(
+                        blank=True, null=True, upload_to="welcome_letters/"
+                    ),
+                ),
+                ("payment_day", models.IntegerField(blank=True, null=True)),
+                ("dg_required", models.BooleanField(default=True)),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='PoliyStatusUpdate',
+            name="PoliyStatusUpdate",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created', models.DateTimeField(auto_now_add=True)),
-                ('modified', models.DateTimeField(auto_now=True)),
-                ('previous_status', models.CharField(max_length=255)),
-                ('next_status', models.CharField(max_length=255)),
-                ('policy', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='policies.policy')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                ("modified", models.DateTimeField(auto_now=True)),
+                ("previous_status", models.CharField(max_length=255)),
+                ("next_status", models.CharField(max_length=255)),
+                (
+                    "policy",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="policies.policy",
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='PolicyCancellation',
+            name="PolicyCancellation",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created', models.DateTimeField(auto_now_add=True)),
-                ('modified', models.DateTimeField(auto_now=True)),
-                ('policy_previous_status', models.CharField(max_length=255)),
-                ('policy_next_status', models.CharField(max_length=255)),
-                ('cancellation_status', models.CharField(choices=[('confirmed', 'Confirmed'), ('pending', 'Pending'), ('cancelled', 'Cancelled')], max_length=255)),
-                ('cancellation_origin', models.CharField(choices=[('customer', 'Customer'), ('insurer', 'Insurer')], max_length=255)),
-                ('policy', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='policies.policy')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                ("modified", models.DateTimeField(auto_now=True)),
+                ("policy_previous_status", models.CharField(max_length=255)),
+                ("policy_next_status", models.CharField(max_length=255)),
+                (
+                    "cancellation_status",
+                    models.CharField(
+                        choices=[
+                            ("confirmed", "Confirmed"),
+                            ("pending", "Pending"),
+                            ("cancelled", "Cancelled"),
+                        ],
+                        max_length=255,
+                    ),
+                ),
+                (
+                    "cancellation_origin",
+                    models.CharField(
+                        choices=[("customer", "Customer"), ("insurer", "Insurer")],
+                        max_length=255,
+                    ),
+                ),
+                (
+                    "policy",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="policies.policy",
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='InsuredItem',
+            name="InsuredItem",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created', models.DateTimeField(auto_now_add=True)),
-                ('modified', models.DateTimeField(auto_now=True)),
-                ('name', models.CharField(max_length=255)),
-                ('seller', models.CharField(max_length=255)),
-                ('brand_name', models.CharField(max_length=255, null=True)),
-                ('model', models.CharField(max_length=255, null=True)),
-                ('description', models.TextField(null=True)),
-                ('price', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('cover_amount', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('cover_period', models.CharField(max_length=255)),
-                ('policy', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='policies.policy')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                ("modified", models.DateTimeField(auto_now=True)),
+                ("name", models.CharField(max_length=255)),
+                ("seller", models.CharField(max_length=255)),
+                ("brand_name", models.CharField(max_length=255, null=True)),
+                ("model", models.CharField(max_length=255, null=True)),
+                ("description", models.TextField(null=True)),
+                ("price", models.DecimalField(decimal_places=2, max_digits=10)),
+                ("cover_amount", models.DecimalField(decimal_places=2, max_digits=10)),
+                ("cover_period", models.CharField(max_length=255)),
+                (
+                    "policy",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="policies.policy",
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
     ]

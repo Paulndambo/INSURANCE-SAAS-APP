@@ -1,7 +1,13 @@
 from apps.users.models import User
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from apps.users.models import User, Membership, PolicyHolder, Profile, PolicyHolderRelative
+from apps.users.models import (
+    User,
+    Membership,
+    PolicyHolder,
+    Profile,
+    PolicyHolderRelative,
+)
 from apps.constants.token_generator import generate_unique_key
 from django.utils import timezone
 import datetime
@@ -13,9 +19,8 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token = super().get_token(user)
 
         # Add custom claims
-        token['username'] = user.username
+        token["username"] = user.username
         # ...
-
 
 
 class UserTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -23,7 +28,7 @@ class UserTokenObtainPairSerializer(TokenObtainPairSerializer):
     def get_token(cls, user):
         token = super().get_token(user)
         # Add custom claims
-        token['id'] = user.id
+        token["id"] = user.id
         return token
 
 
@@ -41,12 +46,15 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = User.objects.create_user(
-            validated_data["username"], validated_data["email"], validated_data["password"])
+            validated_data["username"],
+            validated_data["email"],
+            validated_data["password"],
+        )
         return user
 
 
 class ForgotPasswordSerializer(serializers.Serializer):
-    user = None 
+    user = None
     email = serializers.EmailField()
 
     def send_email(self):
@@ -57,20 +65,18 @@ class ForgotPasswordSerializer(serializers.Serializer):
     def validate_email(self, value):
         try:
             self.user = User.objects.get(email=value)
-        except User.DoesNotExist: 
-            raise serializers.ValidationError('No user found with provided email!')
+        except User.DoesNotExist:
+            raise serializers.ValidationError("No user found with provided email!")
 
 
 class ChangePasswordSerializer(serializers.Serializer):
-    
     user = None
 
     password = serializers.CharField()
     repeat_password = serializers.CharField()
 
     def save(self, validated_data):
-
-        self.user.set_password(validated_data['password'])
+        self.user.set_password(validated_data["password"])
         self.user.token = None
         self.user.token_expiration_date = None
         if not self.user.is_active:
@@ -78,7 +84,7 @@ class ChangePasswordSerializer(serializers.Serializer):
         self.user.is_active = True
         self.user.save()
 
-    #def validate(self, data):
+    # def validate(self, data):
 
     #    self.check_valid_token()
     #    check_valid_password(data, user=self.user)
@@ -87,9 +93,9 @@ class ChangePasswordSerializer(serializers.Serializer):
 
     def check_valid_token(self):
         try:
-            self.user = User.objects.get(token=self.context['token'])
+            self.user = User.objects.get(token=self.context["token"])
         except User.DoesNotExist:
-            raise serializers.ValidationError('Token is not valid.')
+            raise serializers.ValidationError("Token is not valid.")
         fields = "__all__"
 
 
@@ -108,7 +114,6 @@ class MembershipSerializer(serializers.ModelSerializer):
     class Meta:
         model = Membership
         fields = "__all__"
-
 
 
 class PolicyHolderSerializer(serializers.ModelSerializer):

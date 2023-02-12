@@ -7,17 +7,23 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import AbstractUser
 import uuid
 
-from apps.constants.choice_constants import ROLE_CHOICES, SUB_ROLE_CHOICES, GENDER_CHOICES
+from apps.constants.choice_constants import (
+    ROLE_CHOICES,
+    SUB_ROLE_CHOICES,
+    GENDER_CHOICES,
+)
 
 
 class User(AbstractUser, AbstractBaseModel):
-
     PASSWORD_EXPIRATION_DAYS = 90
 
     token = models.CharField(null=True, max_length=255)
     token_expiration_date = models.DateTimeField(null=True)
     activation_date = models.DateTimeField(null=True)
-    email = models.EmailField(unique=True, error_messages={'unique': _('A user with that email already exists.')})
+    email = models.EmailField(
+        unique=True,
+        error_messages={"unique": _("A user with that email already exists.")},
+    )
     role = models.CharField(choices=ROLE_CHOICES, max_length=32, default="individual")
     sub_role = models.CharField(choices=SUB_ROLE_CHOICES, max_length=32, null=True)
     image = models.ImageField(upload_to="user_images/", null=True)
@@ -27,7 +33,6 @@ class User(AbstractUser, AbstractBaseModel):
 
     def __str__(self):
         return self.username
-
 
 
 MARITAL_STATUS_CHOICES = (
@@ -44,12 +49,15 @@ MEMBERSHIP_STATUS_CHOICES = (
     ("cancelled", "Cancelled"),
 )
 
+
 class Membership(AbstractBaseModel):
     member_id = models.UUIDField(default=uuid.uuid4, unique=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="memberships")
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, related_name="memberships"
+    )
     description = models.TextField(null=True, blank=True)
-    scheme_group = models.ForeignKey('schemes.SchemeGroup', on_delete=models.CASCADE)
-    policy = models.ForeignKey('policies.Policy', on_delete=models.SET_NULL, null=True)
+    scheme_group = models.ForeignKey("schemes.SchemeGroup", on_delete=models.CASCADE)
+    policy = models.ForeignKey("policies.Policy", on_delete=models.SET_NULL, null=True)
     status = models.CharField(max_length=255, choices=MEMBERSHIP_STATUS_CHOICES)
 
     def __str__(self):
@@ -94,14 +102,14 @@ class PolicyHolder(AbstractBaseModel):
 
 class PolicyHolderRelative(AbstractBaseModel):
     USE_TYPES = (
-        ('main_member', 'Main Member'),
-        ('dependent', 'Dependent'),
-        ('beneficiary', 'Beneficiary'),
-        ('parents', 'Parents'),
-        ('stillborn', 'Stillborn'),
+        ("main_member", "Main Member"),
+        ("dependent", "Dependent"),
+        ("beneficiary", "Beneficiary"),
+        ("parents", "Parents"),
+        ("stillborn", "Stillborn"),
     )
 
     relative_name = models.CharField(max_length=255)
     relative_key = models.CharField(max_length=255, unique=True)
     degree_of_separation = models.IntegerField()
-    use_type = models.CharField(max_length=128, choices=USE_TYPES, default='dependent')
+    use_type = models.CharField(max_length=128, choices=USE_TYPES, default="dependent")

@@ -4,15 +4,18 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('payments', '0001_initial'),
+        ("payments", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='bankstatement',
-            name='statement_type',
-            field=models.CharField(choices=[('bank_statement', 'Bank Statement'), ('receipt', 'Receipt')], default='bank_statement', max_length=255),
+            model_name="bankstatement",
+            name="statement_type",
+            field=models.CharField(
+                choices=[("bank_statement", "Bank Statement"), ("receipt", "Receipt")],
+                default="bank_statement",
+                max_length=255,
+            ),
         ),
     ]

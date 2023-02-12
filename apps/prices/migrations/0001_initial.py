@@ -5,29 +5,59 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='PricingPlan',
+            name="PricingPlan",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created', models.DateTimeField(auto_now_add=True)),
-                ('modified', models.DateTimeField(auto_now=True)),
-                ('name', models.CharField(blank=True, max_length=255, null=True)),
-                ('group', models.CharField(max_length=255)),
-                ('conditions', models.JSONField(blank=True, default=dict, null=True)),
-                ('matrix', models.JSONField(blank=True, default=dict)),
-                ('base_premium', models.FloatField(default=0, validators=[django.core.validators.MinValueValidator(limit_value=0)])),
-                ('value_added_service', models.FloatField(default=0, validators=[django.core.validators.MinValueValidator(limit_value=0)])),
-                ('total_premium', models.FloatField(default=0, validators=[django.core.validators.MinValueValidator(limit_value=0)])),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                ("modified", models.DateTimeField(auto_now=True)),
+                ("name", models.CharField(blank=True, max_length=255, null=True)),
+                ("group", models.CharField(max_length=255)),
+                ("conditions", models.JSONField(blank=True, default=dict, null=True)),
+                ("matrix", models.JSONField(blank=True, default=dict)),
+                (
+                    "base_premium",
+                    models.FloatField(
+                        default=0,
+                        validators=[
+                            django.core.validators.MinValueValidator(limit_value=0)
+                        ],
+                    ),
+                ),
+                (
+                    "value_added_service",
+                    models.FloatField(
+                        default=0,
+                        validators=[
+                            django.core.validators.MinValueValidator(limit_value=0)
+                        ],
+                    ),
+                ),
+                (
+                    "total_premium",
+                    models.FloatField(
+                        default=0,
+                        validators=[
+                            django.core.validators.MinValueValidator(limit_value=0)
+                        ],
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
     ]

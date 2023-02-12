@@ -5,28 +5,67 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('core', '0001_initial'),
+        ("core", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Product',
+            name="Product",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=255)),
-                ('product_type', models.CharField(choices=[('retail', 'Retail'), ('group', 'Group')], max_length=255)),
-                ('maximum_members_count', models.IntegerField(default=1)),
-                ('description', models.TextField(blank=True, null=True)),
-                ('can_be_reinstated', models.BooleanField(default=True)),
-                ('term_and_conditions', models.FileField(upload_to='terms_and_conditions/')),
-                ('policy_document_template', models.TextField(blank=True)),
-                ('broker_commision', models.DecimalField(decimal_places=2, default=0, max_digits=10)),
-                ('payment_frequency', models.CharField(choices=[('weekly', 'Weekly'), ('monthly', 'Monthly'), ('quarterly', 'Quarterly'), ('semi_annual', 'Semi-Annual'), ('annually', 'Annually')], default='monthly', max_length=255)),
-                ('insurer', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='core.insurer')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=255)),
+                (
+                    "product_type",
+                    models.CharField(
+                        choices=[("retail", "Retail"), ("group", "Group")],
+                        max_length=255,
+                    ),
+                ),
+                ("maximum_members_count", models.IntegerField(default=1)),
+                ("description", models.TextField(blank=True, null=True)),
+                ("can_be_reinstated", models.BooleanField(default=True)),
+                (
+                    "term_and_conditions",
+                    models.FileField(upload_to="terms_and_conditions/"),
+                ),
+                ("policy_document_template", models.TextField(blank=True)),
+                (
+                    "broker_commision",
+                    models.DecimalField(decimal_places=2, default=0, max_digits=10),
+                ),
+                (
+                    "payment_frequency",
+                    models.CharField(
+                        choices=[
+                            ("weekly", "Weekly"),
+                            ("monthly", "Monthly"),
+                            ("quarterly", "Quarterly"),
+                            ("semi_annual", "Semi-Annual"),
+                            ("annually", "Annually"),
+                        ],
+                        default="monthly",
+                        max_length=255,
+                    ),
+                ),
+                (
+                    "insurer",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="core.insurer",
+                    ),
+                ),
             ],
         ),
     ]

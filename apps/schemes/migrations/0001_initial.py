@@ -5,45 +5,104 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('policies', '0001_initial'),
+        ("policies", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Scheme',
+            name="Scheme",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created', models.DateTimeField(auto_now_add=True)),
-                ('modified', models.DateTimeField(auto_now=True)),
-                ('name', models.CharField(max_length=255)),
-                ('scheme_type', models.CharField(max_length=255)),
-                ('max_members_number', models.IntegerField(default=1)),
-                ('description', models.TextField(blank=True, null=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                ("modified", models.DateTimeField(auto_now=True)),
+                ("name", models.CharField(max_length=255)),
+                ("scheme_type", models.CharField(max_length=255)),
+                ("max_members_number", models.IntegerField(default=1)),
+                ("description", models.TextField(blank=True, null=True)),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='SchemeGroup',
+            name="SchemeGroup",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created', models.DateTimeField(auto_now_add=True)),
-                ('modified', models.DateTimeField(auto_now=True)),
-                ('name', models.CharField(blank=True, max_length=255, null=True)),
-                ('payment_method', models.CharField(choices=[('cash', 'Cash'), ('debit_order', 'Debit Order'), ('stop_order', 'Stop Order'), ('manual', 'Manual'), ('off_platform', 'Off Platform'), ('payu', 'Payu'), ('paygate', 'Pay Gate')], max_length=255)),
-                ('period_type', models.CharField(choices=[('weekly', 'Weekly'), ('monthly', 'Monthly'), ('quarterly', 'Quarterly'), ('biannual', 'Biannual'), ('yearly', 'Yearly')], max_length=255)),
-                ('cycle_type', models.CharField(choices=[('member', 'Member'), ('group', 'Group')], max_length=255)),
-                ('description', models.TextField(blank=True, null=True)),
-                ('policy', models.OneToOneField(null=True, on_delete=django.db.models.deletion.CASCADE, to='policies.policy')),
-                ('scheme', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='schemes.scheme')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                ("modified", models.DateTimeField(auto_now=True)),
+                ("name", models.CharField(blank=True, max_length=255, null=True)),
+                (
+                    "payment_method",
+                    models.CharField(
+                        choices=[
+                            ("cash", "Cash"),
+                            ("debit_order", "Debit Order"),
+                            ("stop_order", "Stop Order"),
+                            ("manual", "Manual"),
+                            ("off_platform", "Off Platform"),
+                            ("payu", "Payu"),
+                            ("paygate", "Pay Gate"),
+                        ],
+                        max_length=255,
+                    ),
+                ),
+                (
+                    "period_type",
+                    models.CharField(
+                        choices=[
+                            ("weekly", "Weekly"),
+                            ("monthly", "Monthly"),
+                            ("quarterly", "Quarterly"),
+                            ("biannual", "Biannual"),
+                            ("yearly", "Yearly"),
+                        ],
+                        max_length=255,
+                    ),
+                ),
+                (
+                    "cycle_type",
+                    models.CharField(
+                        choices=[("member", "Member"), ("group", "Group")],
+                        max_length=255,
+                    ),
+                ),
+                ("description", models.TextField(blank=True, null=True)),
+                (
+                    "policy",
+                    models.OneToOneField(
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="policies.policy",
+                    ),
+                ),
+                (
+                    "scheme",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="schemes.scheme"
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
     ]

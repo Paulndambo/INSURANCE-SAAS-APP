@@ -7,7 +7,13 @@ from rest_framework import generics
 from rest_framework.views import APIView
 
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .serializers import RegisterSerializer, UserSerializer, MyTokenObtainPairSerializer, ChangePasswordSerializer, ForgotPasswordSerializer
+from .serializers import (
+    RegisterSerializer,
+    UserSerializer,
+    MyTokenObtainPairSerializer,
+    ChangePasswordSerializer,
+    ForgotPasswordSerializer,
+)
 from rest_framework import status, generics, permissions
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 
@@ -18,12 +24,23 @@ from rest_framework.viewsets import ModelViewSet
 
 ##Serializer Imports
 from .serializers import (
-    UserTokenObtainPairSerializer, MembershipSerializer, PolicyHolderRelativeSerializer, ProfileSerializer,
-    UserSerializer, IndividualRegisterSerializer, PolicyHolderSerializer
+    UserTokenObtainPairSerializer,
+    MembershipSerializer,
+    PolicyHolderRelativeSerializer,
+    ProfileSerializer,
+    UserSerializer,
+    IndividualRegisterSerializer,
+    PolicyHolderSerializer,
 )
 
 ## Model Imports
-from apps.users.models import User, Membership, Profile, PolicyHolder, PolicyHolderRelative
+from apps.users.models import (
+    User,
+    Membership,
+    Profile,
+    PolicyHolder,
+    PolicyHolderRelative,
+)
 
 from rest_framework_simplejwt.views import TokenObtainPairView
 
@@ -41,7 +58,9 @@ class RegisterAPI(generics.GenericAPIView):
 
 class ForgotPasswordAPIView(APIView):
     serializer_class = ForgotPasswordSerializer
-    permission_classes = [AllowAny,]
+    permission_classes = [
+        AllowAny,
+    ]
 
     def get_serializer_class(self):
         return self.serializer_class()
@@ -52,26 +71,30 @@ class ForgotPasswordAPIView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         serializer.send_email()
 
-        return Response({"message": "Password reset link will be send to your email!"}, status=status.HTTP_200_OK)
+        return Response(
+            {"message": "Password reset link will be send to your email!"},
+            status=status.HTTP_200_OK,
+        )
 
 
 class ChangePasswordAPIView(APIView):
     serializer_class = ChangePasswordSerializer
-    permission_classes = [AllowAny,]
-
+    permission_classes = [
+        AllowAny,
+    ]
 
     def get_serializer_class(self):
         return self.serializer_class()
 
     def post(self, request, token):
-        context = {
-            "request": request,
-            "token": token
-        }
+        context = {"request": request, "token": token}
         serializer = self.serializer_class(data=request.data, context=context)
         if serializer.is_valid():
             serializer.save()
-            return Response({"message": "Password has been successfully changed"}, status=status.HTTP_201_CREATED)
+            return Response(
+                {"message": "Password has been successfully changed"},
+                status=status.HTTP_201_CREATED,
+            )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -84,7 +107,7 @@ class UserModelViewSet(ModelViewSet):
     serializer_class = UserSerializer
 
     def get_serializer_class(self):
-        if self.request.method == 'POST':
+        if self.request.method == "POST":
             return IndividualRegisterSerializer
         else:
             return UserSerializer
@@ -108,4 +131,3 @@ class PolicyHolderViewSet(ModelViewSet):
 class PolicyHolderRelativeSerializer(ModelViewSet):
     queryset = PolicyHolderRelative.objects.all()
     serializer_class = PolicyHolderRelativeSerializer
-
