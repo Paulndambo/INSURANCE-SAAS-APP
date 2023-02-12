@@ -6,3 +6,4 @@ pytest-django
 django-rest-framework-nested
 djangorestframework-simplejwt
 django-cors-headers
+pillow
