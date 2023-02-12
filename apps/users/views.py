@@ -1,3 +1,4 @@
+## Django Imports
 from django.shortcuts import render
 from django.http import JsonResponse
 from rest_framework.response import Response
@@ -10,14 +11,21 @@ from .serializers import RegisterSerializer, UserSerializer, MyTokenObtainPairSe
 from rest_framework import status, generics, permissions
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 
-# Create your views here.
+## Rest Framework Imports
+from rest_framework import generics, status
+from rest_framework.viewsets import ModelViewSet
 
 
+##Serializer Imports
+from .serializers import (
+    UserTokenObtainPairSerializer, MembershipSerializer, PolicyHolderRelativeSerializer, ProfileSerializer,
+    UserSerializer, IndividualRegisterSerializer, PolicyHolderSerializer
+)
 
+## Model Imports
+from apps.users.models import User, Membership, Profile, PolicyHolder, PolicyHolderRelative
 
-
-class MyTokenObtainPairView(TokenObtainPairView):
-    serializer_class = MyTokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 
 class RegisterAPI(generics.GenericAPIView):
@@ -65,3 +73,39 @@ class ChangePasswordAPIView(APIView):
             serializer.save()
             return Response({"message": "Password has been successfully changed"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = UserTokenObtainPairSerializer
+
+
+class UserModelViewSet(ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return IndividualRegisterSerializer
+        else:
+            return UserSerializer
+
+
+class MembershipModelViewSet(ModelViewSet):
+    queryset = Membership.objects.all()
+    serializer_class = MembershipSerializer
+
+
+class ProfileModelViewSet(ModelViewSet):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+
+
+class PolicyHolderViewSet(ModelViewSet):
+    queryset = PolicyHolder.objects.all()
+    serializer_class = PolicyHolderSerializer
+
+
+class PolicyHolderRelativeSerializer(ModelViewSet):
+    queryset = PolicyHolderRelative.objects.all()
+    serializer_class = PolicyHolderRelativeSerializer
+

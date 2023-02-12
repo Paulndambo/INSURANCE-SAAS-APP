@@ -1,7 +1,7 @@
 from apps.users.models import User
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-
+from apps.users.models import User, Membership, PolicyHolder, Profile, PolicyHolderRelative
 from apps.constants.token_generator import generate_unique_key
 from django.utils import timezone
 import datetime
@@ -16,6 +16,14 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['username'] = user.username
         # ...
 
+
+
+class UserTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        # Add custom claims
+        token['id'] = user.id
         return token
 
 
@@ -82,3 +90,40 @@ class ChangePasswordSerializer(serializers.Serializer):
             self.user = User.objects.get(token=self.context['token'])
         except User.DoesNotExist:
             raise serializers.ValidationError('Token is not valid.')
+        fields = "__all__"
+
+
+class IndividualRegisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ("id", "first_name", "last_name", "username", "email", "password")
+        extra_kwargs = {"password": {"write_only": True}}
+
+    def create(self, validated_data):
+        user = User.objects.create(**validated_data)
+        return user
+
+
+class MembershipSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Membership
+        fields = "__all__"
+
+
+
+class PolicyHolderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PolicyHolder
+        fields = "__all__"
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = "__all__"
+
+
+class PolicyHolderRelativeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PolicyHolderRelative
+        fields = "__all__"

@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: insurance-backend
+spec:
+  selector:
+    matchLabels:
+      app: insurance-backend
+  template:
+    metadata:
+      labels:
+        app: insurance-backend
+    spec:
+      containers:
+      - name: insurance-backend
+        image: 40781998/insurance-backend:latest
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8000
