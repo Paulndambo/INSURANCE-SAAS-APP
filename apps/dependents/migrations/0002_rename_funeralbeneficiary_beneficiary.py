@@ -4,17 +4,16 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('schemes', '0001_initial'),
-        ('policies', '0001_initial'),
-        ('users', '0003_policyholderrelative'),
-        ('dependents', '0001_initial'),
+        ("schemes", "0001_initial"),
+        ("policies", "0001_initial"),
+        ("users", "0003_policyholderrelative"),
+        ("dependents", "0001_initial"),
     ]
 
     operations = [
         migrations.RenameModel(
-            old_name='FuneralBeneficiary',
-            new_name='Beneficiary',
+            old_name="FuneralBeneficiary",
+            new_name="Beneficiary",
         ),
     ]

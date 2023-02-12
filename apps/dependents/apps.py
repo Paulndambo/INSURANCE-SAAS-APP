@@ -2,5 +2,5 @@ from django.apps import AppConfig
 
 
 class DependentsConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'apps.dependents'
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "apps.dependents"

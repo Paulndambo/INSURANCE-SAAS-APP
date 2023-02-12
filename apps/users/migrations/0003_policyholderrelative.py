@@ -4,25 +4,45 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('users', '0002_policyholder'),
+        ("users", "0002_policyholder"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='PolicyHolderRelative',
+            name="PolicyHolderRelative",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created', models.DateTimeField(auto_now_add=True)),
-                ('modified', models.DateTimeField(auto_now=True)),
-                ('relative_name', models.CharField(max_length=255)),
-                ('relative_key', models.CharField(max_length=255, unique=True)),
-                ('degree_of_separation', models.IntegerField()),
-                ('use_type', models.CharField(choices=[('main_member', 'Main Member'), ('dependent', 'Dependent'), ('beneficiary', 'Beneficiary'), ('parents', 'Parents'), ('stillborn', 'Stillborn')], default='dependent', max_length=128)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                ("modified", models.DateTimeField(auto_now=True)),
+                ("relative_name", models.CharField(max_length=255)),
+                ("relative_key", models.CharField(max_length=255, unique=True)),
+                ("degree_of_separation", models.IntegerField()),
+                (
+                    "use_type",
+                    models.CharField(
+                        choices=[
+                            ("main_member", "Main Member"),
+                            ("dependent", "Dependent"),
+                            ("beneficiary", "Beneficiary"),
+                            ("parents", "Parents"),
+                            ("stillborn", "Stillborn"),
+                        ],
+                        default="dependent",
+                        max_length=128,
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
     ]

@@ -1,4 +1,9 @@
-Django
-psycopg2-binary
+django
 djangorestframework
+drf_yasg
+black
+pytest-django
+django-rest-framework-nested
+djangorestframework-simplejwt
+django-cors-headers
 pillow

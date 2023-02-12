@@ -7,56 +7,141 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('policies', '0001_initial'),
+        ("policies", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('users', '0003_policyholderrelative'),
+        ("users", "0003_policyholderrelative"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Claim',
+            name="Claim",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created', models.DateTimeField(auto_now_add=True)),
-                ('modified', models.DateTimeField(auto_now=True)),
-                ('status', models.CharField(max_length=32)),
-                ('state', models.CharField(choices=[('lodged', 'Lodged'), ('awaiting_approval', 'Awaiting approval'), ('awaiting_payment', 'Awaiting payment'), ('closed', 'Closed'), ('paid', 'Paid')], max_length=32)),
-                ('sub_status', models.CharField(max_length=32, null=True)),
-                ('reason', models.TextField()),
-                ('sub_reason', models.CharField(max_length=255, null=True)),
-                ('reference_number', models.CharField(max_length=32, unique=True)),
-                ('incident_date', models.DateField()),
-                ('incident_details', models.TextField(blank=True)),
-                ('amount', models.FloatField(null=True, validators=[django.core.validators.MinValueValidator(limit_value=0)])),
-                ('excess', models.FloatField(null=True, validators=[django.core.validators.MinValueValidator(limit_value=0)])),
-                ('maximum_indemnity', models.FloatField(null=True, validators=[django.core.validators.MinValueValidator(limit_value=0)])),
-                ('token', models.CharField(max_length=255, null=True)),
-                ('policy_status_when_lodged', models.CharField(max_length=255, null=True)),
-                ('proof_of_payment', models.FileField(null=True, upload_to='proof_of_payments/')),
-                ('creator', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
-                ('membership', models.OneToOneField(null=True, on_delete=django.db.models.deletion.CASCADE, to='users.membership')),
-                ('policy', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='policies.policy')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                ("modified", models.DateTimeField(auto_now=True)),
+                ("status", models.CharField(max_length=32)),
+                (
+                    "state",
+                    models.CharField(
+                        choices=[
+                            ("lodged", "Lodged"),
+                            ("awaiting_approval", "Awaiting approval"),
+                            ("awaiting_payment", "Awaiting payment"),
+                            ("closed", "Closed"),
+                            ("paid", "Paid"),
+                        ],
+                        max_length=32,
+                    ),
+                ),
+                ("sub_status", models.CharField(max_length=32, null=True)),
+                ("reason", models.TextField()),
+                ("sub_reason", models.CharField(max_length=255, null=True)),
+                ("reference_number", models.CharField(max_length=32, unique=True)),
+                ("incident_date", models.DateField()),
+                ("incident_details", models.TextField(blank=True)),
+                (
+                    "amount",
+                    models.FloatField(
+                        null=True,
+                        validators=[
+                            django.core.validators.MinValueValidator(limit_value=0)
+                        ],
+                    ),
+                ),
+                (
+                    "excess",
+                    models.FloatField(
+                        null=True,
+                        validators=[
+                            django.core.validators.MinValueValidator(limit_value=0)
+                        ],
+                    ),
+                ),
+                (
+                    "maximum_indemnity",
+                    models.FloatField(
+                        null=True,
+                        validators=[
+                            django.core.validators.MinValueValidator(limit_value=0)
+                        ],
+                    ),
+                ),
+                ("token", models.CharField(max_length=255, null=True)),
+                (
+                    "policy_status_when_lodged",
+                    models.CharField(max_length=255, null=True),
+                ),
+                (
+                    "proof_of_payment",
+                    models.FileField(null=True, upload_to="proof_of_payments/"),
+                ),
+                (
+                    "creator",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "membership",
+                    models.OneToOneField(
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="users.membership",
+                    ),
+                ),
+                (
+                    "policy",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="policies.policy",
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='ClaimDocument',
+            name="ClaimDocument",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created', models.DateTimeField(auto_now_add=True)),
-                ('modified', models.DateTimeField(auto_now=True)),
-                ('file_name', models.CharField(max_length=255)),
-                ('file_value', models.FileField(null=True, upload_to='claim_documents/')),
-                ('claim', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='claims.claim')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                ("modified", models.DateTimeField(auto_now=True)),
+                ("file_name", models.CharField(max_length=255)),
+                (
+                    "file_value",
+                    models.FileField(null=True, upload_to="claim_documents/"),
+                ),
+                (
+                    "claim",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="claims.claim"
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
     ]
