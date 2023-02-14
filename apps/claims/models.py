@@ -25,18 +25,8 @@ class Claim(AbstractBaseModel):
     reference_number = models.CharField(max_length=32, unique=True)
     incident_date = models.DateField()
     incident_details = models.TextField(blank=True)
-    amount = models.FloatField(
-        null=True,
-        validators=[
-            MinValueValidator(limit_value=0),
-        ],
-    )
-    excess = models.FloatField(
-        null=True,
-        validators=[
-            MinValueValidator(limit_value=0),
-        ],
-    )
+    amount = models.FloatField(null=True, validators=[MinValueValidator(limit_value=0),],)
+    excess = models.FloatField(null=True, validators=[MinValueValidator(limit_value=0),],)
     maximum_indemnity = models.FloatField(
         null=True,
         validators=[

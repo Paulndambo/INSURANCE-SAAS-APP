@@ -17,21 +17,13 @@ class Policy(AbstractBaseModel):
     policy_number = models.CharField(max_length=255)
     policy_holder = models.ForeignKey(PolicyHolder, on_delete=models.CASCADE, null=True)
     status = models.CharField(max_length=255, choices=POLICY_STATUS_CHOICES)
-    sub_status = models.CharField(
-        max_length=255, null=True, choices=POLICY_SUB_STATUS_CHOICES
-    )
+    sub_status = models.CharField(max_length=255, null=True, choices=POLICY_SUB_STATUS_CHOICES)
     activation_date = models.DateField(null=True, blank=True)
     start_date = models.DateField(null=True, blank=True)
     lapse_date = models.DateField(null=True, blank=True)
-    policy_document = models.FileField(
-        upload_to="policy_documents/", null=True, blank=True
-    )
-    policy_wording = models.FileField(
-        upload_to="policy_wordings/", null=True, blank=True
-    )
-    welcome_letter = models.FileField(
-        upload_to="welcome_letters/", null=True, blank=True
-    )
+    policy_document = models.FileField(upload_to="policy_documents/", null=True, blank=True)
+    policy_wording = models.FileField(upload_to="policy_wordings/", null=True, blank=True)
+    welcome_letter = models.FileField(upload_to="welcome_letters/", null=True, blank=True)
     payment_day = models.IntegerField(null=True, blank=True)
     dg_required = models.BooleanField(default=True)
 
@@ -55,12 +47,8 @@ class PolicyCancellation(AbstractBaseModel):
     policy = models.ForeignKey(Policy, on_delete=models.CASCADE)
     policy_previous_status = models.CharField(max_length=255)
     policy_next_status = models.CharField(max_length=255)
-    cancellation_status = models.CharField(
-        max_length=255, choices=CANCELLATION_STATUS_CHOICES
-    )
-    cancellation_origin = models.CharField(
-        max_length=255, choices=CANCELLATION_ORIGIN_CHOICES
-    )
+    cancellation_status = models.CharField(max_length=255, choices=CANCELLATION_STATUS_CHOICES)
+    cancellation_origin = models.CharField(max_length=255, choices=CANCELLATION_ORIGIN_CHOICES)
 
     def __str__(self):
         return self.policy.policy_number
