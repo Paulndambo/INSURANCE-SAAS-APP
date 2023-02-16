@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: insurance-backend
+  name: smart-insure-backend
 spec:
   selector:
     matchLabels:
-      app: insurance-backend
+      app: smart-insure-backend
   template:
     metadata:
       labels:
-        app: insurance-backend
+        app: smart-insure-backend
     spec:
       containers:
-      - name: insurance-backend
-        image: 40781998/insurance-backend:latest
+      - name: smart-insure-backend
+        image: 40781998/smart-insure-backend:latest
         resources:
           limits:
             memory: "128Mi"

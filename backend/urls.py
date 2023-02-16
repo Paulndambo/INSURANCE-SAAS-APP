@@ -27,5 +27,6 @@ urlpatterns = [
     path("schemes/", include("apps.schemes.urls")),
     path("prices/", include("apps.prices.urls")),
     path("policies/", include("apps.policies.urls")),
+    path("claims/", include("apps.claims.urls")),
     path("", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
 ]
