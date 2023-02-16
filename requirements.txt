@@ -3,6 +3,7 @@ djangorestframework
 drf_yasg
 black
 pytest-django
+pytest
 django-rest-framework-nested
 djangorestframework-simplejwt
 django-cors-headers
