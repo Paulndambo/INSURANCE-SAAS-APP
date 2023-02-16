@@ -54,25 +54,10 @@ class PolicyCancellation(AbstractBaseModel):
         return self.policy.policy_number
 
 
-class PoliyStatusUpdate(AbstractBaseModel):
+class PolicyStatusUpdate(AbstractBaseModel):
     policy = models.ForeignKey(Policy, on_delete=models.CASCADE)
     previous_status = models.CharField(max_length=255)
     next_status = models.CharField(max_length=255)
 
     def __str__(self):
         return self.policy.policy_number
-
-
-class InsuredItem(AbstractBaseModel):
-    policy = models.ForeignKey(Policy, on_delete=models.CASCADE)
-    name = models.CharField(max_length=255)
-    seller = models.CharField(max_length=255)
-    brand_name = models.CharField(max_length=255, null=True)
-    model = models.CharField(max_length=255, null=True)
-    description = models.TextField(null=True)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    cover_amount = models.DecimalField(max_digits=10, decimal_places=2)
-    cover_period = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.name
