@@ -8,12 +8,7 @@ from apps.core.models import AbstractBaseModel
 
 
 class PricingPlan(AbstractBaseModel):
-    """
-    PricingPlan model
-    """
-
-    name = models.CharField(max_length=255, blank=True, null=True)
-    group = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
     conditions = models.JSONField(default=dict, blank=True, null=True)
     matrix = models.JSONField(default=dict, blank=True)
     base_premium = models.FloatField(

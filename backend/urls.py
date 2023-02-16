@@ -9,7 +9,7 @@ from drf_yasg import openapi
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="Insure SAAS API",
+        title="Smart Insure API",
         default_version="v1",
         description="This is the Insure API Service",
         terms_of_service="https://www.google.com/policies/terms/",
@@ -25,5 +25,7 @@ urlpatterns = [
     path("users/", include("apps.users.urls")),
     path("dependents/", include("apps.dependents.urls")),
     path("schemes/", include("apps.schemes.urls")),
+    path("prices/", include("apps.prices.urls")),
+    path("policies/", include("apps.policies.urls")),
     path("", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
 ]
