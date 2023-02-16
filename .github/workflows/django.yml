@@ -40,7 +40,7 @@ jobs:
 
 
   build-docker-image:
-    needs: build
+    needs: test-application
     runs-on: ubuntu-latest # SO where jobs will execute.
     steps: # sequence tasks to do.
       - name: PULL REPOSITORY
