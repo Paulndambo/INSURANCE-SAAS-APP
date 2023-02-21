@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "apps.schemes",
     "apps.prices",
     "apps.claims",
+    "apps.sales",
 ]
 
 MIDDLEWARE = [
