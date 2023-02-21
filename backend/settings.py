@@ -9,7 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-yi9!a!+wk!dg0)sl5ek4@_p%-w9o2n+!lhwk$ix4e5!)!nz#s&"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
@@ -84,11 +84,11 @@ if DEBUG:
 else:
     DATABASES = {
         "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": os.environ.get("POSTGRES_NAME"),
-            "USER": os.environ.get("POSTGRES_USER"),
-            "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
-            "HOST": "db",
+            "ENGINE": "django.db.backends.postgresql_psycopg2",
+            "NAME": "smartsure",
+            "USER": "postgres",
+            "PASSWORD": "1234",
+            "HOST": "localhost",
             "PORT": 5432,
         }
     }

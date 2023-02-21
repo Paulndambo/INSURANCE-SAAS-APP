@@ -37,12 +37,8 @@ class BankStatement(AbstractBaseModel):
     }
 
     uploaded_file = models.FileField(upload_to="bank_statements/", null=True)
-    status = models.CharField(
-        choices=BANK_STATEMENT_STATUS_CHOICES, default="unmapped", max_length=128
-    )
-    statement_type = models.CharField(
-        max_length=255, choices=BANK_STATEMENT_TYPE_CHOICES, default="bank_statement"
-    )
+    status = models.CharField(choices=BANK_STATEMENT_STATUS_CHOICES, default="unmapped", max_length=128)
+    statement_type = models.CharField(max_length=255, choices=BANK_STATEMENT_TYPE_CHOICES, default="bank_statement")
     description = models.JSONField(null=True)
 
     def __str__(self):

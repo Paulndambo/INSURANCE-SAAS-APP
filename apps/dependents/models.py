@@ -4,8 +4,6 @@ from apps.users.models import PolicyHolderRelative
 from apps.policies.models import Policy
 
 # Create your models here.
-
-
 class Beneficiary(AbstractBaseModel):
     policy = models.ForeignKey(Policy, on_delete=models.CASCADE, null=True)
     relative = models.ForeignKey(PolicyHolderRelative, on_delete=models.CASCADE, null=True)

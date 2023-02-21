@@ -1,8 +1,6 @@
 from django.shortcuts import render
 from rest_framework.permissions import AllowAny
 from rest_framework_bulk import (
-    BulkListSerializer,
-    BulkSerializerMixin,
     ListBulkCreateUpdateDestroyAPIView,
 )
 

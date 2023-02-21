@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from apps.claims.models import Claim, ClaimDocument, ClaimStatusUpdates
+from apps.claims.models import Claim, ClaimDocument, ClaimStatusUpdates, ClaimAdditionalInfo
 
 
 class ClaimSerializer(serializers.ModelSerializer):
@@ -17,4 +17,10 @@ class ClaimDocumentSerializer(serializers.ModelSerializer):
 class ClaimStatusUpdatesSerializer(serializers.ModelSerializer):
     class Meta:
         model = ClaimStatusUpdates
+        fields = "__all__"
+
+
+class ClaimAdditionalInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ClaimAdditionalInfo
         fields = "__all__"

@@ -55,3 +55,14 @@ class ClaimStatusUpdates(AbstractBaseModel):
 
     def __str__(self):
         return self.claim.reference_number
+
+
+class ClaimAdditionalInfo(AbstractBaseModel):
+    claim = models.ForeignKey(Claim, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    is_file = models.BooleanField(default=False)
+    file = models.FileField(upload_to="claim_additional_files/", null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return self.title
