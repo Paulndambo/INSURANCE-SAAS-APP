@@ -16,7 +16,7 @@ def bulk_policy_upload(row):
         "physical_address": row[9],
         "postal_address": row[10],
         "gender": row[11],
-        "product": row[12]
+        "product": row[12],
     }
     return data
 
@@ -96,37 +96,37 @@ def check_if_user_exists(identification_type, identification_number):
 
 
 def get_product_id_from_pricing_plan(pricing_plan: str):
-    product_id = ''
-    if pricing_plan.lower() == 'Synergy'.lower():
+    product_id = ""
+    if pricing_plan.lower() == "Synergy".lower():
         product_id = 0
-    elif pricing_plan.lower() == 'Nutun Wellness Funeral'.lower():
+    elif pricing_plan.lower() == "Nutun Wellness Funeral".lower():
         product_id = 1
-    elif pricing_plan.lower() == 'MBD Funeral'.lower():
+    elif pricing_plan.lower() == "MBD Funeral".lower():
         product_id = 2
-    elif pricing_plan.lower() == 'Nutun Wellness Legacy'.lower():
+    elif pricing_plan.lower() == "Nutun Wellness Legacy".lower():
         product_id = 3
-    elif pricing_plan.lower() == 'Nutun Transact Legacy'.lower():
+    elif pricing_plan.lower() == "Nutun Transact Legacy".lower():
         product_id = 4
-    elif pricing_plan.lower() == 'Nutun Munnik Basson Da Gama Inc Legacy'.lower():
+    elif pricing_plan.lower() == "Nutun Munnik Basson Da Gama Inc Legacy".lower():
         product_id = 5
-    elif pricing_plan.lower() == 'Nutun MBD Legal Collections Legacy'.lower():
+    elif pricing_plan.lower() == "Nutun MBD Legal Collections Legacy".lower():
         product_id = 6
-    elif pricing_plan.lower() == 'Nutun Business Services SA Legacy'.lower():
+    elif pricing_plan.lower() == "Nutun Business Services SA Legacy".lower():
         product_id = 7
-    elif pricing_plan.lower() == 'Nutun Telesales Funeral'.lower():
+    elif pricing_plan.lower() == "Nutun Telesales Funeral".lower():
         product_id = 8
-    elif pricing_plan.lower() == 'Nutun Kwande Legacy'.lower():
+    elif pricing_plan.lower() == "Nutun Kwande Legacy".lower():
         product_id = 9
-    elif pricing_plan.lower() == 'Nutun Transact Group Scheme'.lower():
+    elif pricing_plan.lower() == "Nutun Transact Group Scheme".lower():
         product_id = 10
-    elif pricing_plan.lower() == 'Nutun Wellness Group Scheme'.lower():
+    elif pricing_plan.lower() == "Nutun Wellness Group Scheme".lower():
         product_id = 11
-    elif pricing_plan.lower() == 'Nutun Munnik Basson Da Gama Inc Group Scheme'.lower():
+    elif pricing_plan.lower() == "Nutun Munnik Basson Da Gama Inc Group Scheme".lower():
         product_id = 12
-    elif pricing_plan.lower() == 'Nutun Business Services SA Group Scheme'.lower():
+    elif pricing_plan.lower() == "Nutun Business Services SA Group Scheme".lower():
         product_id = 13
-    elif pricing_plan.lower() == 'Nutun MBD Legal Collections Group Scheme'.lower():
+    elif pricing_plan.lower() == "Nutun MBD Legal Collections Group Scheme".lower():
         product_id = 14
-    elif pricing_plan.lower() == 'Nutun Kwande Group Scheme'.lower():
+    elif pricing_plan.lower() == "Nutun Kwande Group Scheme".lower():
         product_id = 15
     return product_id

@@ -3,7 +3,12 @@ from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
 
 from apps.policies.models import Policy, PolicyCancellation, PolicyStatusUpdate
-from apps.policies.serializers import PolicySerializer, PolicyCancellationSerializer, PolicyStatusUpdateSerializer
+from apps.policies.serializers import (
+    PolicySerializer,
+    PolicyCancellationSerializer,
+    PolicyStatusUpdateSerializer,
+)
+
 
 # Create your views here.
 class PolicyModelViewSet(ModelViewSet):

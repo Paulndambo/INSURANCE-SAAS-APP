@@ -9,7 +9,7 @@ from apps.sales.models import (
     TemporaryDataHolding,
     TemporaryCancelledMemberData,
     TemporaryMemberData,
-    TemporaryPaidMemberData
+    TemporaryPaidMemberData,
 )
 
 from apps.sales.serializers import (
@@ -17,8 +17,9 @@ from apps.sales.serializers import (
     TemporaryDataHoldingUploadSerializer,
     TemporaryDepedentDataUploadSerializer,
     TemporaryNewMemberUploadSerializer,
-    TemporaryPaidMemberDataUploadSerializer
+    TemporaryPaidMemberDataUploadSerializer,
 )
+
 
 # Create your views here.
 class TemporaryNewMemberDataAPIView(ListBulkCreateUpdateDestroyAPIView):

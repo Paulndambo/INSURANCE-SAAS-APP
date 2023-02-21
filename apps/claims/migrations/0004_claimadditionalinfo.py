@@ -5,26 +5,43 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('claims', '0003_remove_claim_state'),
+        ("claims", "0003_remove_claim_state"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='ClaimAdditionalInfo',
+            name="ClaimAdditionalInfo",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created', models.DateTimeField(auto_now_add=True)),
-                ('modified', models.DateTimeField(auto_now=True)),
-                ('title', models.CharField(max_length=255)),
-                ('is_file', models.BooleanField(default=False)),
-                ('file', models.FileField(blank=True, null=True, upload_to='claim_additional_files/')),
-                ('description', models.TextField(blank=True, null=True)),
-                ('claim', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='claims.claim')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                ("modified", models.DateTimeField(auto_now=True)),
+                ("title", models.CharField(max_length=255)),
+                ("is_file", models.BooleanField(default=False)),
+                (
+                    "file",
+                    models.FileField(
+                        blank=True, null=True, upload_to="claim_additional_files/"
+                    ),
+                ),
+                ("description", models.TextField(blank=True, null=True)),
+                (
+                    "claim",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="claims.claim"
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
     ]

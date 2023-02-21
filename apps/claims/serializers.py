@@ -1,5 +1,10 @@
 from rest_framework import serializers
-from apps.claims.models import Claim, ClaimDocument, ClaimStatusUpdates, ClaimAdditionalInfo
+from apps.claims.models import (
+    Claim,
+    ClaimDocument,
+    ClaimStatusUpdates,
+    ClaimAdditionalInfo,
+)
 
 
 class ClaimSerializer(serializers.ModelSerializer):

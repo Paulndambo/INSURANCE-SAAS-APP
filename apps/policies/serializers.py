@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from apps.policies.models import Policy, PolicyCancellation, PolicyStatusUpdate
 
+
 class PolicySerializer(serializers.ModelSerializer):
     class Meta:
         model = Policy

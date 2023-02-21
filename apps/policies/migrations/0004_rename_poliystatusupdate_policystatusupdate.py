@@ -4,14 +4,13 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('policies', '0003_delete_insureditem'),
+        ("policies", "0003_delete_insureditem"),
     ]
 
     operations = [
         migrations.RenameModel(
-            old_name='PoliyStatusUpdate',
-            new_name='PolicyStatusUpdate',
+            old_name="PoliyStatusUpdate",
+            new_name="PolicyStatusUpdate",
         ),
     ]

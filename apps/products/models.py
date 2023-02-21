@@ -26,7 +26,9 @@ class Product(models.Model):
     term_and_conditions = models.FileField(upload_to="terms_and_conditions/")
     policy_document_template = models.TextField(blank=True)
     broker_commision = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    payment_frequency = models.CharField(max_length=255, choices=PAYMENT_FREQUENCY_CHOICES, default="monthly")
+    payment_frequency = models.CharField(
+        max_length=255, choices=PAYMENT_FREQUENCY_CHOICES, default="monthly"
+    )
 
     def __str__(self):
         return self.name

@@ -4,13 +4,12 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('policies', '0002_policy_policy_holder'),
+        ("policies", "0002_policy_policy_holder"),
     ]
 
     operations = [
         migrations.DeleteModel(
-            name='InsuredItem',
+            name="InsuredItem",
         ),
     ]

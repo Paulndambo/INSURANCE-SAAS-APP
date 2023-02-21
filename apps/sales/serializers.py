@@ -8,35 +8,46 @@ from apps.sales.models import (
     TemporaryDependentImport,
     TemporaryMemberData,
     TemporaryDataHolding,
-    TemporaryPaidMemberData
+    TemporaryPaidMemberData,
 )
 
-class TemporaryNewMemberUploadSerializer(BulkSerializerMixin, serializers.ModelSerializer):
+
+class TemporaryNewMemberUploadSerializer(
+    BulkSerializerMixin, serializers.ModelSerializer
+):
     class Meta(object):
         model = TemporaryMemberData
         # only necessary in DRF3
         fields = "__all__"
 
 
-class TemporaryCancelledMemberDataUploadSerializer(BulkSerializerMixin, serializers.ModelSerializer):
+class TemporaryCancelledMemberDataUploadSerializer(
+    BulkSerializerMixin, serializers.ModelSerializer
+):
     class Meta(object):
         model = TemporaryCancelledMemberData
         fields = "__all__"
 
 
-class TemporaryDataHoldingUploadSerializer(BulkSerializerMixin, serializers.ModelSerializer):
+class TemporaryDataHoldingUploadSerializer(
+    BulkSerializerMixin, serializers.ModelSerializer
+):
     class Meta:
         model = TemporaryDataHolding
         fields = "__all__"
 
 
-class TemporaryPaidMemberDataUploadSerializer(BulkSerializerMixin, serializers.ModelSerializer):
+class TemporaryPaidMemberDataUploadSerializer(
+    BulkSerializerMixin, serializers.ModelSerializer
+):
     class Meta:
         model = TemporaryPaidMemberData
         fields = "__all__"
 
 
-class TemporaryDepedentDataUploadSerializer(BulkSerializerMixin, serializers.ModelSerializer):
+class TemporaryDepedentDataUploadSerializer(
+    BulkSerializerMixin, serializers.ModelSerializer
+):
     class Meta(object):
         model = TemporaryDependentImport
         fields = "__all__"

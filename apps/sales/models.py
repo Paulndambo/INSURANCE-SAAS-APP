@@ -1,6 +1,7 @@
 from django.db import models
 from apps.core.models import AbstractBaseModel
 
+
 # Create your models here.
 class TemporaryMemberData(AbstractBaseModel):
     username = models.EmailField()
@@ -25,7 +26,9 @@ class TemporaryDependentImport(AbstractBaseModel):
     main_member_identification_number = models.CharField(max_length=255)
     use_type = models.CharField(max_length=255)
     dependent_type = models.CharField(max_length=255)
-    cover_level = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    cover_level = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True
+    )
     firstname = models.CharField(max_length=255)
     lastname = models.CharField(max_length=255)
     identification_method = models.IntegerField()
@@ -65,7 +68,6 @@ UPLOAD_TYPES = (
     ("paid_members", "Paid Members"),
     ("cancelled_members", "Cancelled Members"),
     ("lapsed_members", "Lapsed Members"),
-
 )
 
 ONBOARDING_MODES = (
@@ -73,10 +75,13 @@ ONBOARDING_MODES = (
     ("background", "Background"),
 )
 
+
 class TemporaryDataHolding(AbstractBaseModel):
     upload_type = models.CharField(max_length=255, choices=UPLOAD_TYPES)
     upload_data = models.JSONField(default=[])
-    onboarding_mode = models.CharField(max_length=255, choices=ONBOARDING_MODES, default="background")
+    onboarding_mode = models.CharField(
+        max_length=255, choices=ONBOARDING_MODES, default="background"
+    )
 
     def __str__(self):
         return self.upload_type

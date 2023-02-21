@@ -5,6 +5,7 @@ from rest_framework import generics, status
 from apps.dependents.models import Beneficiary, Dependent
 from apps.dependents.serializers import BeneficiarySerializer, DependentSerializer
 
+
 # Create your views here.
 class DependentModelViewSet(ModelViewSet):
     queryset = Dependent.objects.all()

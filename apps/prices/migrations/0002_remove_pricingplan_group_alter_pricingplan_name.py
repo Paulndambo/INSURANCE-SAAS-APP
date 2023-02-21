@@ -4,19 +4,18 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('prices', '0001_initial'),
+        ("prices", "0001_initial"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='pricingplan',
-            name='group',
+            model_name="pricingplan",
+            name="group",
         ),
         migrations.AlterField(
-            model_name='pricingplan',
-            name='name',
+            model_name="pricingplan",
+            name="name",
             field=models.CharField(max_length=255),
         ),
     ]
