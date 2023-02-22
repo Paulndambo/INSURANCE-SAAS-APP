@@ -5,24 +5,37 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('users', '0004_alter_profile_gender_alter_user_role'),
+        ("users", "0004_alter_profile_gender_alter_user_role"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='MembershipStatusUpdates',
+            name="MembershipStatusUpdates",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created', models.DateTimeField(auto_now_add=True)),
-                ('modified', models.DateTimeField(auto_now=True)),
-                ('previous_status', models.CharField(max_length=255)),
-                ('next_status', models.CharField(max_length=255)),
-                ('membership', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.membership')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                ("modified", models.DateTimeField(auto_now=True)),
+                ("previous_status", models.CharField(max_length=255)),
+                ("next_status", models.CharField(max_length=255)),
+                (
+                    "membership",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="users.membership",
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
     ]

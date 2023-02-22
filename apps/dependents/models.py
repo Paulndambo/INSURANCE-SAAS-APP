@@ -3,12 +3,13 @@ from apps.core.models import AbstractBaseModel
 from apps.users.models import PolicyHolderRelative
 from apps.policies.models import Policy
 
+
 # Create your models here.
-
-
 class Beneficiary(AbstractBaseModel):
     policy = models.ForeignKey(Policy, on_delete=models.CASCADE, null=True)
-    relative = models.ForeignKey(PolicyHolderRelative, on_delete=models.CASCADE, null=True)
+    relative = models.ForeignKey(
+        PolicyHolderRelative, on_delete=models.CASCADE, null=True
+    )
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=255, null=True)
@@ -18,8 +19,12 @@ class Beneficiary(AbstractBaseModel):
     address = models.TextField(null=True)
     is_deleted = models.BooleanField(default=False)
     date_of_birth = models.DateField(null=True)
-    membership = models.ForeignKey("users.Membership", on_delete=models.SET_NULL, null=True, blank=True)
-    schemegroup = models.ForeignKey("schemes.SchemeGroup", on_delete=models.SET_NULL, null=True, blank=True)
+    membership = models.ForeignKey(
+        "users.Membership", on_delete=models.SET_NULL, null=True, blank=True
+    )
+    schemegroup = models.ForeignKey(
+        "schemes.SchemeGroup", on_delete=models.SET_NULL, null=True, blank=True
+    )
     # Required for minor beneficiaries
     guardian_or_trustee_first_name = models.CharField(max_length=255, null=True)
     guardian_or_trustee_last_name = models.CharField(max_length=255, null=True)
@@ -48,7 +53,9 @@ class Dependent(AbstractBaseModel):
 
     GENDER_CHOICES = (("female", "Female"), ("male", "Male"))
 
-    membership = models.ForeignKey( "users.Membership", null=True, on_delete=models.CASCADE)
+    membership = models.ForeignKey(
+        "users.Membership", null=True, on_delete=models.CASCADE
+    )
     is_additional_family_member = models.BooleanField(default=False)
     dependent_type = models.CharField(max_length=200, choices=DEPENDENT_TYPE)
     dependent_type_notes = models.TextField(null=True, blank=True)
@@ -56,7 +63,9 @@ class Dependent(AbstractBaseModel):
     age_min = models.PositiveSmallIntegerField(null=True)
     age_max = models.PositiveSmallIntegerField(null=True)
     age_metric = models.CharField(max_length=100, choices=AGE_METRIC_CHOICES)
-    relative = models.ForeignKey(PolicyHolderRelative, on_delete=models.CASCADE, null=True)
+    relative = models.ForeignKey(
+        PolicyHolderRelative, on_delete=models.CASCADE, null=True
+    )
     relative_option = models.CharField(max_length=200, null=True)
     first_name = models.CharField(max_length=200, null=True)
     last_name = models.CharField(max_length=200, null=True)
@@ -65,7 +74,9 @@ class Dependent(AbstractBaseModel):
     guid = models.CharField(max_length=200, null=True)
     id_number = models.CharField(max_length=255, null=True)
     passport_number = models.CharField(max_length=255, null=True)
-    add_on_premium = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
+    add_on_premium = models.DecimalField(
+        max_digits=20, decimal_places=2, null=True, blank=True
+    )
     is_deleted = models.BooleanField(default=False)
 
     def __str__(self):

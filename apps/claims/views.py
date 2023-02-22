@@ -2,8 +2,20 @@ from django.shortcuts import render
 
 from rest_framework.viewsets import ModelViewSet
 
-from apps.claims.models import Claim, ClaimDocument, ClaimStatusUpdates
-from apps.claims.serializers import ClaimDocumentSerializer, ClaimSerializer, ClaimStatusUpdatesSerializer
+from apps.claims.models import (
+    Claim,
+    ClaimDocument,
+    ClaimStatusUpdates,
+    ClaimAdditionalInfo,
+)
+from apps.claims.serializers import (
+    ClaimDocumentSerializer,
+    ClaimSerializer,
+    ClaimStatusUpdatesSerializer,
+    ClaimAdditionalInfoSerializer,
+)
+
+
 # Create your views here.
 class ClaimModelViewSet(ModelViewSet):
     queryset = Claim.objects.all()
@@ -18,3 +30,8 @@ class ClaimDocumentModelViewSet(ModelViewSet):
 class ClaimStatusUpdatesModelViewSet(ModelViewSet):
     queryset = ClaimStatusUpdates.objects.all()
     serializer_class = ClaimStatusUpdatesSerializer
+
+
+class ClaimAdditionalInfoModelViewSet(ModelViewSet):
+    queryset = ClaimAdditionalInfo.objects.all()
+    serializer_class = ClaimAdditionalInfoSerializer

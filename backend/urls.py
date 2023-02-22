@@ -28,5 +28,10 @@ urlpatterns = [
     path("prices/", include("apps.prices.urls")),
     path("policies/", include("apps.policies.urls")),
     path("claims/", include("apps.claims.urls")),
-    path("", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
+    path("sales/", include("apps.sales.urls")),
+    path(
+        "",
+        schema_view.with_ui("swagger", cache_timeout=0),
+        name="schema-swagger-ui",
+    ),
 ]

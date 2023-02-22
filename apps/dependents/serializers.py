@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from apps.dependents.models import Beneficiary, Dependent
 
+
 class BeneficiarySerializer(serializers.ModelSerializer):
     class Meta:
         model = Beneficiary

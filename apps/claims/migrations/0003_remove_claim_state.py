@@ -4,14 +4,13 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('claims', '0002_remove_claim_token_claimstatusupdates'),
+        ("claims", "0002_remove_claim_token_claimstatusupdates"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='claim',
-            name='state',
+            model_name="claim",
+            name="state",
         ),
     ]
