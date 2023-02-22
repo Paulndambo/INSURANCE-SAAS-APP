@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 from apps.policies.views import (
     PolicyModelViewSet,
     PolicyCancellationViewSet,
-    PolicyStatusUpdateViewSet,
+    PolicyStatusUpdatesViewSet,
 )
 
 router = DefaultRouter()
@@ -12,7 +12,7 @@ router.register(
     "policy-cancellations", PolicyCancellationViewSet, basename="policy-cancellations"
 )
 router.register(
-    "policy-status-updates", PolicyStatusUpdateViewSet, basename="policy-status-updates"
+    "policy-status-updates", PolicyStatusUpdatesViewSet, basename="policy-status-updates"
 )
 
 urlpatterns = [

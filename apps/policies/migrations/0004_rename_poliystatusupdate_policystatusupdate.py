@@ -11,6 +11,6 @@ class Migration(migrations.Migration):
     operations = [
         migrations.RenameModel(
             old_name="PoliyStatusUpdate",
-            new_name="PolicyStatusUpdate",
+            new_name="PolicyStatusUpdates",
         ),
     ]

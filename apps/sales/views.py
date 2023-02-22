@@ -4,6 +4,8 @@ from rest_framework_bulk import (
     ListBulkCreateUpdateDestroyAPIView,
 )
 
+from rest_framework import generics
+from rest_framework.response import Response
 from apps.sales.models import (
     TemporaryDependentImport,
     TemporaryDataHolding,
@@ -50,3 +52,8 @@ class TemporaryDependentDataAPIView(ListBulkCreateUpdateDestroyAPIView):
     queryset = TemporaryDependentImport.objects.all()
     serializer_class = TemporaryDepedentDataUploadSerializer
     permission_classes = [AllowAny]
+
+
+class GenerateGWPReportAPIView(generics.GenericAPIView):
+    def get(self, request, *args, **kwargs):
+        return Response({"message": "Hello World"})

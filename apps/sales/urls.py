@@ -5,6 +5,7 @@ from apps.sales.views import (
     TemporaryDependentDataAPIView,
     TemporaryNewMemberDataAPIView,
     TemporaryPaidMemberDataAPIView,
+    GenerateGWPReportAPIView,
 )
 
 urlpatterns = [
@@ -33,4 +34,5 @@ urlpatterns = [
         TemporaryDataHoldingAPIView.as_view(),
         name="bulk-data-upload",
     ),
+    path("generate-gwp-report/", GenerateGWPReportAPIView.as_view(), name="generate-gwp-report"),
 ]

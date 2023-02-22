@@ -30,7 +30,7 @@ urlpatterns = [
     path("claims/", include("apps.claims.urls")),
     path("sales/", include("apps.sales.urls")),
     path(
-        "docs/",
+        "",
         schema_view.with_ui("swagger", cache_timeout=0),
         name="schema-swagger-ui",
     ),
