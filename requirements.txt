@@ -9,3 +9,4 @@ djangorestframework-simplejwt
 django-cors-headers
 pillow
 psycopg2-binary
+rest_framework_bulk
