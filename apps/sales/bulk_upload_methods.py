@@ -41,9 +41,21 @@ def get_policy_number_prefix(pricing_plan_id):
     elif pricing_plan_id == 7:
         policy_number_prefix = "NBSL_"
     elif pricing_plan_id == 8:
-        pass
+        policy_number_prefix = "NTLF_"
     elif pricing_plan_id == 9:
         policy_number_prefix = "NKL_"
+    elif pricing_plan_id == 10:
+        policy_number_prefix = "NTLG_"
+    elif pricing_plan_id == 11:
+        policy_number_prefix = "NWLG_"
+    elif pricing_plan_id == 12:
+        policy_number_prefix = "NMBLG_"
+    elif pricing_plan_id == 13:
+        policy_number_prefix = "NBSLG_"
+    elif pricing_plan_id == 14:
+        policy_number_prefix = "NMBDG_"
+    elif pricing_plan_id == 15:
+        policy_number_prefix = "NKLG_"
 
     return policy_number_prefix
 
@@ -68,9 +80,21 @@ def get_pricing_plan(pricing_plan_id):
     elif pricing_plan_id == 7:
         pricing_plan_name = "Nutun Business Services SA Legacy"
     elif pricing_plan_id == 8:
-        pass
+        pricing_plan_name = "Nutun Telesales Funeral"
     elif pricing_plan_id == 9:
         pricing_plan_name = "Nutun Kwande Legacy"
+    elif pricing_plan_id == 10:
+        pricing_plan_name = "Nutun Transact Group Scheme"
+    elif pricing_plan_id == 11:
+        pricing_plan_name = "Nutun Wellness Group Scheme"
+    elif pricing_plan_id == 12:
+        pricing_plan_name = "Nutun Munnik Basson Da Gama Inc Group Scheme"
+    elif pricing_plan_id == 13:
+        pricing_plan_name = "Nutun Business Services SA Group Scheme"
+    elif pricing_plan_id == 14:
+        pricing_plan_name = "Nutun MBD Legal Collections Group Scheme"
+    elif pricing_plan_id == 15:
+        pricing_plan_name = "Nutun Kwande Group Scheme"
 
     return pricing_plan_name
 

@@ -79,9 +79,7 @@ ONBOARDING_MODES = (
 class TemporaryDataHolding(AbstractBaseModel):
     upload_type = models.CharField(max_length=255, choices=UPLOAD_TYPES)
     upload_data = models.JSONField(default=[])
-    onboarding_mode = models.CharField(
-        max_length=255, choices=ONBOARDING_MODES, default="background"
-    )
+    onboarding_mode = models.CharField(max_length=255, choices=ONBOARDING_MODES, default="background")
 
     def __str__(self):
         return self.upload_type
