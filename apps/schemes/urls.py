@@ -4,7 +4,7 @@ from rest_framework.routers import DefaultRouter
 from apps.schemes.views import SchemeGroupModelViewSet, SchemeModelViewSet
 
 router = DefaultRouter()
-router.register("", SchemeModelViewSet, basename="schemes")
+router.register("schemes", SchemeModelViewSet, basename="schemes")
 router.register("scheme-groups", SchemeGroupModelViewSet, basename="scheme-groups")
 
 urlpatterns = [

@@ -7,7 +7,7 @@ from apps.policies.views import (
 )
 
 router = DefaultRouter()
-router.register("", PolicyModelViewSet, basename="policies")
+router.register("policies", PolicyModelViewSet, basename="policies")
 router.register("policy-cancellations", PolicyCancellationViewSet, basename="policy-cancellations")
 router.register("policy-status-updates", PolicyStatusUpdatesViewSet, basename="policy-status-updates")
 

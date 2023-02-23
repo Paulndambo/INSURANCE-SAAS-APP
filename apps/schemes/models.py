@@ -25,9 +25,8 @@ class SchemeGroup(AbstractBaseModel):
     name = models.CharField(max_length=255, null=True, blank=True)
     payment_method = models.CharField(max_length=255, choices=PAYMENT_METHODS)
     period_type = models.CharField(max_length=255, choices=PAYMENT_PERIOD_CHOICES)
-    pricing_group = models.ForeignKey(
-        "prices.PricingPlan", on_delete=models.CASCADE, null=True, blank=True
-    )
+    period_frequency = models.IntegerField(default=1)
+    pricing_group = models.ForeignKey("prices.PricingPlan", on_delete=models.CASCADE, null=True, blank=True)
     cycle_type = models.CharField(max_length=255, choices=CYCLE_CHOICE_TYPES)
     description = models.TextField(null=True, blank=True)
 
