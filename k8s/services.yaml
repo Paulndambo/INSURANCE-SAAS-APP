@@ -1,10 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: insurance-backend
+  name: smart-insure-backend
 spec:
   selector:
-    app: insurance-backend
+    app: smart-insure-backend
+  type: LoadBalancer
   ports:
   - port: 8000
     targetPort: 8000

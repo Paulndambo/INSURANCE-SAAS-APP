@@ -8,7 +8,6 @@ class SchemeSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-
 class SchemeGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = SchemeGroup

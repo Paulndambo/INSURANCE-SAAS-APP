@@ -64,6 +64,15 @@ class Membership(AbstractBaseModel):
         return self.user.username
 
 
+class MembershipStatusUpdates(AbstractBaseModel):
+    membership = models.ForeignKey(Membership, on_delete=models.CASCADE)
+    previous_status = models.CharField(max_length=255)
+    next_status = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.membership.user.username
+
+
 class Profile(AbstractBaseModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profiles")
     first_name = models.CharField(max_length=255, blank=True)
