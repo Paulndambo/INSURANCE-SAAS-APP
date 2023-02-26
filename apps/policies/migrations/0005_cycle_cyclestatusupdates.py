@@ -8,7 +8,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ("users", "0005_membershipstatusupdates"),
         ("schemes", "0002_schemegroup_pricing_group"),
-        ("policies", "0004_rename_poliystatusupdate_policystatusupdate"),
+        #("policies", "0004_rename_poliystatusupdate_PolicyStatusUpdate"),
     ]
 
     operations = [
