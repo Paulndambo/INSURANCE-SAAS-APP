@@ -116,6 +116,7 @@ class CycleStatusUpdates(AbstractBaseModel):
     Keep all status updates of Cycle.
     """
 
-    cycle = models.ForeignKey(Cycle, on_delete=models.CASCADE, related_name='statuses')
+    cycle = models.ForeignKey(
+        Cycle, on_delete=models.CASCADE, related_name='statuses')
     previous_status = models.CharField(max_length=255, choices=Cycle.STATUS)
     next_status = models.CharField(max_length=255, choices=Cycle.STATUS)
