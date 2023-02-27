@@ -1,6 +1,6 @@
 from backend.celery import app
 from apps.sales.models import TemporaryMemberData, TemporaryDataHolding
-from apps.sales.mixins import BulkMembersOnboardingMixin
+from apps.sales.mixins import BulkMembersOnboardingMixin, BulkPaidMembersMixin
 
 
 @app.task(name="print_hello_world")
@@ -15,6 +15,15 @@ def print_hello_world():
         print(
             "*******************************All Members Have Been Processed!*********************************"
         )
+
+@app.task(name="mark_members_as_paid_task")
+def mark_members_as_paid_task():
+    paid_members = TemporaryDataHolding.objects.filter(upload_type="paid_members").first()
+
+    if paid_members:
+        paid_members_mixin = BulkPaidMembersMixin(paid_members.upload_data)
+        paid_members_mixin.run()
+        
 
 
 app.conf.beat_schedule = {

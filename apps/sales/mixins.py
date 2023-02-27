@@ -8,25 +8,36 @@ from apps.sales.bulk_upload_methods import (
     get_pricing_plan,
     get_product_id_from_pricing_plan,
     validate_id_number_length,
-    validate_phone_number_length
+    validate_phone_number_length,
 )
+
+from apps.sales.mark_members_as_paid import mark_members_as_paid
 
 
 ##Apps Imports
 from apps.schemes.models import Scheme, SchemeGroup
 from apps.policies.models import (
-    Policy, PolicyCancellation, PolicyHolder, Cycle, CycleStatusUpdates
+    Policy,
+    PolicyCancellation,
+    PolicyHolder,
+    Cycle,
+    CycleStatusUpdates,
 )
 from apps.users.models import (
-    User, IndividualUser, Profile, Membership, MembershipConfiguration
+    User,
+    IndividualUser,
+    Profile,
+    Membership,
+    MembershipConfiguration,
 )
 from apps.payments.models import PolicyPayment, PolicyPremium
 from apps.prices.models import PricingPlan
+
+
 class BulkMembersOnboardingMixin(object):
     def __init__(self, data):
         self.data = data
 
-    
     def run(self):
         self.__create_scheme_group()
 
@@ -50,16 +61,15 @@ class BulkMembersOnboardingMixin(object):
             period_frequency=1,
             pricing_group=pricing_plan,
             cycle_type="member",
-            description=get_pricing_plan(first_member["product"])
+            description=get_pricing_plan(first_member["product"]),
         )
 
         policy = Policy.objects.create(
             policy_number=f"{get_policy_number_prefix(first_member['product'])}{scheme_group.id}",
             start_date=datetime.now(),
             payment_day=2,
-            status='created',
+            status="created",
             dg_required=False,
-
         )
 
         scheme_group.policy = policy
@@ -81,7 +91,7 @@ class BulkMembersOnboardingMixin(object):
                     "is_staff": False,
                     "is_superuser": False,
                     "is_active": True,
-                    "role": "individual"
+                    "role": "individual",
                 }
                 print("****************Start of Member Onboarding****************")
                 user = User.objects.create(**user_obj)
@@ -107,8 +117,8 @@ class BulkMembersOnboardingMixin(object):
                         phone_number=data["mobile_number"],
                         work_phone_number=data["mobile_number"],
                         home_phone_number=data["landline"],
-                        gender=data['gender'],
-                        date_of_birth=data['date_of_birth'].replace("/", "-")
+                        gender=data["gender"],
+                        date_of_birth=data["date_of_birth"].replace("/", "-"),
                     )
                     profile.save()
                 else:
@@ -122,8 +132,8 @@ class BulkMembersOnboardingMixin(object):
                         phone_number=data["mobile_number"],
                         work_phone_number=data["mobile_number"],
                         home_phone_number=data["landline"],
-                        gender=data['gender'],
-                        date_of_birth=data['date_of_birth'].replace("/", "-")
+                        gender=data["gender"],
+                        date_of_birth=data["date_of_birth"].replace("/", "-"),
                     )
                     profile.save()
 
@@ -136,8 +146,8 @@ class BulkMembersOnboardingMixin(object):
                         postal_address=data["postal_address"],
                         phone_number=data["mobile_number"],
                         id_number=data["identification_number"],
-                        gender=data['gender'],
-                        date_of_birth=data['date_of_birth'].replace("/", "-")
+                        gender=data["gender"],
+                        date_of_birth=data["date_of_birth"].replace("/", "-"),
                     )
                     policy_holder.save()
                 else:
@@ -145,14 +155,12 @@ class BulkMembersOnboardingMixin(object):
                         user=user,
                         postal_address=data["postal_address"],
                         passport_number=data["identification_number"],
-                        gender=data['gender'],
-                        ddate_of_birth=data['date_of_birth'].replace("/", "-"),
-                        phone_number=data["mobile_number"]
+                        gender=data["gender"],
+                        ddate_of_birth=data["date_of_birth"].replace("/", "-"),
+                        phone_number=data["mobile_number"],
                     )
                     policy_holder.save()
 
-                
-            #pricing_plan = PricingPlan.objects.get(group=scheme_group.pricing_group)
 
             membership = Membership.objects.create(
                 user=user,
@@ -187,28 +195,45 @@ class BulkMembersOnboardingMixin(object):
             print(f"Policy Payment: {policy_payment.id} Created Successfully!!")
 
             membership_configuration = MembershipConfiguration.objects.create(
-                membership=membership,
-                cover_level=50000,
-                pricing_plan=pricing_plan
+                membership=membership, cover_level=50000, pricing_plan=pricing_plan
             )
             membership_configuration.save()
 
-            print(f"Membership Config: {membership_configuration.id} Created Successfully!!")
+            print(
+                f"Membership Config: {membership_configuration.id} Created Successfully!!"
+            )
 
             cycle = Cycle.objects.filter(membership=membership).first()
 
             if not cycle:
                 cycle = Cycle.objects.create(
-                    membership=membership,
-                    scheme_group=scheme_group,
-                    status='active'
+                    membership=membership, scheme_group=scheme_group, status="active"
                 )
 
             print(f"Cycle: {cycle.id} Created Successfully!!!")
 
             CycleStatusUpdates.objects.create(
-                cycle=cycle,
-                previous_status='awaiting_payment',
-                next_status='active'
+                cycle=cycle, previous_status="awaiting_payment", next_status="active"
             )
             print("****************End of Member Onboarding****************")
+
+
+class BulkPaidMembersMixin(object):
+    def __init__(self, data):
+        self.data = data 
+
+
+    def run(self):
+        self.__mark_members_as_paid()
+
+
+    def __mark_members_as_paid(self):
+        for member in self.data:
+            try:
+                mark_members_as_paid(
+                    member['identification method'], 
+                    member['identification number'],
+                    member['product']
+                )
+            except Exception as e:
+                raise e

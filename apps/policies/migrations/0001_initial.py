@@ -74,7 +74,6 @@ class Migration(migrations.Migration):
                 "abstract": False,
             },
         ),
-    
         migrations.CreateModel(
             name="PolicyCancellation",
             fields=[

@@ -75,7 +75,6 @@ class PolicyStatusUpdate(AbstractBaseModel):
         return self.policy.policy_number
 
 
-
 class Cycle(AbstractBaseModel):
     """
     In all cases Scheme Group has precedence over Membership
