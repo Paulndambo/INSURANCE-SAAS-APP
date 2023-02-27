@@ -2,11 +2,11 @@ from django.shortcuts import render
 
 from rest_framework.viewsets import ModelViewSet
 
-from apps.policies.models import Policy, PolicyCancellation, PolicyStatusUpdates
+from apps.policies.models import Policy, PolicyCancellation #PolicyStatusUpdates
 from apps.policies.serializers import (
     PolicySerializer,
     PolicyCancellationSerializer,
-    PolicyStatusUpdatesSerializer,
+    #PolicyStatusUpdatesSerializer,
 )
 
 
@@ -21,6 +21,6 @@ class PolicyCancellationViewSet(ModelViewSet):
     serializer_class = PolicyCancellationSerializer
 
 
-class PolicyStatusUpdatesViewSet(ModelViewSet):
-    queryset = PolicyStatusUpdates.objects.all()
-    serializer_class = PolicyStatusUpdatesSerializer
+#class PolicyStatusUpdatesViewSet(ModelViewSet):
+#    queryset = PolicyStatusUpdates.objects.all()
+#    serializer_class = PolicyStatusUpdatesSerializer

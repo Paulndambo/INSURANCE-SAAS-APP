@@ -34,5 +34,9 @@ urlpatterns = [
         TemporaryDataHoldingAPIView.as_view(),
         name="bulk-data-upload",
     ),
-    path("generate-gwp-report/", GenerateGWPReportAPIView.as_view(), name="generate-gwp-report"),
+    path(
+        "generate-gwp-report/",
+        GenerateGWPReportAPIView.as_view(),
+        name="generate-gwp-report",
+    ),
 ]

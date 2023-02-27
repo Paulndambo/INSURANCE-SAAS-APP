@@ -49,6 +49,8 @@ MEMBERSHIP_STATUS_CHOICES = (
     ("cancelled", "Cancelled"),
 )
 
+class IndividualUser(AbstractBaseModel):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
 class Membership(AbstractBaseModel):
     member_id = models.UUIDField(default=uuid.uuid4, unique=True)
@@ -63,6 +65,15 @@ class Membership(AbstractBaseModel):
     def __str__(self):
         return self.user.username
 
+
+class MembershipConfiguration(AbstractBaseModel):
+    membership = models.ForeignKey(Membership, on_delete=models.CASCADE)
+    beneficiary = models.ForeignKey("dependents.Beneficiary", on_delete=models.CASCADE, blank=True, null=True)
+    pricing_plan = models.ForeignKey('prices.PricingPlan', on_delete=models.SET_NULL, null=True, blank=True)
+    cover_level = models.DecimalField(max_digits=10, decimal_places=2, null=True)
+
+    def __str__(self):
+        return self.membership.user.email
 
 class MembershipStatusUpdates(AbstractBaseModel):
     membership = models.ForeignKey(Membership, on_delete=models.CASCADE)
