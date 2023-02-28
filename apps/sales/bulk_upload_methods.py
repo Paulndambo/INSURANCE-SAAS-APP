@@ -186,3 +186,28 @@ def validate_phone_number_length(phone_number):
         validated_phone_number = f"0{phone_number}"
 
     return validated_phone_number
+
+
+def get_date_of_birth(id):
+    day = int(id[4:6])
+    month = int(id[2:4])
+    year = id[0:2]
+
+    first_construct = int('20' + year)
+    second_construct = int('19' + year)
+
+    first_date = datetime(first_construct, 1, 1)
+    second_date = datetime(second_construct, 1, 1)
+
+    first_diff = datetime.today() - first_date
+    second_diff = datetime.today() - second_date
+
+    number = first_diff.days
+
+    # CHECK NUMBER
+    if number > 0 and first_diff < second_diff:
+        dob = datetime(first_construct, month, day)
+    else:
+        dob = datetime(second_construct, month, day)
+
+    return dob

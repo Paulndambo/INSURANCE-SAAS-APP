@@ -97,3 +97,11 @@ class MemberUploadOutcome(AbstractBaseModel):
 
     def __str__(self):
         return self.identification_number
+
+
+class PricingPlanSchemeMapping(AbstractBaseModel):
+    name = models.CharField(max_length=255)
+    scheme_type = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name

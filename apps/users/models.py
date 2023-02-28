@@ -119,7 +119,7 @@ class PolicyHolder(AbstractBaseModel):
     date_of_birth = models.DateField(null=True, blank=True)
     postal_address = models.CharField(max_length=255, null=True)
     physical_address = models.CharField(max_length=255, null=True)
-    phone_number = models.CharField(max_length=255)
+    phone_number = models.CharField(max_length=255, null=True, blank=True)
     town = models.CharField(max_length=255, null=True)
     country = models.CharField(max_length=255, null=True)
 

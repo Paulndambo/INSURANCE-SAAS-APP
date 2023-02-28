@@ -12,6 +12,7 @@ from apps.sales.models import (
     TemporaryCancelledMemberData,
     TemporaryMemberData,
     TemporaryPaidMemberData,
+    PricingPlanSchemeMapping,
 )
 
 from apps.sales.serializers import (
@@ -20,6 +21,7 @@ from apps.sales.serializers import (
     TemporaryDepedentDataUploadSerializer,
     TemporaryNewMemberUploadSerializer,
     TemporaryPaidMemberDataUploadSerializer,
+    PricingPlanSchemeMappingSerializer
 )
 
 
@@ -27,6 +29,12 @@ from apps.sales.serializers import (
 class TemporaryNewMemberDataAPIView(ListBulkCreateUpdateDestroyAPIView):
     queryset = TemporaryMemberData.objects.all()
     serializer_class = TemporaryNewMemberUploadSerializer
+    permission_classes = [AllowAny]
+
+
+class PricingPlanSchemeMappingAPIView(ListBulkCreateUpdateDestroyAPIView):
+    queryset = PricingPlanSchemeMapping.objects.all()
+    serializer_class = PricingPlanSchemeMappingSerializer
     permission_classes = [AllowAny]
 
 
