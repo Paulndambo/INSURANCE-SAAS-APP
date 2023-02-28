@@ -46,20 +46,25 @@ class BulkMembersOnboardingMixin(object):
     @transaction.atomic
     def __onboard_members(self):
         group_plans = list(PricingPlanSchemeMapping.objects.filter(scheme_type="group").values_list("name", flat=True))
-        retail_plans = group_plans = list(PricingPlanSchemeMapping.objects.filter(scheme_type="retail").values_list("name", flat=True))
+        retail_plans = list(PricingPlanSchemeMapping.objects.filter(scheme_type="retail").values_list("name", flat=True))
 
         first_member = self.data.upload_data[0]
         pricing_plan = PricingPlan.objects.get(name=get_pricing_plan(first_member["product"]))
 
         pricing_plan_name = pricing_plan.name
 
+        print(pricing_plan_name)
+        #print(group_plans)
+
+        
         if pricing_plan_name in retail_plans:
             bulk_retail_mixin = BulkRetailMemberOnboardingMixin(self.data)
             bulk_retail_mixin.run()
-            
+
         elif pricing_plan_name in group_plans:
             bulk_group_mixin = BulkGroupMembersOnboardingMixin(self.data)
             bulk_group_mixin.run()
+        
 
 
 class BulkGroupMembersOnboardingMixin(object):
@@ -273,9 +278,7 @@ class BulkRetailMemberOnboardingMixin(object):
         scheme = Scheme.objects.get(name="Retail Scheme")
         
         for data in members.upload_data:
-            pricing_plan = PricingPlan.objects.get(
-            name=get_pricing_plan(data["product"])
-            )
+            pricing_plan = PricingPlan.objects.get(name=get_pricing_plan(data["product"]))
 
             scheme_group = SchemeGroup.objects.create(
                 scheme_id=scheme.id,
@@ -415,8 +418,7 @@ class BulkRetailMemberOnboardingMixin(object):
                 status="unpaid",
             )
 
-            print(
-                f"Policy Premium: {policy_premium.id} Created Successfully!!!")
+            print(f"Policy Premium: {policy_premium.id} Created Successfully!!!")
 
             policy_payment = PolicyPayment.objects.create(
                 policy=policy,
