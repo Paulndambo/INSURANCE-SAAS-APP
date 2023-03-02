@@ -84,9 +84,7 @@ class BulkGroupMembersOnboardingMixin(object):
 
         last_policy = Policy.objects.last()
 
-        pricing_plan = PricingPlan.objects.get(
-            name=get_pricing_plan(first_member["product"])
-        )
+        pricing_plan = PricingPlan.objects.get(name=get_pricing_plan(first_member["product"]))
         scheme = Scheme.objects.get(name="Group Scheme")
 
         scheme_group = SchemeGroup.objects.create(
@@ -256,9 +254,7 @@ class BulkGroupMembersOnboardingMixin(object):
 
             print(f"Cycle: {cycle.id} Created Successfully!!!")
 
-            CycleStatusUpdates.objects.create(
-                cycle=cycle, previous_status="awaiting_payment", next_status="active"
-            )
+            CycleStatusUpdates.objects.create(cycle=cycle, previous_status="awaiting_payment", next_status="active")
             print("****************End of Member Onboarding****************")
 
 
@@ -283,7 +279,7 @@ class BulkRetailMemberOnboardingMixin(object):
             scheme_group = SchemeGroup.objects.create(
                 scheme_id=scheme.id,
                 name=get_pricing_plan(data["product"]),
-                payment_method="off_platform",
+                payment_method="debit_order",
                 period_type="monthly",
                 period_frequency=1,
                 pricing_group=pricing_plan,
@@ -334,8 +330,7 @@ class BulkRetailMemberOnboardingMixin(object):
             if not profile:
                 if data["identification method"] == 1:
 
-                    profile = Profile.objects.filter(
-                        id_number=data["identification number"]).first()
+                    profile = Profile.objects.filter(id_number=data["identification number"]).first()
 
                     if not profile:
                         profile = Profile.objects.create(

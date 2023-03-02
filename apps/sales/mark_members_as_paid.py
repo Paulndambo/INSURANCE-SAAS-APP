@@ -13,14 +13,18 @@ def mark_members_as_paid(identification_method: int, id_number: str, product: in
             profile = Profile.objects.filter(passport_number=id_number).first()
         if profile:
             membership = Membership.objects.filter(user=profile.user, scheme_group__name=get_pricing_plan(product)).first()
-            premium = PolicyPremium.objects.filter(membership=membership).latest("expected_date")
-            print(f"Membership ID: {membership.id}, Premium ID: {premium.id}")
-            premium.status='paid'
-            premium.save()
-            print(f"ID No: {id_number} Profile Found!!")
+            premium = PolicyPremium.objects.filter(membership=membership).order_by("-expected_date").first()
+
+            if premium:
+                print(f"Membership ID: {membership.id}, Premium ID: {premium.id}")
+                premium.status='paid'
+                premium.balance=0
+                premium.save()
+            #print("Premium: ", premium)
             
         else:
-            print(f"ID No: {id_number} has no profile yet")
+            #print(f"ID No: {id_number} has no profile yet")
+            pass
             
 
     except Exception as e:
