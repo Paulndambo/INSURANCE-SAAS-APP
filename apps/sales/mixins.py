@@ -267,7 +267,6 @@ class BulkRetailMemberOnboardingMixin(object):
     def run(self):
         self.__onboard_retail_members()
 
-
     def __onboard_retail_members(self):
         members = self.data
 
