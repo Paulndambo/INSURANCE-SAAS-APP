@@ -1,7 +1,7 @@
 QUEUE_SETTINGS = {
     'EXCHANGE_NAME': 'default',
     'EXCHANGE_TYPE': 'topic',
-    'QUEUE_NAME': 'c2s1',
+    'QUEUE_NAME': 'main_queue',
 }
 
 ROUTING_KEYS = {
