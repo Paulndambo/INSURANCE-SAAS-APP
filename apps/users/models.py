@@ -50,6 +50,10 @@ MEMBERSHIP_STATUS_CHOICES = (
 )
 
 
+class IndividualUser(AbstractBaseModel):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+
 class Membership(AbstractBaseModel):
     member_id = models.UUIDField(default=uuid.uuid4, unique=True)
     user = models.OneToOneField(
@@ -62,6 +66,20 @@ class Membership(AbstractBaseModel):
 
     def __str__(self):
         return self.user.username
+
+
+class MembershipConfiguration(AbstractBaseModel):
+    membership = models.ForeignKey(Membership, on_delete=models.CASCADE)
+    beneficiary = models.ForeignKey(
+        "dependents.Beneficiary", on_delete=models.CASCADE, blank=True, null=True
+    )
+    pricing_plan = models.ForeignKey(
+        "prices.PricingPlan", on_delete=models.SET_NULL, null=True, blank=True
+    )
+    cover_level = models.DecimalField(max_digits=10, decimal_places=2, null=True)
+
+    def __str__(self):
+        return self.membership.user.email
 
 
 class MembershipStatusUpdates(AbstractBaseModel):
@@ -101,7 +119,7 @@ class PolicyHolder(AbstractBaseModel):
     date_of_birth = models.DateField(null=True, blank=True)
     postal_address = models.CharField(max_length=255, null=True)
     physical_address = models.CharField(max_length=255, null=True)
-    phone_number = models.CharField(max_length=255)
+    phone_number = models.CharField(max_length=255, null=True, blank=True)
     town = models.CharField(max_length=255, null=True)
     country = models.CharField(max_length=255, null=True)
 

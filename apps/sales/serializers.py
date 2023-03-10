@@ -9,6 +9,7 @@ from apps.sales.models import (
     TemporaryMemberData,
     TemporaryDataHolding,
     TemporaryPaidMemberData,
+    PricingPlanSchemeMapping
 )
 
 
@@ -50,4 +51,10 @@ class TemporaryDepedentDataUploadSerializer(
 ):
     class Meta(object):
         model = TemporaryDependentImport
+        fields = "__all__"
+
+
+class PricingPlanSchemeMappingSerializer(BulkSerializerMixin, serializers.ModelSerializer):
+    class Meta(object):
+        model = PricingPlanSchemeMapping
         fields = "__all__"

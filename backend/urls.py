@@ -32,7 +32,12 @@ urlpatterns = [
     path("policies/", include("apps.policies.urls")),
     path("claims/", include("apps.claims.urls")),
     path("sales/", include("apps.sales.urls")),
-    path("docs/", schema_view.with_ui("swagger", cache_timeout=0),name="schema-swagger-ui",),
+    path(
+        "docs/",
+        schema_view.with_ui("swagger", cache_timeout=0),
+        name="schema-swagger-ui",
+    ),
+    path("", schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
 
-urlpatterns+=static(settings.MEDIA_URL, document_root=settings)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings)

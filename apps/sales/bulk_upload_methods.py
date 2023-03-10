@@ -60,7 +60,7 @@ def get_policy_number_prefix(pricing_plan_id):
     return policy_number_prefix
 
 
-def get_pricing_plan(pricing_plan_id):
+def get_pricing_plan(pricing_plan_id: int):
     pricing_plan_name = None
 
     if pricing_plan_id == 0:
@@ -154,3 +154,60 @@ def get_product_id_from_pricing_plan(pricing_plan: str):
     elif pricing_plan.lower() == "Nutun Kwande Group Scheme".lower():
         product_id = 15
     return product_id
+
+
+def validate_id_number_length(identification_method, identification_number):
+    validated_id_number = ""
+
+    if int(identification_method) == 1:
+        if len(identification_number) == 13:
+            validated_id_number = identification_number
+        elif len(identification_number) == 12:
+            validated_id_number = f"0{identification_number}"
+        elif len(identification_number) == 11:
+            validated_id_number = f"00{identification_number}"
+        elif len(identification_number) == 10:
+            validated_id_number = f"000{identification_number}"
+        elif len(identification_number) == 9:
+            validated_id_number = f"0000{identification_number}"
+        elif len(identification_number) == 8:
+            validated_id_number = f"00000{identification_number}"
+
+    elif int(identification_method) == 0:
+        validated_id_number = identification_number
+
+    return validated_id_number
+
+
+def validate_phone_number_length(phone_number):
+    validated_phone_number = ""
+
+    if len(phone_number) == 9:
+        validated_phone_number = f"0{phone_number}"
+
+    return validated_phone_number
+
+
+def get_date_of_birth(id):
+    day = int(id[4:6])
+    month = int(id[2:4])
+    year = id[0:2]
+
+    first_construct = int('20' + year)
+    second_construct = int('19' + year)
+
+    first_date = datetime(first_construct, 1, 1)
+    second_date = datetime(second_construct, 1, 1)
+
+    first_diff = datetime.today() - first_date
+    second_diff = datetime.today() - second_date
+
+    number = first_diff.days
+
+    # CHECK NUMBER
+    if number > 0 and first_diff < second_diff:
+        dob = datetime(first_construct, month, day)
+    else:
+        dob = datetime(second_construct, month, day)
+
+    return dob

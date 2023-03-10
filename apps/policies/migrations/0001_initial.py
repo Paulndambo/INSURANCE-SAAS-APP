@@ -75,34 +75,6 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name="PoliyStatusUpdate",
-            fields=[
-                (
-                    "id",
-                    models.BigAutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
-                ("created", models.DateTimeField(auto_now_add=True)),
-                ("modified", models.DateTimeField(auto_now=True)),
-                ("previous_status", models.CharField(max_length=255)),
-                ("next_status", models.CharField(max_length=255)),
-                (
-                    "policy",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE,
-                        to="policies.policy",
-                    ),
-                ),
-            ],
-            options={
-                "abstract": False,
-            },
-        ),
-        migrations.CreateModel(
             name="PolicyCancellation",
             fields=[
                 (

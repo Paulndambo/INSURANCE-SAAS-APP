@@ -6,6 +6,7 @@ from apps.sales.views import (
     TemporaryNewMemberDataAPIView,
     TemporaryPaidMemberDataAPIView,
     GenerateGWPReportAPIView,
+    PricingPlanSchemeMappingAPIView
 )
 
 urlpatterns = [
@@ -14,6 +15,8 @@ urlpatterns = [
         TemporaryNewMemberDataAPIView.as_view(),
         name="new-members-upload",
     ),
+    path("pricing-plan-scheme-mapping/", PricingPlanSchemeMappingAPIView.as_view(),
+        name="pricing-plan-scheme-mapping"),
     path(
         "paid-members-upload/",
         TemporaryPaidMemberDataAPIView.as_view(),
@@ -34,5 +37,9 @@ urlpatterns = [
         TemporaryDataHoldingAPIView.as_view(),
         name="bulk-data-upload",
     ),
-    path("generate-gwp-report/", GenerateGWPReportAPIView.as_view(), name="generate-gwp-report"),
+    path(
+        "generate-gwp-report/",
+        GenerateGWPReportAPIView.as_view(),
+        name="generate-gwp-report",
+    ),
 ]

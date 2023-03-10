@@ -1,34 +1,34 @@
 from backend.celery import app
-from apps.sales.models import TemporaryMemberData
-from apps.sales.mixins import BulkMembersOnboardingMixin
+from apps.sales.models import TemporaryMemberData, TemporaryDataHolding
+from apps.sales.mixins import (
+    BulkMembersOnboardingMixin, 
+    BulkPaidMembersMixin, 
+    BulkRetailMemberOnboardingMixin, 
+    BulkGroupMembersOnboardingMixin
+)
 
 
 @app.task(name="print_hello_world")
 def print_hello_world():
-    members = TemporaryMemberData.objects.filter(processed=True)
-    data = [
-        {
-            "id": 1,
-            "name": "John Doe",
-            "profession": "Software Developer"
-        },
-        {
-            "id": 2,
-            "name": "Jane Doe",
-            "profession": "DevOps Engineer"
-        }
-    ]
+    members = TemporaryDataHolding.objects.filter(upload_type="new_members").order_by("-created").first()
 
-    if members.count() > 1:
+    if members:
         bulk_mixin = BulkMembersOnboardingMixin(members)
         bulk_mixin.run()
+        # print(members.upload_data)
     else:
         print("*******************************All Members Have Been Processed!*********************************")
 
+@app.task(name="mark_members_as_paid_task")
+def mark_members_as_paid_task():
+    paid_members = TemporaryDataHolding.objects.filter(upload_type="paid_members").first()
+
+    if paid_members:
+        paid_members_mixin = BulkPaidMembersMixin(paid_members.upload_data)
+        paid_members_mixin.run()
+        
+
 
 app.conf.beat_schedule = {
-    'run-every-2-seconds': {
-        'task': 'print_hello_world',
-        'schedule': 2
-    }
+    "run-every-2-seconds": {"task": "print_hello_world", "schedule": 2}
 }
