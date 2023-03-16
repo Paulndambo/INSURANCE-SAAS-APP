@@ -23,30 +23,13 @@ class Claim(AbstractBaseModel):
     reference_number = models.CharField(max_length=32, unique=True)
     incident_date = models.DateField()
     incident_details = models.TextField(blank=True)
-    amount = models.FloatField(
-        null=True,
-        validators=[
-            MinValueValidator(limit_value=0),
-        ],
-    )
-    excess = models.FloatField(
-        null=True,
-        validators=[
-            MinValueValidator(limit_value=0),
-        ],
-    )
-    maximum_indemnity = models.FloatField(
-        null=True,
-        validators=[
-            MinValueValidator(limit_value=0),
-        ],
-    )
+    amount = models.FloatField(null=True, validators=[MinValueValidator(limit_value=0),],)
+    excess = models.FloatField(null=True, validators=[MinValueValidator(limit_value=0),],)
+    maximum_indemnity = models.FloatField(null=True, validators=[MinValueValidator(limit_value=0)],)
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
     policy_status_when_lodged = models.CharField(max_length=255, null=True)
     proof_of_payment = models.FileField(upload_to="proof_of_payments/", null=True)
-    membership = models.OneToOneField(
-        "users.Membership", on_delete=models.CASCADE, null=True
-    )
+    membership = models.ForeignKey("users.Membership", on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.reference_number

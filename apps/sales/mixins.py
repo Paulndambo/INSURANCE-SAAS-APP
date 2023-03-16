@@ -13,6 +13,7 @@ from apps.sales.bulk_upload_methods import (
 )
 from apps.sales.date_formatting_methods import date_format_method
 from apps.sales.mark_members_as_paid import mark_members_as_paid
+from apps.sales.get_membership import get_membership
 
 
 ##Apps Imports
@@ -34,6 +35,8 @@ from apps.users.models import (
 from apps.payments.models import PolicyPayment, PolicyPremium
 from apps.prices.models import PricingPlan
 from apps.sales.models import PricingPlanSchemeMapping
+
+from apps.dependents.models import Dependent, Beneficiary
 
 
 class BulkMembersOnboardingMixin(object):
@@ -465,3 +468,75 @@ class BulkPaidMembersMixin(object):
                 )
             except Exception as e:
                 raise e
+
+
+class FamilyMembersOnboardingMixin(object):
+    def __init__(self, data):
+        self.data = data
+
+
+    def run(self):
+        self.__onboard_family_members()
+
+
+    def __onboard_family_members(self):
+        dependents_types = ["Dependant", "Dependent"]
+        for x in self.data:
+            if x.relationship_type.lower() in [x.lower() for x in dependents_types]:
+                dependent_mixin = DependentOnboardingMixin(x)
+                dependent_mixin.run()
+            elif x.relationship_type.lower() == "Beneficiary".lower():
+                beneficiary_mixin = BeneficiaryOnboardingMixin(x)
+                beneficiary_mixin.run()
+            elif x.relationship_type.lower() == "Extended".lower():
+                extended_mixin = ExtendedFamilyMembersOnboardingMixin(x)
+                extended_mixin.run()
+            else:
+                raise ValueError("The Relationship Type You Passed Can't Be Processed!!!!!!")
+
+
+class DependentOnboardingMixin(object):
+    def __init__(self, data):
+        self.data = data
+
+    def run(self):
+        self.__onboard_dependents()
+
+
+    def __onboard_dependents(self):
+        data = self.data
+        membership = get_membership(
+            data['main_member_identification_number'],
+            data['identification_method'],
+            int(data['product'])
+        )
+
+        if membership:
+            dependent = Dependent(
+                membership=membership,
+                is_additional_family_member=False,
+                
+            )
+
+
+class ExtendedFamilyMembersOnboardingMixin(object):
+    def __init__(self, data):
+        self.data = data
+
+
+    def run(self):
+        pass
+
+    def __onboard_extended_family_members(self):
+        pass
+
+
+class BeneficiaryOnboardingMixin(object):
+    def __init__(self, data):
+        self.data = data 
+
+    def run(self):
+        pass
+
+    def __onboard_beneficiaries(self):
+        pass
