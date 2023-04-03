@@ -12,6 +12,7 @@ class ClaimSerializer(serializers.ModelSerializer):
         model = Claim
         fields = "__all__"
 
+    
 
 class ClaimDocumentSerializer(serializers.ModelSerializer):
     class Meta:
