@@ -62,6 +62,6 @@ class TemporaryDependentDataAPIView(ListBulkCreateUpdateDestroyAPIView):
     permission_classes = [AllowAny]
 
 
-class GenerateGWPReportAPIView(generics.GenericAPIView):
-    def get(self, request, *args, **kwargs):
-        return Response({"message": "Hello World"})
+#class GenerateGWPReportAPIView(generics.GenericAPIView):
+#    def get(self, request, *args, **kwargs):
+#        return Response({"message": "Hello World"})

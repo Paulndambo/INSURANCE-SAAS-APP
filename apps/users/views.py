@@ -113,7 +113,7 @@ class UserModelViewSet(ModelViewSet):
             return UserSerializer
 
 
-class MembershipModelViewSet(ModelViewSet):
+class MembershipViewSet(ModelViewSet):
     queryset = Membership.objects.all()
     serializer_class = MembershipSerializer
 
