@@ -13,7 +13,7 @@ from rest_framework_simplejwt.views import (
 
 
 router = DefaultRouter()
-router.register("users", views.UserModelViewSet, basename="users")
+#router.register("users", views.UserModelViewSet, basename="users")
 router.register("memberships", views.MembershipViewSet, basename="memberships")
 router.register("profiles", views.ProfileModelViewSet, basename="profiles")
 router.register("policyholders", views.PolicyHolderViewSet, basename="policy-holders")

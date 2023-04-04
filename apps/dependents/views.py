@@ -4,6 +4,7 @@ from rest_framework import generics, status
 
 from apps.dependents.models import Beneficiary, Dependent
 from apps.dependents.serializers import BeneficiarySerializer, DependentSerializer
+from rest_framework.permissions import IsAuthenticated
 
 
 # Create your views here.
@@ -31,6 +32,7 @@ class DependentModelViewSet(ModelViewSet):
 class BeneficiaryModelViewSet(ModelViewSet):
     queryset = Beneficiary.objects.all()
     serializer_class = BeneficiarySerializer
+    permission_classes = [IsAuthenticated]
 
     def get_serializer_context(self):
         return self.kwargs
@@ -40,6 +42,9 @@ class BeneficiaryModelViewSet(ModelViewSet):
         membership = self.kwargs.get("membership_pk")
 
         # TODO: use authentication to separate customer dashboard & admin dashboard
+
+        user = self.request.user
+        print(user, user.role)
 
         if scheme_group and membership:
             membership_id = int(membership)
