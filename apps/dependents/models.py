@@ -67,9 +67,7 @@ class Dependent(AbstractBaseModel):
     guid = models.CharField(max_length=200, null=True)
     id_number = models.CharField(max_length=255, null=True)
     passport_number = models.CharField(max_length=255, null=True)
-    add_on_premium = models.DecimalField(
-        max_digits=20, decimal_places=2, null=True, blank=True
-    )
+    add_on_premium = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
     is_deleted = models.BooleanField(default=False)
 
     def __str__(self):

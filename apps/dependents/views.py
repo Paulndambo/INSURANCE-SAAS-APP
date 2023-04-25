@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import generics, status
+from rest_framework.permissions import IsAuthenticated
 
 from apps.dependents.models import Beneficiary, Dependent, FamilyMemberPricing
 from apps.dependents.serializers import BeneficiarySerializer, DependentSerializer, FamilyMemberPricingSerializer
@@ -11,6 +12,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 class DependentModelViewSet(ModelViewSet):
     queryset = Dependent.objects.all()
     serializer_class = DependentSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_serializer_context(self):
         return self.kwargs
@@ -20,11 +22,13 @@ class DependentModelViewSet(ModelViewSet):
         scheme_group = self.kwargs.get("scheme_group_pk")
         membership = self.kwargs.get("membership_pk")
 
-        if scheme_group and membership:
-            membership_id = int(membership)
-            scheme_group_id = int(scheme_group)
-            queryset = self.queryset.filter(schemegroup_id=scheme_group_id, membership_id=membership_id)
-            return queryset
+        if self.request.user.role == 'individual':
+            print(self.request.user)
+            if scheme_group and membership:
+                membership_id = int(membership)
+                scheme_group_id = int(scheme_group)
+                queryset = self.queryset.filter(schemegroup_id=scheme_group_id, membership_id=membership_id)
+                return queryset
         return self.queryset
 
 
