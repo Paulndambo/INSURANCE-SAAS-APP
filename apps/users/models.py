@@ -56,13 +56,16 @@ class IndividualUser(AbstractBaseModel):
 
 class Membership(AbstractBaseModel):
     member_id = models.UUIDField(default=uuid.uuid4, unique=True)
-    user = models.OneToOneField(
-        User, on_delete=models.CASCADE, related_name="memberships"
-    )
-    description = models.TextField(null=True, blank=True)
-    scheme_group = models.ForeignKey("schemes.SchemeGroup", on_delete=models.CASCADE)
-    policy = models.ForeignKey("policies.Policy", on_delete=models.SET_NULL, null=True)
-    status = models.CharField(max_length=255, choices=MEMBERSHIP_STATUS_CHOICES)
+    description = models.TextField(null=True)
+    #price_request = models.ForeignKey('generic_policy_prices.PolicyPriceRequest', null=True, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+    scheme_group = models.ForeignKey('schemes.SchemeGroup', on_delete=models.CASCADE)
+    policy = models.OneToOneField('policies.Policy', null=True, on_delete=models.CASCADE)
+    membership_status = models.CharField(max_length=255, choices=MEMBERSHIP_STATUS_CHOICES, null=True, blank=True)
+    membership_certificate = models.FileField(upload_to="membership_certificates", null=True, blank=True)
+    membership_certificate_generated = models.BooleanField(default=False)
+    membership_welcome_letter = models.FileField(upload_to="membership_welcome_letters/", null=True, blank=True)
+    properties = models.JSONField(default=dict)
 
     def __str__(self):
         return self.user.username
@@ -70,12 +73,8 @@ class Membership(AbstractBaseModel):
 
 class MembershipConfiguration(AbstractBaseModel):
     membership = models.ForeignKey(Membership, on_delete=models.CASCADE)
-    beneficiary = models.ForeignKey(
-        "dependents.Beneficiary", on_delete=models.CASCADE, blank=True, null=True
-    )
-    pricing_plan = models.ForeignKey(
-        "prices.PricingPlan", on_delete=models.SET_NULL, null=True, blank=True
-    )
+    beneficiary = models.ForeignKey("dependents.Beneficiary", on_delete=models.CASCADE, blank=True, null=True)
+    pricing_plan = models.ForeignKey("prices.PricingPlan", on_delete=models.SET_NULL, null=True, blank=True)
     cover_level = models.DecimalField(max_digits=10, decimal_places=2, null=True)
 
     def __str__(self):
@@ -92,36 +91,44 @@ class MembershipStatusUpdates(AbstractBaseModel):
 
 
 class Profile(AbstractBaseModel):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profiles")
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=255, blank=True)
     last_name = models.CharField(max_length=255, blank=True)
     id_number = models.CharField(max_length=255, null=True, unique=True)
+    identification_number = models.CharField(max_length=255, null=True, blank=True)
+    registration_number = models.CharField(max_length=255, null=True, unique=True)
     passport_number = models.CharField(max_length=255, null=True, unique=True)
     date_of_birth = models.DateField(null=True)
-    occupation = models.CharField(max_length=255, null=True, blank=True)
-    nationality = models.CharField(max_length=255, null=True)
-    gender = models.CharField(max_length=255, null=True, choices=GENDER_CHOICES)
-    physical_address = models.CharField(max_length=255, null=True, blank=True)
-    postal_address = models.CharField(max_length=255, null=True, blank=True)
-    phone_number = models.CharField(max_length=255, null=True, blank=True)
-    home_phone_number = models.CharField(max_length=255, null=True, blank=True)
-    work_phone_number = models.CharField(max_length=255, null=True, blank=True)
+    occupation = models.TextField(null=True)
+    nationality = models.CharField(max_length=120, null=True)
+    gender = models.CharField(null=True, max_length=60, choices=GENDER_CHOICES)
+    address = models.CharField(max_length=255, null=True, blank=True)
+    address1 = models.CharField(max_length=255, null=True, blank=True)
+    phone = models.CharField(max_length=255, null=True, blank=True)
+    phone1 = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
 
 class PolicyHolder(AbstractBaseModel):
-    user = models.OneToOneField(User, on_delete=models.PROTECT)
-    id_number = models.CharField(max_length=255)
-    gender = models.CharField(max_length=255, choices=GENDER_CHOICES)
-    marital_status = models.CharField(max_length=255)
-    date_of_birth = models.DateField(null=True, blank=True)
-    postal_address = models.CharField(max_length=255, null=True)
-    physical_address = models.CharField(max_length=255, null=True)
+    individual_user = models.OneToOneField(IndividualUser, null=True, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255, null=True, blank=True)
     phone_number = models.CharField(max_length=255, null=True, blank=True)
-    town = models.CharField(max_length=255, null=True)
-    country = models.CharField(max_length=255, null=True)
+    address = models.CharField(max_length=255, null=True, blank=True)
+    id_number = models.CharField(max_length=255, null=True, unique=True)
+    registration_number = models.CharField(max_length=255,null=True,unique=True)
+    passport_number = models.CharField(max_length=255,null=True,unique=True)
+    identification_number = models.CharField(max_length=255, null=True, blank=True)
+    date_of_birth = models.DateField(null=True)
+    gender = models.CharField(null=True, max_length=60)
+    occupation = models.TextField(null=True)
+    nationality = models.CharField(max_length=120, null=True)
+    gender = models.CharField(null=True, max_length=60, choices=GENDER_CHOICES)
+    address = models.CharField(max_length=255, null=True, blank=True)
+    address1 = models.CharField(max_length=255, null=True, blank=True)
+    phone = models.CharField(max_length=255, blank=True)
+    phone1 = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         return self.id_number
