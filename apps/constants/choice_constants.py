@@ -15,6 +15,7 @@ PAYMENT_PERIOD_CHOICES = (
     ("quarterly", "Quarterly"),
     ("biannual", "Biannual"),
     ("yearly", "Yearly"),
+    ("single", "Single"),
 )
 
 SCHEME_TYPE_CHOICES = (
@@ -70,4 +71,18 @@ ACCOUNT_TYPES = (
     ("cheque", "Cheque"),
     ("savings", "Savings"),
     ("transmission", "Transmission"),
+)
+
+POLICY_STATUS_CHOICES = (
+    ("active", "Active"),
+    ("lapsed", "Lapsed"),
+    ("cancelled", "Cancelled"),
+    ("ntu", "NTU"),
+    ("created", "Expired"),
+    ("awaiting_payment", "Awaiting Payment"),
+    ("draft", "Draft"),
+    ("incative", "Inactive"),
+)
+POLICY_SUB_STATUS_CHOICES = (
+    ("lapse_pending", "Lapse Pending"),
 )

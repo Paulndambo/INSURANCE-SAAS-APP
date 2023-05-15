@@ -1,0 +1,12 @@
+{
+    "member_type": "dependent",
+    "pricing_group": "group",
+    "matrix": [
+        {
+            "min_age": 10,
+            "max_age": 21,
+            "cover_amount": 25000.00,
+            "premium": 40.00
+        }
+    ]
+}

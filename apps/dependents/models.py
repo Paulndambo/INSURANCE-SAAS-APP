@@ -74,3 +74,35 @@ class Dependent(AbstractBaseModel):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+
+
+RELATIVE_TYPE_CHOICES = (
+    ("spouse", "Spouse"),
+    ("child", "Child"),
+    ("extended", "Extended"),
+    ("stillborn", "Stillborn")
+)
+
+MEMBER_TYPE_CHOICES = (
+    ("dependent", "Dependent"),
+    ("extended", "Extended")
+)
+
+PRICING_GROUP = (
+    ("credit", "Credit Life"),
+    ("funeral", "Funeral"),
+    ("group", "Group"),
+    ("retail", "Retail"),
+)
+
+class FamilyMemberPricing(AbstractBaseModel):
+    pricing_group = models.CharField(max_length=255, choices=PRICING_GROUP)
+    member_type = models.CharField(max_length=255, choices=MEMBER_TYPE_CHOICES)
+    relative_type = models.CharField(max_length=255, choices=RELATIVE_TYPE_CHOICES)
+    min_age = models.IntegerField(default=0)
+    max_age = models.IntegerField(default=0)
+    cover_amount = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    premium = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
+    def __str__(self):
+        return self.relative_type
