@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     ##Third Party
     "rest_framework",
+    
     "rest_framework.authtoken",
     "djoser",
     "corsheaders",

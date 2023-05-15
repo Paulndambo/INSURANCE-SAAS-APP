@@ -2,9 +2,9 @@ from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import generics, status
 
-from apps.dependents.models import Beneficiary, Dependent
-from apps.dependents.serializers import BeneficiarySerializer, DependentSerializer
-from rest_framework.permissions import IsAuthenticated
+from apps.dependents.models import Beneficiary, Dependent, FamilyMemberPricing
+from apps.dependents.serializers import BeneficiarySerializer, DependentSerializer, FamilyMemberPricingSerializer
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 
 # Create your views here.
@@ -54,3 +54,8 @@ class BeneficiaryModelViewSet(ModelViewSet):
             return queryset
         return self.queryset
         
+
+class FamilyMemberPricingViewSet(ModelViewSet):
+    queryset = FamilyMemberPricing.objects.all()
+    serializer_class = FamilyMemberPricingSerializer
+    permission_classes = [AllowAny,]
