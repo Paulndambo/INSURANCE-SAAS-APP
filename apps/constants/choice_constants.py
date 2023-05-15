@@ -86,3 +86,26 @@ POLICY_STATUS_CHOICES = (
 POLICY_SUB_STATUS_CHOICES = (
     ("lapse_pending", "Lapse Pending"),
 )
+
+CYCLE_STATUS_CHOICES = (
+    ("draft", "Draft"),
+    ("created", "Created"),
+    ("active", "Active"),
+    ("cancelled", "Cancelled"),
+    ("lapsed", "Lapsed"),
+    ("inactive", "Incative"),
+    ("ntu", "Not Taken Up"),
+    ("expired", "Expired"),
+    ("awaiting_payment", "Awaiting Payment"),
+)
+
+POLICY_CANCELLATION_STATUS = (
+    ('pending', 'Pending'),
+    ('confirmed', 'Confirmed'),
+    ('refunded', 'Refunded'),
+    ('cancelled', 'Cancelled'),
+)
+CANCELLATION_ORIGIN = (
+    ('customer', 'Customer'),
+    ('insurer', 'Insurer'),
+)
