@@ -21,6 +21,7 @@ PAYMENT_PERIOD_CHOICES = (
 SCHEME_TYPE_CHOICES = (
     ("retail", "Retail"),
     ("group", "Group"),
+    ("credit", "Credit"),
 )
 
 

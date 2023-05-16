@@ -6,14 +6,19 @@ from apps.constants.choice_constants import (
     PAYMENT_METHODS,
     PAYMENT_PERIOD_CHOICES,
     CYCLE_CHOICE_TYPES,
+    SCHEME_TYPE_CHOICES
 )
 
 
 class Scheme(AbstractBaseModel):
     name = models.CharField(max_length=255)
-    scheme_type = models.CharField(max_length=255)
-    max_members_number = models.IntegerField(default=1)
+    scheme_type = models.CharField(max_length=255, choices=SCHEME_TYPE_CHOICES)
+    max_amount_of_members = models.IntegerField(default=1)
     description = models.TextField(null=True, blank=True)
+    master_policy = models.BooleanField(default=False)
+    is_group_scheme = models.BooleanField(default=False)
+    config = models.JSONField(null=True)
+
 
     def __str__(self):
         return self.name

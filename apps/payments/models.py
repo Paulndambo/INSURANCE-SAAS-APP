@@ -110,7 +110,7 @@ class DebitOrder(AbstractBaseModel):
     accepted = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
     signature = models.ImageField(upload_to="signatures/", null=True)
-    # pdf = models.FileField(upload_to=get_pdf_path, null=True)
+    pdf = models.FileField(upload_to="debit_orders/", null=True)
     pdf_glacier_id = models.CharField(max_length=256, null=True)
     state = models.CharField(max_length=256, null=True)
     rejected_reason = models.CharField(max_length=256, null=True)
