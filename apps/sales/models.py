@@ -105,3 +105,12 @@ class PricingPlanSchemeMapping(AbstractBaseModel):
 
     def __str__(self):
         return self.name
+
+
+class FailedUploadData(AbstractBaseModel):
+    member = models.JSONField(default=dict)
+    member_type = models.CharField(max_length=255)
+    reason = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.member_type + ' upload failed'

@@ -11,6 +11,7 @@ from apps.constants.choice_constants import (
     CANCELLATION_ORIGIN,
     POLICY_CANCELLATION_STATUS
 )
+from apps.users.utils import is_fake_email
 
 
 class Policy(AbstractBaseModel):
@@ -163,3 +164,35 @@ class PolicyDetails(AbstractBaseModel):
 
     def __str__(self):
         return self.policy.policy_number
+
+
+class CancellationNotification(AbstractBaseModel):
+    policy = models.ForeignKey(Policy, on_delete=models.SET_NULL, null=True)
+    membership = models.ForeignKey("users.Membership", on_delete=models.SET_NULL, null=True)
+    email = models.EmailField(null=True)
+    mobile_number = models.CharField(max_length=255, null=True)
+    notification_send = models.BooleanField(default=False)
+    policy_type = models.CharField(max_length=255, null=True)
+    product = models.CharField(max_length=255, null=True)
+    is_fake_email = models.BooleanField(default=False)
+
+    def save(self, *args, **kwargs):
+        self.is_fake_email = is_fake_email(self.email)
+        return super().save()
+
+
+class LapseNotification(AbstractBaseModel):
+    membership = models.ForeignKey(
+        "users.Membership", on_delete=models.SET_NULL, null=True)
+    email = models.EmailField(null=True)
+    mobile_number = models.CharField(max_length=255, null=True)
+    notification_send = models.BooleanField(default=False)
+    policy_type = models.CharField(max_length=255, null=True)
+    policy_number = models.CharField(max_length=255, null=True)
+    policy_status = models.CharField(max_length=255, null=True)
+    product = models.CharField(max_length=255, null=True)
+    premium_expected_date = models.DateField(null=True)
+    is_fake_email = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.policy_type
