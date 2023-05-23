@@ -7,10 +7,10 @@ from apps.policies.models import (
     CancellationNotification,
     LapseNotification
 )
-from apps.onboarding.bulk_upload_methods import (
+from apps.sales.bulk_upload_methods import (
     get_pricing_plan
 )
-from apps.onboarding.models import FailedUploadData
+from apps.sales.models import FailedUploadData
 
 from apps.users.models import Profile, Membership
 from apps.users.utils import is_fake_email
@@ -21,12 +21,15 @@ def mark_members_as_cancelled(identification_method: int, identification_number:
 
     profile = ''
     if identification_method == 1:
-        profile = Profile.objects.filter(id_number=identification_number).first()
+        profile = Profile.objects.filter(
+            id_number=identification_number).first()
     else:
-        profile = Profile.objects.filter(passport_number=identification_number).first()
+        profile = Profile.objects.filter(
+            passport_number=identification_number).first()
 
     if profile:
-        membership = Membership.objects.filter(user=profile.user, scheme_group__pricing_group=get_pricing_plan(product)).first()
+        membership = Membership.objects.filter(
+            user=profile.user, scheme_group__pricing_group=get_pricing_plan(product)).first()
         if membership:
             if action_type.lower() == "Cancel".lower():
                 if membership.scheme_group.scheme.is_group_scheme == True:
@@ -47,11 +50,12 @@ def mark_members_as_cancelled(identification_method: int, identification_number:
                         mobile_number=profile.phone if profile.phone else profile.phone1,
                         notification_send=False,
                         policy_type="Group Scheme",
-                        product=membership.scheme_group.pricing_group    
+                        product=membership.scheme_group.pricing_group
                     )
 
                 else:
-                    policy = Policy.objects.get(id=membership.scheme_group.policy.id)
+                    policy = Policy.objects.get(
+                        id=membership.scheme_group.policy.id)
                     policy.status = "cancelled"
                     policy.save()
 
@@ -86,13 +90,13 @@ def mark_members_as_cancelled(identification_method: int, identification_number:
                         mobile_number=profile.phone if profile.phone else profile.phone1,
                         notification_send=False,
                         policy_type="Retail Scheme",
-                        product=membership.scheme_group.pricing_group        
+                        product=membership.scheme_group.pricing_group
                     )
             elif action_type.lower() == "Lapsed".lower():
                 try:
                     if membership.scheme_group.scheme.is_group_scheme == False:
                         lapse_notif = LapseNotification(
-                            membership=membership, 
+                            membership=membership,
                             email=membership.user.email,
                             mobile_number=profile.phone if profile.phone else profile.phone1,
                             notification_send=False,
@@ -127,9 +131,9 @@ def mark_members_as_cancelled(identification_method: int, identification_number:
                 raise e
     else:
         data = {
-                "identification_number": identification_number,
-                "product": product,
-                "reference_reason": reference_reason
+            "identification_number": identification_number,
+            "product": product,
+            "reference_reason": reference_reason
         }
         try:
             FailedUploadData.objects.create(

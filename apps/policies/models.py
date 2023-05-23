@@ -196,3 +196,13 @@ class LapseNotification(AbstractBaseModel):
 
     def __str__(self):
         return self.policy_type
+
+
+class PolicyStatusUpdates(AbstractBaseModel):
+    """
+    Keep all status updates of policies.
+    """
+
+    policy = models.ForeignKey(Policy, on_delete=models.CASCADE)
+    previous_status = models.CharField(max_length=255, choices=POLICY_STATUS_CHOICES)
+    next_status = models.CharField(max_length=255, choices=POLICY_STATUS_CHOICES)
