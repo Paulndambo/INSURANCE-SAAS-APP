@@ -1,12 +1,248 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    Home
-</body>
-</html>
+{% extends "base.html" %}
+{% block content %}
+
+<main class="content">
+    <div class="container-fluid p-0">
+        <div class="row">
+            <div class="col-xl-4 col-md-6">
+                <div class="card card-stats">
+                    <!-- Card body -->
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <h5 class="card-title text-uppercase text-muted mb-0">Total Members</h5>
+
+                                <span class="h2 font-weight-bold mb-0">0</span>
+                            </div>
+                            <div class="col-auto">
+                                <div class="icon icon-shape bg-gradient-red  rounded-circle shadow">
+                                    <i class="" data-feather="users"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6">
+                <div class="card card-stats">
+                    <!-- Card body -->
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <h5 class="card-title text-uppercase text-muted mb-0">Total Savings</h5>
+                                <span class="h2 font-weight-bold mb-0">Ksh {{ total_savings }}</span>
+                            </div>
+                            <div class="col-auto">
+                                <div class="icon icon-shape bg-gradient-orange  rounded-circle shadow">
+                                    <i class="" data-feather="dollar-sign"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6">
+                <div class="card card-stats">
+                    <!-- Card body -->
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <h5 class="card-title text-uppercase text-muted mb-0">Performance</h5>
+                                <span class="h2 font-weight-bold mb-0">49.65%</span>
+                            </div>
+                            <div class="col-auto">
+                                <div class="icon icon-shape bg-gradient-info text-white rounded-circle shadow">
+                                    <i class="" data-feather="bar-chart"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8 col-md-12" style="height: 100%;">
+            <div class="card ">
+                <div class="card-header">
+                    Yearly Savings
+
+                </div>
+                <div class="card-body">
+                    <canvas id="myChartBar"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-12">
+            <div class="card ">
+                <div class="card-header">
+                    Yearly Savings
+
+                </div>
+                <div class="card-body">
+                    <canvas id="myPieChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-lg-6 col-md-12">
+            <div class="card ">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col">
+                            <h4 class="card-title"> Members</h4>
+                        </div>
+                        <div class="col text-right">
+                            <a href="" class="text-dark"><i class="align-middle"
+                                    data-feather="user-plus"></i></a>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table tablesorter " id="">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Country</th>
+                                    <th>Town</th>
+                                    <th class="text-center">Savings(Ksh)</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                
+                                <tr>
+                                    <td><a href=""
+                                            class="text-dark"></a></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="text-center"></td>
+                                </tr>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-12">
+            <div class="card card-tasks">
+                <div class="card-header ">
+                    <h6 class="title d-inline">Pending Loan Approvals</h6>
+                </div>
+                <div class="card-body ">
+                    <div class="table-full-width table-responsive">
+                        <table class="table table-hover my-0">
+                            <thead>
+                                <tr>
+                                    <th>Member</th>
+                                    <th>Amount Applying</th>
+                                    <th colspan="3">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                
+                                <tr>
+                                    <td>#</td>
+                                    <td>#</td>
+                                    <td>
+                                        <a href=""
+                                            class="btn btn-success">Approve</a>
+                                    </td>
+
+                                    <td>
+                                        <a href=""
+                                            class="btn btn-danger">Decline</a>
+                                    </td>
+                                </tr>
+                               
+
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  const ctx = document.getElementById('myChartBar');
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: [{% for label in labels %} '{{ label }}', {% endfor %}],
+      datasets: [{
+        label: 'Yearly Savings',
+        data: [{% for data in chartdata %} '{{ data }}', {% endfor %}],
+        backgroundColor : [
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(75, 192, 192, 0.6)',
+          'rgba(153, 102, 255, 0.6)',
+          'rgba(255, 159, 64, 0.6)',
+          'rgba(99, 200, 64, 0.6)'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+
+  const piect = document.getElementById('myPieChart');
+
+  new Chart(piect, {
+    type: 'doughnut',
+    data: {
+      labels: [{% for label in labels %} '{{ label }}', {% endfor %}],
+      datasets: [{
+        label: 'Yearly Savings',
+        data: [{% for data in chartdata %} '{{ data }}', {% endfor %}],
+        backgroundColor : [
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(75, 192, 192, 0.6)',
+          'rgba(153, 102, 255, 0.6)',
+          'rgba(255, 159, 64, 0.6)',
+          'rgba(99, 200, 64, 0.6)'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+</script>
+
+{% endblock content %}
