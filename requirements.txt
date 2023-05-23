@@ -13,3 +13,4 @@ djangorestframework-bulk
 drf-nested-routers
 gunicorn
 whitenoise
+djoser
