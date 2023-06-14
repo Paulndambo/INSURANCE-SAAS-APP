@@ -60,7 +60,7 @@ class Membership(AbstractBaseModel):
     #price_request = models.ForeignKey('generic_policy_prices.PolicyPriceRequest', null=True, on_delete=models.CASCADE)
     user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
     scheme_group = models.ForeignKey('schemes.SchemeGroup', on_delete=models.CASCADE)
-    policy = models.OneToOneField('policies.Policy', null=True, on_delete=models.CASCADE)
+    policy = models.ForeignKey('policies.Policy', null=True, on_delete=models.CASCADE)
     membership_status = models.CharField(max_length=255, choices=MEMBERSHIP_STATUS_CHOICES, null=True, blank=True)
     membership_certificate = models.FileField(upload_to="membership_certificates", null=True, blank=True)
     membership_certificate_generated = models.BooleanField(default=False)
@@ -147,3 +147,7 @@ class PolicyHolderRelative(AbstractBaseModel):
     relative_key = models.CharField(max_length=255, unique=True)
     degree_of_separation = models.IntegerField()
     use_type = models.CharField(max_length=128, choices=USE_TYPES, default="dependent")
+
+
+    def __str__(self):
+        return self.relative_name

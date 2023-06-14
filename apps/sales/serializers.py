@@ -1,60 +1,55 @@
 from rest_framework import serializers
-from rest_framework_bulk import (
-    BulkSerializerMixin,
-)
-
-from apps.sales.models import (
-    TemporaryCancelledMemberData,
-    TemporaryDependentImport,
-    TemporaryMemberData,
-    TemporaryDataHolding,
-    TemporaryPaidMemberData,
-    PricingPlanSchemeMapping
-)
+from apps.sales.models import FailedUploadData, TemporaryDataHolding
 
 
-class TemporaryNewMemberUploadSerializer(
-    BulkSerializerMixin, serializers.ModelSerializer
-):
-    class Meta(object):
-        model = TemporaryMemberData
-        # only necessary in DRF3
-        fields = "__all__"
+class BulkTemporaryPaidMemberDataBulkSerializer(serializers.Serializer):
+    onboarding_mode = serializers.CharField(max_length=255)
+    upload_type = serializers.CharField(max_length=255)
+    upload_data = serializers.JSONField()
 
 
-class TemporaryCancelledMemberDataUploadSerializer(
-    BulkSerializerMixin, serializers.ModelSerializer
-):
-    class Meta(object):
-        model = TemporaryCancelledMemberData
-        fields = "__all__"
+class BulkPolicyCreateSerializer(serializers.Serializer):
+    file = serializers.FileField()
+    # policy_number = serializers.CharField(max_length=255)
+    scheme_group_id = serializers.IntegerField()
+    # pricing_plan = serializers.CharField(max_length=255)
 
 
-class TemporaryDataHoldingUploadSerializer(
-    BulkSerializerMixin, serializers.ModelSerializer
-):
+class BulkTemporaryNewMemberUploadSerializer(serializers.Serializer):
+    onboarding_mode = serializers.CharField(max_length=255)
+    upload_type = serializers.CharField(max_length=255)
+    upload_data = serializers.JSONField()
+
+
+class BulkTemporaryDependentUploadSerializer(serializers.Serializer):
+    onboarding_mode = serializers.CharField(max_length=255)
+    upload_type = serializers.CharField(max_length=255)
+    upload_data = serializers.JSONField()
+
+
+class BulkTemporaryMemberCancellationUploadSerializer(serializers.Serializer):
+    onboarding_mode = serializers.CharField(max_length=255)
+    upload_type = serializers.CharField(max_length=255)
+    upload_data = serializers.JSONField()
+
+
+class BulkTemporaryLapseDataUploadSerializer(serializers.ModelSerializer):
+    onboarding_mode = serializers.CharField(
+        max_length=255, default='background', required=False)
+    upload_data = serializers.JSONField()
+
+
+class TemporaryDataHoldingSerializer(serializers.ModelSerializer):
     class Meta:
         model = TemporaryDataHolding
         fields = "__all__"
 
 
-class TemporaryPaidMemberDataUploadSerializer(
-    BulkSerializerMixin, serializers.ModelSerializer
-):
+class MembersOnboardingInitiateSerializer(serializers.Serializer):
+    pass
+
+
+class FailedUploadDataSerializer(serializers.ModelSerializer):
     class Meta:
-        model = TemporaryPaidMemberData
-        fields = "__all__"
-
-
-class TemporaryDepedentDataUploadSerializer(
-    BulkSerializerMixin, serializers.ModelSerializer
-):
-    class Meta(object):
-        model = TemporaryDependentImport
-        fields = "__all__"
-
-
-class PricingPlanSchemeMappingSerializer(BulkSerializerMixin, serializers.ModelSerializer):
-    class Meta(object):
-        model = PricingPlanSchemeMapping
+        model = FailedUploadData
         fields = "__all__"

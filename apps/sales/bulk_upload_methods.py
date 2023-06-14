@@ -1,5 +1,6 @@
 from apps.users.models import Profile
 from datetime import datetime
+from apps.prices.models import PricingPlan
 
 
 def bulk_policy_upload(row):
@@ -41,7 +42,7 @@ def get_policy_number_prefix(pricing_plan_id):
     elif pricing_plan_id == 7:
         policy_number_prefix = "NBSL_"
     elif pricing_plan_id == 8:
-        policy_number_prefix = "NTLF_"
+        policy_number_prefix = "NTF_"
     elif pricing_plan_id == 9:
         policy_number_prefix = "NKL_"
     elif pricing_plan_id == 10:
@@ -56,11 +57,13 @@ def get_policy_number_prefix(pricing_plan_id):
         policy_number_prefix = "NMBDG_"
     elif pricing_plan_id == 15:
         policy_number_prefix = "NKLG_"
+    elif pricing_plan_id == 16:
+        policy_number_prefix = "NTCL_"
 
     return policy_number_prefix
 
 
-def get_pricing_plan(pricing_plan_id: int):
+def get_pricing_plan(pricing_plan_id):
     pricing_plan_name = None
 
     if pricing_plan_id == 0:
@@ -95,6 +98,8 @@ def get_pricing_plan(pricing_plan_id: int):
         pricing_plan_name = "Nutun MBD Legal Collections Group Scheme"
     elif pricing_plan_id == 15:
         pricing_plan_name = "Nutun Kwande Group Scheme"
+    elif pricing_plan_id == 16:
+        pricing_plan_name = "Credit Life"
 
     return pricing_plan_name
 
@@ -153,6 +158,8 @@ def get_product_id_from_pricing_plan(pricing_plan: str):
         product_id = 14
     elif pricing_plan.lower() == "Nutun Kwande Group Scheme".lower():
         product_id = 15
+    elif pricing_plan.lower() == "Credit Life".lower():
+        product_id = 16
     return product_id
 
 
@@ -188,26 +195,12 @@ def validate_phone_number_length(phone_number):
     return validated_phone_number
 
 
-def get_date_of_birth(id):
-    day = int(id[4:6])
-    month = int(id[2:4])
-    year = id[0:2]
-
-    first_construct = int('20' + year)
-    second_construct = int('19' + year)
-
-    first_date = datetime(first_construct, 1, 1)
-    second_date = datetime(second_construct, 1, 1)
-
-    first_diff = datetime.today() - first_date
-    second_diff = datetime.today() - second_date
-
-    number = first_diff.days
-
-    # CHECK NUMBER
-    if number > 0 and first_diff < second_diff:
-        dob = datetime(first_construct, month, day)
-    else:
-        dob = datetime(second_construct, month, day)
-
-    return dob
+def get_pricing_plan_base_cover(pricing_plan_name: str):
+    cover_amount = 0
+    try:
+        pricing_group = PricingPlan.objects.filter(group=pricing_plan_name).first()
+        cover_amount = [x for x in pricing_group.matrix.keys()][0]
+        return cover_amount
+    except Exception as e:
+        raise e
+    

@@ -51,6 +51,7 @@ class Dependent(AbstractBaseModel):
     policy = models.ForeignKey(Policy, on_delete=models.CASCADE, null=True)
     schemegroup = models.ForeignKey("schemes.SchemeGroup", on_delete=models.SET_NULL, null=True, blank=True)
     membership = models.ForeignKey("users.Membership", null=True, on_delete=models.CASCADE)
+    membership_configuration = models.ForeignKey("users.MembershipConfiguration", on_delete=models.CASCADE, null=True)
     is_additional_family_member = models.BooleanField(default=False)
     dependent_type = models.CharField(max_length=200, choices=DEPENDENT_TYPE)
     dependent_type_notes = models.TextField(null=True, blank=True)
