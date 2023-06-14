@@ -117,6 +117,16 @@ class MembershipViewSet(ModelViewSet):
     queryset = Membership.objects.all()
     serializer_class = MembershipSerializer
 
+    def get_queryset(self):
+        scheme_group_id = self.kwargs.get("scheme_group_pk")
+        if scheme_group_id:
+            return self.queryset.filter(scheme_group_id=scheme_group_id)
+        else:
+            return self.queryset
+
+    def get_serializer_context(self):
+        return {"request": self.request}
+
 
 class ProfileModelViewSet(ModelViewSet):
     queryset = Profile.objects.all()
