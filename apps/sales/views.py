@@ -48,7 +48,6 @@ class BulkTemporaryMemberDataAPIView(generics.ListCreateAPIView):
     #queryset = TemporaryMemberData.objects.all()
     serializer_class = BulkTemporaryMemberDataSerializer
 
-
     def post(self, request, *args, **kwargs):
         try:
             upload_data = request.data["upload_data"]

@@ -9,6 +9,8 @@ from apps.constants.choice_constants import (
     SCHEME_TYPE_CHOICES
 )
 
+from apps.sales.bulk_upload_methods import get_product_id_from_pricing_plan, get_policy_number_prefix
+
 
 class Scheme(AbstractBaseModel):
     name = models.CharField(max_length=255)
@@ -18,10 +20,29 @@ class Scheme(AbstractBaseModel):
     master_policy = models.BooleanField(default=False)
     is_group_scheme = models.BooleanField(default=False)
     config = models.JSONField(null=True)
+    policy_number_starting_counter = models.PositiveIntegerField(default=1)
 
 
     def __str__(self):
         return self.name
+
+    def get_policy_number(self, pricing_group) -> dict:
+        product_id = get_product_id_from_pricing_plan(pricing_plan=pricing_group)
+
+        prefix = get_policy_number_prefix(product_id)
+        policies = Policy.objects.filter(policy_number__startswith=prefix).order_by('-policy_number_counter')
+        
+        policy_number_counter = self.policy_number_starting_counter
+
+        if policies.count() > 0:
+            policy_number_counter = policies.first().policy_number_counter + 1
+
+        policy_number = f"{prefix}{policy_number_counter}"
+
+        return {
+            "policy_number": policy_number,
+            "policy_number_counter": policy_number_counter
+        }
 
 
 class SchemeGroup(AbstractBaseModel):
@@ -39,3 +60,4 @@ class SchemeGroup(AbstractBaseModel):
 
     def __str__(self):
         return self.name
+

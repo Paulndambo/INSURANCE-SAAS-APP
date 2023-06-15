@@ -165,7 +165,7 @@ def get_product_id_from_pricing_plan(pricing_plan: str):
 
 def validate_id_number_length(identification_method, identification_number):
     validated_id_number = ""
-
+    identification_number = str(identification_number)
     if int(identification_method) == 1:
         if len(identification_number) == 13:
             validated_id_number = identification_number
@@ -189,10 +189,14 @@ def validate_id_number_length(identification_method, identification_number):
 def validate_phone_number_length(phone_number):
     validated_phone_number = ""
 
-    if len(phone_number) == 9:
-        validated_phone_number = f"0{phone_number}"
+    if phone_number:
+        phone_number = str(phone_number)
+        if len(phone_number) == 9:
+            validated_phone_number = f"0{phone_number}"
 
-    return validated_phone_number
+        return validated_phone_number
+    else:
+        return None
 
 
 def get_pricing_plan_base_cover(pricing_plan_name: str):
@@ -204,3 +208,7 @@ def get_pricing_plan_base_cover(pricing_plan_name: str):
     except Exception as e:
         raise e
     
+
+def get_next_month_first_date():
+    today = date.today()
+    return today.replace(day=1)

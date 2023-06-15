@@ -4,7 +4,8 @@ from datetime import datetime, date
 from apps.sales.bulk_upload_methods import (
     get_policy_number_prefix,
     get_pricing_plan,
-    get_pricing_plan_base_cover
+    get_pricing_plan_base_cover,
+    get_next_month_first_date
 
 )
 from apps.sales.date_formatting_methods import date_format_method
@@ -39,33 +40,24 @@ class BulkRetailMemberOnboardingMixin(object):
 
     @transaction.atomic
     def __onboard_retail_members(self):
-        members = self.data
 
+        data = self.data
         scheme = Scheme.objects.get(name="Retail Scheme")
+        for member in data:
+            identification_number = member.identification_number
+            identification_method = member.identification_method
+            date_of_birth = member.date_of_birth
+            first_name = member.firstname
+            last_name = member.lastname
+            postal_address = member.postal_address
+            phone_number = member.mobile_number
+            product = member.product
+            gender = member.gender
+            email = member.email
+            username = member.username
 
-        for data in members.upload_data:
-
-            identification_number = data.get("identification number") if data.get(
-                "identification number") else data.get("identification_number")
-            identification_method = data.get("identification method") if data.get(
-                "identification method") else data.get("identification_method")
-            date_of_birth = data.get("date of birth") if data.get(
-                "date of birth") else data.get("date_of_birth")
-            first_name = data.get("firstname") if data.get(
-                "firstname") else data.get("first_name")
-            last_name = data.get("lastname") if data.get(
-                "lastname") else data.get("last_name")
-            postal_address = data.get("postal address") if data.get(
-                "postal address") else data.get("postal_address")
-            phone_number = data.get("mobile number") if data.get(
-                "mobile number") else data.get("mobile_number")
-            product = data.get("product")
-            gender = data.get("gender")
-            email = data.get("email")
-            username = data.get("username")
-
-            pricing_plan = PricingPlan.objects.get(
-                name=get_pricing_plan(product))
+            pricing_plan = PricingPlan.objects.get(name=get_pricing_plan(product))
+            pricing_plan_name = get_pricing_plan(product)
 
             scheme_group = SchemeGroup.objects.create(
                 scheme_id=scheme.id,
@@ -78,12 +70,13 @@ class BulkRetailMemberOnboardingMixin(object):
                 description=get_pricing_plan(product),
             )
 
-            last_policy = Policy.objects.last()
-
+            pn_data = scheme.get_policy_number(pricing_plan_name)
+            print(f"PN. Data: {pn_data}")
+        
             policy = Policy.objects.create(
-                policy_number=f"{get_policy_number_prefix(product)}{last_policy.id+1}",
+                policy_number=pn_data["policy_number"],
                 amount=0,
-                start_date=datetime.now().date(),
+                start_date=get_next_month_first_date(),
                 payment_due_day=2,
                 payment_frequency='monthly',
                 status='active',
@@ -94,7 +87,7 @@ class BulkRetailMemberOnboardingMixin(object):
                 is_group_policy=True,
                 dg_required=False,
                 config={},
-                policy_number_counter=1,
+                policy_number_counter=pn_data["policy_number_counter"],
                 policy_document='',
                 welcome_letter=''
             )
@@ -102,7 +95,7 @@ class BulkRetailMemberOnboardingMixin(object):
             scheme_group.policy = policy
             scheme_group.save()
 
-            policy_details = PolicyDetails.objects.create(
+            PolicyDetails.objects.create(
                 policy=policy
             )
 
@@ -149,12 +142,11 @@ class BulkRetailMemberOnboardingMixin(object):
                             phone=phone_number,
                             phone1=phone_number,
                             gender=gender,
-                            date_of_birth=date_format_method(date_of_birth)
+                            date_of_birth=date_of_birth
                         )
                         profile.save()
                 else:
-                    profile = Profile.objects.filter(
-                        passport_number=identification_number).first()
+                    profile = Profile.objects.filter(passport_number=identification_number).first()
                     if not profile:
                         profile = Profile.objects.create(
                             user=user,
@@ -166,12 +158,11 @@ class BulkRetailMemberOnboardingMixin(object):
                             phone=phone_number,
                             phone1=phone_number,
                             gender=gender,
-                            date_of_birth=date_format_method(date_of_birth)
+                            date_of_birth=date_of_birth
                         )
                         profile.save()
 
-            policy_holder = PolicyHolder.objects.filter(
-                individual_user=individual_user).first()
+            policy_holder = PolicyHolder.objects.filter(individual_user=individual_user).first()
             # policy_holder_by_identification_number = PolicyHolder.objects.filter(id_number=data["identification number"]).first()
 
             if not policy_holder:
@@ -191,7 +182,7 @@ class BulkRetailMemberOnboardingMixin(object):
                             phone1=phone_number,
                             id_number=identification_number,
                             gender=gender,
-                            date_of_birth=date_format_method(date_of_birth)
+                            date_of_birth=date_of_birth
                         )
                         policy_holder.save()
                 else:
@@ -208,7 +199,7 @@ class BulkRetailMemberOnboardingMixin(object):
                             phone1=phone_number,
                             passport_number=identification_number,
                             gender=gender,
-                            date_of_birth=date_format_method(date_of_birth)
+                            date_of_birth=date_of_birth
                         )
                         policy_holder.save()
 
@@ -243,8 +234,7 @@ class BulkRetailMemberOnboardingMixin(object):
                 payment_due_date=datetime.now().date(),
             )
 
-            print(
-                f"Policy Payment: {policy_payment.id} Created Successfully!!")
+            print(f"Policy Payment: {policy_payment.id} Created Successfully!!")
 
             membership_configuration = MembershipConfiguration.objects.filter(
                 membership=membership, beneficiary__isnull=True).first()

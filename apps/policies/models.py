@@ -64,16 +64,6 @@ CANCELLATION_ORIGIN_CHOICES = (
     ("customer", "Customer"),
     ("insurer", "Insurer"),
 )
-
-class PolicyStatusUpdate(AbstractBaseModel):
-    policy = models.ForeignKey(Policy, on_delete=models.CASCADE)
-    previous_status = models.CharField(max_length=255)
-    next_status = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.policy.policy_number
-
-
 class Cycle(AbstractBaseModel):
     """
     In all cases Scheme Group has precedence over Membership
@@ -83,6 +73,14 @@ class Cycle(AbstractBaseModel):
     scheme_group = models.ForeignKey("schemes.SchemeGroup", on_delete=models.CASCADE, related_name="cycles", null=True,)
     status = models.CharField(choices=CYCLE_STATUS_CHOICES, max_length=255, default="draft")
 
+
+#class PolicyStatusUpdates(AbstractBaseModel):
+#    policy = models.ForeignKey(Policy, on_delete=models.CASCADE)
+#    previous_status = models.CharField(max_length=255)
+#    next_status = models.CharField(max_length=255)
+
+#    def __str__(self):
+#        return self.policy.policy_number
 
 class CycleStatusUpdates(AbstractBaseModel):
     """
@@ -159,7 +157,7 @@ class PolicyDetails(AbstractBaseModel):
     extra_premium = models.FloatField(default=0)
     funeral_policy_details = models.JSONField(default=dict)
     activation_details = models.JSONField(default=dict)
-    cover_level = models.DecimalField(max_digits=10, decimal_places=2) #ForeignKey(PackageCoverLevel, related_name='policies', on_delete=models.CASCADE, null=True)
+    cover_level = models.DecimalField(max_digits=10, decimal_places=2, null=True) #ForeignKey(PackageCoverLevel, related_name='policies', on_delete=models.CASCADE, null=True)
     cancellation_date = models.DateField(null=True)
 
     def __str__(self):
