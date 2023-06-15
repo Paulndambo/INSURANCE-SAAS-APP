@@ -17,6 +17,9 @@ class PolicyModelViewSet(ModelViewSet):
     queryset = Policy.objects.all()
     serializer_class = PolicySerializer
 
+    def get_serializer_context(self):
+        return { "request": self.request }
+
 
 class PolicyCancellationViewSet(ModelViewSet):
     queryset = PolicyCancellation.objects.all()
