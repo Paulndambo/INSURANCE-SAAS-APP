@@ -26,7 +26,7 @@ INSTALLED_APPS = [
     "rest_framework",
     
     "rest_framework.authtoken",
-    "djoser",
+    #"djoser",
     "corsheaders",
     "drf_yasg",
     ## Apps
@@ -167,7 +167,7 @@ REST_FRAMEWORK = {
 
 
 
-DJOSER={"USER_ID_FIELD":"username"}
+#DJOSER={"USER_ID_FIELD":"username"}
 
 
 

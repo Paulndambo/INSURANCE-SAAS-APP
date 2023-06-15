@@ -242,8 +242,7 @@ class BulkGroupMembersOnboardingMixin(object):
             membership_configuration = MembershipConfiguration.objects.filter(
                 membership=membership, beneficiary__isnull=True).first()
             if membership_configuration:
-                membership_configuration.cover_level = get_pricing_plan_base_cover(
-                    pricing_plan.name)
+                membership_configuration.cover_level = get_pricing_plan_base_cover(pricing_plan.name)
                 membership_configuration.save()
             else:
                 membership_configuration = MembershipConfiguration.objects.create(
