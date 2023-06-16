@@ -17,7 +17,7 @@ class SchemeModelViewSet(ModelViewSet):
 
 
 class SchemeGroupModelViewSet(ModelViewSet):
-    queryset = SchemeGroup.objects.all()
+    queryset = SchemeGroup.objects.all().order_by("-created")
     serializer_class = SchemeGroupSerializer
 
     def get_queryset(self):

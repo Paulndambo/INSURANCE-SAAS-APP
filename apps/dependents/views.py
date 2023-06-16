@@ -6,12 +6,16 @@ from apps.dependents.models import Beneficiary, Dependent, FamilyMemberPricing
 from apps.dependents.serializers import BeneficiarySerializer, DependentSerializer, FamilyMemberPricingSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
+from apps.schemes.models import SchemeGroup
+from apps.users.models import Membership
+
+
 
 # Create your views here.
 class DependentModelViewSet(ModelViewSet):
     queryset = Dependent.objects.all()
     serializer_class = DependentSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     def get_serializer_context(self):
         return { "request": self.request }
@@ -19,10 +23,23 @@ class DependentModelViewSet(ModelViewSet):
     def get_queryset(self):
         scheme_group_id = self.kwargs.get("scheme_group_pk")
         membership_id = self.kwargs.get("membership_pk")
+        policy_id = self.kwargs.get("policy_pk")
+        user = self.request.user
+        
+        user_role = user.role
+        print(f"Role: {user_role}, Username: {user.username}, Email: {user.email}")
+        if policy_id:
+            if user_role == "individual":  # individual
+                scheme_group = SchemeGroup.objects.get(policy_id=policy_id)
+                membership = Membership.objects.filter(user=user, scheme_group=scheme_group, policy_id=policy_id).first()
+                if membership:
+                    return self.queryset.filter(schemegroup=scheme_group, membership=membership)
+                return []
+            else:
+                return self.queryset.filter(policy_id=policy_id)
         if scheme_group_id and membership_id:
             return self.queryset.filter(schemegroup_id=scheme_group_id, membership_id=membership_id)
         return self.queryset
-
 
 
 class BeneficiaryModelViewSet(ModelViewSet):
@@ -31,23 +48,28 @@ class BeneficiaryModelViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_serializer_context(self):
-        return self.kwargs
+        return { "request": self.request }
 
     def get_queryset(self):
-        scheme_group = self.kwargs.get("scheme_group_pk")
-        membership = self.kwargs.get("membership_pk")
-
-        # TODO: use authentication to separate customer dashboard & admin dashboard
-
+        scheme_group_id = self.kwargs.get("scheme_group_pk")
+        membership_id = self.kwargs.get("membership_pk")
+        policy_id = self.kwargs.get("policy_pk")
         user = self.request.user
-        print(user, user.role)
 
-        if scheme_group and membership:
-            membership_id = int(membership)
-            scheme_group_id = int(scheme_group)
-            #print(type(scheme_group_id))
-            queryset = self.queryset.filter(schemegroup_id=scheme_group_id, membership_id=membership_id)
-            return queryset
+        user_role = user.role
+        print(f"Role: {user_role}, Username: {user.username}, Email: {user.email}")
+        if policy_id:
+            if user_role == "individual":  # individual
+                scheme_group = SchemeGroup.objects.get(policy_id=policy_id)
+                membership = Membership.objects.filter(
+                    user=user, scheme_group=scheme_group, policy_id=policy_id).first()
+                if membership:
+                    return self.queryset.filter(schemegroup=scheme_group, membership=membership)
+                return []
+            else:
+                return self.queryset.filter(policy_id=policy_id)
+        if scheme_group_id and membership_id:
+            return self.queryset.filter(schemegroup_id=scheme_group_id, membership_id=membership_id)
         return self.queryset
         
 

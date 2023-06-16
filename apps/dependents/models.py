@@ -21,7 +21,6 @@ class Beneficiary(AbstractBaseModel):
     date_of_birth = models.DateField(null=True)
     membership = models.ForeignKey("users.Membership", on_delete=models.SET_NULL, null=True, blank=True)
     schemegroup = models.ForeignKey("schemes.SchemeGroup", on_delete=models.SET_NULL, null=True, blank=True)
-    # Required for minor beneficiaries
     guardian_or_trustee_first_name = models.CharField(max_length=255, null=True)
     guardian_or_trustee_last_name = models.CharField(max_length=255, null=True)
     guardian_or_trustee_phone_number = models.CharField(max_length=255, null=True)

@@ -4,19 +4,21 @@ from apps.core.models import AbstractBaseModel
 
 # Create your models here.
 class TemporaryMemberData(AbstractBaseModel):
-    username = models.EmailField()
-    firstname = models.CharField(max_length=255)
-    lastname = models.CharField(max_length=255)
-    email = models.EmailField()
-    identification_method = models.IntegerField()
-    identification_number = models.CharField(max_length=255)
-    mobile_number = models.CharField(max_length=255)
-    landline = models.CharField(max_length=255)
-    physical_address = models.CharField(max_length=500)
-    postal_address = models.CharField(max_length=500)
+    username = models.EmailField(null=True)
+    firstname = models.CharField(max_length=255, null=True)
+    lastname = models.CharField(max_length=255, null=True)
+    email = models.EmailField(null=True)
+    identification_method = models.IntegerField(null=True)
+    identification_number = models.CharField(max_length=255, null=True)
+    mobile_number = models.CharField(max_length=255, null=True)
+    landline = models.CharField(max_length=255, null=True)
+    physical_address = models.CharField(max_length=500, null=True)
+    postal_address = models.CharField(max_length=500, null=True)
     date_of_birth = models.DateField(null=True, blank=True)
     gender = models.CharField(max_length=255, null=True, blank=True)
-    product = models.IntegerField()
+    product = models.IntegerField(null=True)
+    cover_level = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    premium = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     processed = models.BooleanField(default=False)
 
     def __str__(self):

@@ -26,7 +26,7 @@ scheme_group_router.register("memberships", MembershipViewSet, basename="members
 
 membership_router = routers.NestedDefaultRouter(scheme_group_router, "memberships", lookup="membership")
 membership_router.register("dependents", DependentModelViewSet, basename="dependents")
-#membership_router.register("beneficiaries", BeneficiaryModelViewSet, basename="beneficiaries")
+membership_router.register("beneficiaries", BeneficiaryModelViewSet, basename="beneficiaries")
 
 
 urlpatterns = [

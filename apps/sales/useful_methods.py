@@ -90,3 +90,12 @@ def get_dependent_cover_level(dependent_type, pricing_plan, dependent_age):
 
 def get_extended_family_member_premium(cover_level: int, pricing_plan: str):
     pass
+
+
+def get_product_whose_members_to_onboard():
+    most_unprocessed = TemporaryMemberData.objects.exclude(product__in=[1, 2, 8]).filter(processed=False).values('product') \
+        .annotate(num_members=Count('product')) \
+        .order_by('-num_members') \
+        .first()
+
+    print(f"Product With Most Unprocessed Members: {most_unprocessed}")

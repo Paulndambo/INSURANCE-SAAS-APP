@@ -33,7 +33,7 @@ class User(AbstractUser, AbstractBaseModel):
 
     def __str__(self):
         return self.username
-
+    
 
 MARITAL_STATUS_CHOICES = (
     ("single", "Single"),

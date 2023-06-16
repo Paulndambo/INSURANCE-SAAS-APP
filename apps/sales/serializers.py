@@ -1,5 +1,35 @@
 from rest_framework import serializers
-from apps.sales.models import FailedUploadData, TemporaryDataHolding
+from apps.sales.models import FailedUploadData, TemporaryDataHolding, TemporaryMemberData
+
+from rest_framework_bulk import (
+    BulkListSerializer,
+    BulkSerializerMixin,
+    ListBulkCreateUpdateDestroyAPIView,
+)
+
+
+class BulkTemporaryMemberDataSerializer(serializers.ModelSerializer):
+    onboarding_mode = serializers.CharField(max_length=255)
+    upload_type = serializers.CharField(max_length=255)
+    upload_data = serializers.JSONField()
+    # date_of_birth = serializers.SerializerMethodField()
+    # class Meta:
+    #    model = TemporaryMemberData
+    #    fields = "__all__"
+    # only necessary in DRF3
+    # list_serializer_class = BulkListSerializer
+
+
+class TelesalesBulkTemporaryMemberDataSerializer(serializers.ModelSerializer):
+    onboarding_mode = serializers.CharField(max_length=255)
+    upload_type = serializers.CharField(max_length=255)
+    upload_data = serializers.JSONField()
+
+
+class NewMembersSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TemporaryMemberData
+        fields = "__all__"
 
 
 class BulkTemporaryPaidMemberDataBulkSerializer(serializers.Serializer):

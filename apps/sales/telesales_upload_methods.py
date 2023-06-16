@@ -26,6 +26,12 @@ from apps.users.models import (
 from apps.payments.models import PolicyPayment, PolicyPremium
 from apps.prices.models import PricingPlan
 
+from apps.sales.new_members_onboarding_functions import (
+    create_policy, create_scheme_group, create_profile,
+    create_policy_holder, create_user, create_membership, 
+    create_payment, create_membership_pemium, create_retail_scheme_group
+)
+
 
 def calculate_telesales_premium_by_cover_level(cover_level):
     cover_level_premium = 0
@@ -54,8 +60,9 @@ def calculate_telesales_cover_level_by_premium(premium):
 
 
 class BulkTelesalesUploadMixin(object):
-    def __init__(self, data):
+    def __init__(self, data, product):
         self.data = data
+        self.product = product
 
     def run(self):
         self.__upload_telesales_members()
@@ -63,64 +70,42 @@ class BulkTelesalesUploadMixin(object):
     @transaction.atomic
     def __upload_telesales_members(self):
         members = self.data
+        product = self.product
+
         scheme = Scheme.objects.get(name="Retail Scheme")
 
-        for data in members.upload_data:
-            pricing_plan = PricingPlan.objects.get(
-                name=get_pricing_plan(data["product"]))
+        for data in members:
+            pricing_plan = PricingPlan.objects.get(name=get_pricing_plan(product))
+            pricing_plan_name = get_pricing_plan(product)
 
-            identification_number = data.get("identification number") if data.get(
-                "identification number") else data.get("identification_number")
-            identification_method = data.get("identification method") if data.get(
-                "identification method") else data.get("identification_method")
-            date_of_birth = data.get("date of birth") if data.get(
-                "date of birth") else data.get("date_of_birth")
-            first_name = data.get("firstname") if data.get(
-                "firstname") else data.get("first_name")
-            last_name = data.get("lastname") if data.get(
-                "lastname") else data.get("last_name")
-            postal_address = data.get("postal address") if data.get(
-                "postal address") else data.get("postal_address")
-            phone_number = data.get("mobile number") if data.get(
-                "mobile number") else data.get("mobile_number")
-            product = data.get("product")
-            gender = data.get("gender")
-            username = data.get("username")
-            email = data.get("email")
-            premium_value = data.get("premium")
-            cover_level_value = data.get("cover_level") if data.get(
-                "cover_level") else data.get("cover level")
+            identification_number = data.identification_number
+            identification_method = data.identification_method
+            date_of_birth = data.date_of_birth
+            first_name = data.firstname
+            last_name = data.lastname
+            postal_address = data.postal_address
+            phone_number = data.mobile_number
+            product = product
+            gender = data.gender
+            username = data.username
+            email = data.email
+            premium_value = data.premium
+            cover_level_value = data.cover_level
 
             scheme_group = SchemeGroup.objects.create(
-                scheme_id=scheme.id,
-                name=f"{first_name} {last_name}",
-                payment_method="debit_order",
-                period_type="monthly",
-                period_frequency=1,
-                pricing_group=pricing_plan.name,
-                cycle_type="member",
-                description=get_pricing_plan(product),
-            )
+                **create_retail_scheme_group(
+                    scheme, 
+                    pricing_plan, 
+                    pricing_plan_name, 
+                    first_name, 
+                    last_name)
+                )
 
-            last_policy = Policy.objects.last()
+            pn_data = scheme.get_policy_number(pricing_plan_name)
+            print(f"PN. Data: {pn_data}")
 
             policy = Policy.objects.create(
-                policy_number=f"{get_policy_number_prefix(product)}{last_policy.id+1}",
-                amount=0,
-                start_date=datetime.now().date(),
-                payment_due_day=2,
-                payment_frequency='monthly',
-                status='active',
-                terms_and_conditions_accepted=True,
-                claim_lodging_awaiting_period=0,
-                insurance_product_id=1,
-                proxy_purchase=False,
-                is_group_policy=True,
-                dg_required=False,
-                config={},
-                policy_number_counter=1,
-                policy_document='',
-                welcome_letter=''
+                **create_policy(pn_data)
             )
 
             scheme_group.policy = policy
@@ -131,165 +116,74 @@ class BulkTelesalesUploadMixin(object):
             )
 
             user = User.objects.filter(email=email).first()
-
             if not user:
-                user_obj = {
-                    "username": username,
-                    "email": email,
-                    "first_name": first_name,
-                    "last_name": last_name,
-                    "password": "temp_password",
-                    "is_staff": False,
-                    "is_superuser": False,
-                    "is_active": True,
-                    "role": "individual",
-                }
                 print("****************Start of Member sales****************")
-                user = User.objects.create(**user_obj)
-                user.save()
+                user = User.objects.create(**create_user(username, email, first_name, last_name))
+
 
             individual_user = IndividualUser.objects.filter(user=user).first()
-
             if not individual_user:
                 individual_user = IndividualUser.objects.create(user=user)
                 individual_user.save()
 
             profile = Profile.objects.filter(user=user).first()
-
             if not profile:
                 if identification_method == 1:
-
-                    profile = Profile.objects.filter(
-                        id_number=identification_number).first()
-
+                    profile = Profile.objects.filter(id_number=identification_number).first()
                     if not profile:
                         profile = Profile.objects.create(
-                            user=user,
-                            first_name=first_name,
-                            last_name=last_name,
-                            id_number=identification_number,
-                            address=postal_address,
-                            address1=postal_address,
-                            phone=phone_number,
-                            phone1=phone_number,
-                            gender=gender,
-                            date_of_birth=date_format_method(date_of_birth)
-                        )
-                        profile.save()
+                            **create_profile(user, first_name, last_name, identification_method, 
+                            identification_number, postal_address, phone_number, gender, date_of_birth))
                 else:
-                    profile = Profile.objects.filter(
-                        passport_number=identification_number).first()
+                    profile = Profile.objects.filter(passport_number=identification_number).first()
                     if not profile:
                         profile = Profile.objects.create(
-                            user=user,
-                            first_name=first_name,
-                            last_name=last_name,
-                            passport_number=identification_number,
-                            address=postal_address,
-                            address1=postal_address,
-                            phone=phone_number,
-                            phone1=phone_number,
-                            gender=gender,
-                            date_of_birth=date_format_method(date_of_birth)
-                        )
-                        profile.save()
+                            **create_profile(user, first_name, last_name, identification_method,
+                                identification_number, postal_address, phone_number, gender, date_of_birth))
+                    
 
-            policy_holder = PolicyHolder.objects.filter(
-                individual_user=individual_user).first()
+            policy_holder = PolicyHolder.objects.filter(individual_user=individual_user).first()
 
             if not policy_holder:
                 if identification_method == 1:
-
-                    policy_holder = PolicyHolder.objects.filter(
-                        id_number=identification_number).first()
+                    policy_holder = PolicyHolder.objects.filter(id_number=identification_number).first()
 
                     if not policy_holder:
                         policy_holder = PolicyHolder.objects.create(
-                            individual_user=individual_user,
-                            name="{first_name} {last_name}",
-                            address=postal_address,
-                            address1=postal_address,
-                            phone_number=phone_number,
-                            phone=phone_number,
-                            phone1=phone_number,
-                            id_number=identification_number,
-                            gender=gender,
-                            date_of_birth=date_format_method(date_of_birth)
-                        )
-                        policy_holder.save()
+                            **create_policy_holder(individual_user, first_name, last_name, postal_address, 
+                            phone_number, identification_method, identification_number, gender, date_of_birth))
                 else:
-                    policy_holder = PolicyHolder.objects.filter(
-                        passport_number=identification_number).first()
+                    policy_holder = PolicyHolder.objects.filter(passport_number=identification_number).first()
                     if not policy_holder:
                         policy_holder = PolicyHolder.objects.create(
-                            individual_user=individual_user,
-                            name=f"{first_name} {last_name}",
-                            address=postal_address,
-                            address1=postal_address,
-                            phone_number=phone_number,
-                            phone=phone_number,
-                            phone1=phone_number,
-                            passport_number=identification_number,
-                            gender=gender,
-                            date_of_birth=date_format_method(date_of_birth)
+                            **create_policy_holder(individual_user, first_name, last_name, postal_address,
+                                phone_number, identification_method, identification_number, gender, date_of_birth)
                         )
-                        policy_holder.save()
+                        
 
-            membership = Membership.objects.create(
-                user=user,
-                scheme_group=scheme_group,
-                # policy=policy,
-                properties={}
-            )
-            membership.save()
-
+            membership = Membership.objects.create(**create_membership(user, policy, scheme_group))
             print(f"Membership: {membership.id} Created Successfully!!!")
 
-            premium_value = data.get("premium")
-            cover_level_value = data.get("cover_level")
-
+            
             cover_level = 0
             premium = 0
+            if premium_value > 0 and cover_level_value > 0:
+                cover_level = calculate_telesales_cover_level_by_premium(int(premium_value))
+                premium = calculate_telesales_premium_by_cover_level(int(cover_level_value))
 
-            if premium_value and cover_level_value:
-                cover_level = calculate_telesales_cover_level_by_premium(
-                    int(premium_value))
-                premium = calculate_telesales_premium_by_cover_level(
-                    int(cover_level_value))
+            elif premium_value > 0:
+                cover_level = calculate_telesales_cover_level_by_premium(int(premium_value))
+                premium = calculate_telesales_premium_by_cover_level(int(cover_level))
 
-            elif premium_value:
-                cover_level = calculate_telesales_cover_level_by_premium(
-                    int(premium_value))
-                premium = calculate_telesales_premium_by_cover_level(
-                    int(cover_level))
+            elif cover_level_value > 0:
+                premium = calculate_telesales_premium_by_cover_level(int(cover_level_value))
+                cover_level = calculate_telesales_cover_level_by_premium(int(premium))
 
-            elif cover_level_value:
-                premium = calculate_telesales_premium_by_cover_level(
-                    int(cover_level_value))
-                cover_level = calculate_telesales_cover_level_by_premium(
-                    int(premium))
+            policy_premium = PolicyPremium.objects.create(**create_membership_pemium(policy, premium, membership))
+            print(f"Policy Premium: {policy_premium.id} Created Successfully!!!")
 
-            policy_premium = PolicyPremium.objects.create(
-                policy=policy,
-                expected_payment=premium,
-                balance=-premium,
-                membership=membership,
-                expected_date=datetime.now().date(),
-                status="unpaid",
-            )
-
-            print(
-                f"Policy Premium: {policy_premium.id} Created Successfully!!!")
-
-            policy_payment = PolicyPayment.objects.create(
-                policy=policy,
-                membership=membership,
-                premium=premium,
-                payment_due_date=datetime.now().date(),
-            )
-
-            print(
-                f"Policy Payment: {policy_payment.id} Created Successfully!!")
+            policy_payment = PolicyPayment.objects.create(**create_payment(policy, membership, premium))
+            print(f"Policy Payment: {policy_payment.id} Created Successfully!!")
 
             membership_configuration = MembershipConfiguration.objects.filter(
                 membership=membership, beneficiary__isnull=True).first()
@@ -298,22 +192,18 @@ class BulkTelesalesUploadMixin(object):
                 membership_configuration.save()
             else:
                 membership_configuration = MembershipConfiguration.objects.create(
-                    membership=membership, cover_level=cover_level, pricing_plan=pricing_plan
-                )
+                    membership=membership, cover_level=cover_level, pricing_plan=pricing_plan)
+            print(f"Membership Config: {membership_configuration.id} Created Successfully!!")
 
-            print(
-                f"Membership Config: {membership_configuration.id} Created Successfully!!")
 
             cycle = Cycle.objects.filter(membership=membership).first()
-
             if not cycle:
-                cycle = Cycle.objects.create(
-                    membership=membership, scheme_group=scheme_group, status="awaiting_payment"
-                )
-
+                cycle = Cycle.objects.create(membership=membership, scheme_group=scheme_group, status="awaiting_payment")
             print(f"Cycle: {cycle.id} Created Successfully!!!")
 
-            CycleStatusUpdates.objects.create(
-                cycle=cycle, previous_status="created", next_status="awaiting_payment"
-            )
+            #CycleStatusUpdates.objects.create(
+            #    cycle=cycle, previous_status="created", next_status="awaiting_payment"
+            #)
+            data.processed = True
+            data.save()
             print("****************End of Member sales****************")
