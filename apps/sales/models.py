@@ -18,6 +18,7 @@ class TemporaryMemberData(AbstractBaseModel):
     gender = models.CharField(max_length=255, null=True, blank=True)
     product = models.IntegerField(null=True)
     cover_level = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    premium = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     processed = models.BooleanField(default=False)
 
     def __str__(self):
