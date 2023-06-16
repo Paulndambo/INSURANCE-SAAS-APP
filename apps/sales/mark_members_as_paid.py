@@ -9,16 +9,12 @@ def mark_members_as_paid(identification_method: int, identification_number: str,
     try:
         profile = ''
         if identification_method == 1:
-            profile = Profile.objects.filter(
-                id_number=identification_number).first()
+            profile = Profile.objects.filter(id_number=identification_number).first()
         else:
-            profile = Profile.objects.filter(
-                passport_number=identification_number).first()
+            profile = Profile.objects.filter(passport_number=identification_number).first()
         if profile:
-            membership = Membership.objects.filter(
-                user=profile.user, scheme_group__pricing_group=get_pricing_plan(product)).first()
-            premium = PolicyPremium.objects.filter(
-                membership=membership).order_by("-expected_date").first()
+            membership = Membership.objects.filter(user=profile.user, scheme_group__pricing_group=get_pricing_plan(product)).first()
+            premium = PolicyPremium.objects.filter(membership=membership).order_by("-expected_date").first()
 
             if premium:
                 print(f"Membership ID: {membership.id}, Premium ID: {premium.id}")

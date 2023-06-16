@@ -115,18 +115,14 @@ class MembersCancellationMixin(object):
 
     @transaction.atomic
     def __cancel_membership(self):
-        data = self.data.upload_data
+        data = self.data
 
         for member in data:
-            identification_method = member.get("identification method") if member.get(
-                "identification method") else member.get("identification_method")
-            identification_number = member.get("identification number") if member.get(
-                "identification number") else member.get("identification_number")
-            product = member.get("product")
-            action_type = member.get("action_type") if member.get(
-                "action_type") else member.get("action type")
-            reference_reason = member.get("reference reason") if member.get(
-                "reference_reason") else member.get("reference_reason")
+            identification_method = member.identification_method
+            identification_number = member.identification_number
+            product = member.product
+            action_type = member.action_type
+            reference_reason = member.reference_reason
             try:
                 mark_members_as_cancelled(
                     identification_method=identification_method,
