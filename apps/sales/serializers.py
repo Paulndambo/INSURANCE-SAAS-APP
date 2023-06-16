@@ -12,12 +12,19 @@ class BulkTemporaryMemberDataSerializer(serializers.ModelSerializer):
     onboarding_mode = serializers.CharField(max_length=255)
     upload_type = serializers.CharField(max_length=255)
     upload_data = serializers.JSONField()
-    #date_of_birth = serializers.SerializerMethodField()
-    #class Meta:
+    # date_of_birth = serializers.SerializerMethodField()
+    # class Meta:
     #    model = TemporaryMemberData
     #    fields = "__all__"
-        # only necessary in DRF3
-        #list_serializer_class = BulkListSerializer
+    # only necessary in DRF3
+    # list_serializer_class = BulkListSerializer
+
+
+class TelesalesBulkTemporaryMemberDataSerializer(serializers.ModelSerializer):
+    onboarding_mode = serializers.CharField(max_length=255)
+    upload_type = serializers.CharField(max_length=255)
+    upload_data = serializers.JSONField()
+
 
 class NewMembersSerializer(serializers.ModelSerializer):
     class Meta:

@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
-from apps.sales.new_member_data_constructor import new_member_data_constructor
+from apps.sales.new_member_data_constructor import new_member_data_constructor, telesales_new_member_data_constructor
 
 
 # from apps.policies.mixins import CancelIndividualPolicyMixin, BulkMemberUploadMixin, SchemeGroupPolicyCancellationMixin
@@ -17,7 +17,8 @@ from apps.sales.serializers import (
     TemporaryDataHoldingSerializer,
     FailedUploadDataSerializer,
     BulkTemporaryMemberDataSerializer,
-    NewMembersSerializer
+    NewMembersSerializer,
+    TelesalesBulkTemporaryMemberDataSerializer
 )
 # from apps.sales.useful_methods import bulk_policy_upload
 from apps.sales.models import FailedUploadData, TemporaryDataHolding, TemporaryMemberData
@@ -62,6 +63,27 @@ class BulkTemporaryMemberDataAPIView(generics.ListCreateAPIView):
         except Exception as e:
             raise e
         return Response({"message": "Data Uploaded Successfully"}, status=status.HTTP_201_CREATED)
+
+
+class TelesalesBulkTemporaryMemberDataAPIView(generics.ListCreateAPIView):
+    # queryset = TemporaryMemberData.objects.all()
+    serializer_class = TelesalesBulkTemporaryMemberDataSerializer
+
+    def post(self, request, *args, **kwargs):
+        try:
+            upload_data = request.data["upload_data"]
+            new_members = []
+            for data in upload_data:
+                new_members.append(
+                    TemporaryMemberData(
+                        **telesales_new_member_data_constructor(data)
+                    )
+                )
+            TemporaryMemberData.objects.bulk_create(new_members)
+        except Exception as e:
+            raise e
+        return Response({"message": "Data Uploaded Successfully"}, status=status.HTTP_201_CREATED)
+
 
 class NewMembersAPIView(generics.ListAPIView):
     queryset = TemporaryMemberData.objects.all()

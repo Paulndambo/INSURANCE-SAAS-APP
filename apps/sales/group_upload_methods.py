@@ -48,22 +48,28 @@ class BulkGroupMembersOnboardingMixin(object):
         data = self.data
         pricing_plan_name = get_pricing_plan(product)
 
+        date_today = datetime.now().date()
+
         pricing_plan = PricingPlan.objects.get(name=get_pricing_plan(product))
         scheme = Scheme.objects.get(name="Group Scheme")
 
-        scheme_group = SchemeGroup.objects.create(
-            **create_scheme_group(scheme, pricing_plan, pricing_plan_name)
-        )
+        scheme_group = SchemeGroup.objects.filter(pricing_group=pricing_plan, created__date=date_today).order_by("-created").first()
 
-        pn_data = scheme.get_policy_number(pricing_plan_name)
-        print(f"PN. Data: {pn_data}")
+        if not scheme_group:
+            scheme_group = SchemeGroup.objects.create(
+                **create_scheme_group(scheme, pricing_plan, pricing_plan_name)
+            )
 
-        policy = Policy.objects.create(**create_policy(pn_data))
+        policy = Policy.objects.filter(id=scheme_group.policy_id).first()
+        if not policy:
+            pn_data = scheme.get_policy_number(pricing_plan_name)
+            print(f"PN. Data: {pn_data}")
+            policy = Policy.objects.create(**create_policy(pn_data))
 
-        scheme_group.policy = policy
-        scheme_group.save()
+            scheme_group.policy = policy
+            scheme_group.save()
 
-        PolicyDetails.objects.create(policy=policy)
+            PolicyDetails.objects.create(policy=policy)
 
         for member in data:
             email = member.email

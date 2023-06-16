@@ -9,7 +9,8 @@ from apps.sales.views import (
     TemporaryDataHoldingAPIView,
     FailedUploadDataAPIView,
     BulkTemporaryMemberDataAPIView,
-    NewMembersAPIView
+    NewMembersAPIView,
+    TelesalesBulkTemporaryMemberDataAPIView
 )
 
 urlpatterns = [
@@ -23,4 +24,5 @@ urlpatterns = [
     path("bulk-upload/failed-uploads/", FailedUploadDataAPIView.as_view(), name="failed-uploads"),
     path("bulk-upload/bulk-new-members/", BulkTemporaryMemberDataAPIView.as_view(), name="bulk-new-members"),
     path("bulk-upload/bulk-new-members-list/", NewMembersAPIView.as_view(), name="bulk-new-members-list"),
+    
 ]

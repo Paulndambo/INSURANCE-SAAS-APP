@@ -37,6 +37,19 @@ def create_scheme_group(scheme, pricing_plan, pricing_plan_name):
     return scheme_group_object
 
 
+def create_retail_scheme_group(scheme, pricing_plan, pricing_plan_name, first_name, last_name):
+    scheme_group_object = {
+        "scheme_id": scheme.id,
+        "name": f"{first_name} {last_name}",
+        "payment_method": "off_platform",
+        "period_type": "monthly",
+        "period_frequency": 1,
+        "pricing_group": pricing_plan,
+        "cycle_type": "MEMBER_CYCLE",
+        "description": pricing_plan_name,
+    }
+    return scheme_group_object
+
 def create_user(username, email, first_name, last_name):
     user_object = {
         "username": username,

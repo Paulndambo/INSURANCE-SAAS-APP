@@ -28,7 +28,8 @@ from apps.prices.models import PricingPlan
 
 from apps.sales.new_members_onboarding_functions import (
     create_policy, create_scheme_group, create_profile,
-    create_policy_holder, create_user, create_membership, create_payment, create_membership_pemium
+    create_policy_holder, create_user, create_membership, 
+    create_payment, create_membership_pemium, create_retail_scheme_group
 )
 
 
@@ -61,7 +62,7 @@ def calculate_telesales_cover_level_by_premium(premium):
 class BulkTelesalesUploadMixin(object):
     def __init__(self, data, product):
         self.data = data
-        self.data = product
+        self.product = product
 
     def run(self):
         self.__upload_telesales_members()
@@ -73,7 +74,7 @@ class BulkTelesalesUploadMixin(object):
 
         scheme = Scheme.objects.get(name="Retail Scheme")
 
-        for data in members.upload_data:
+        for data in members:
             pricing_plan = PricingPlan.objects.get(name=get_pricing_plan(product))
             pricing_plan_name = get_pricing_plan(product)
 
@@ -91,8 +92,14 @@ class BulkTelesalesUploadMixin(object):
             premium_value = data.premium
             cover_level_value = data.cover_level
 
-
-            scheme_group = SchemeGroup.objects.create(**create_scheme_group(scheme, pricing_plan, pricing_plan_name))
+            scheme_group = SchemeGroup.objects.create(
+                **create_retail_scheme_group(
+                    scheme, 
+                    pricing_plan, 
+                    pricing_plan_name, 
+                    first_name, 
+                    last_name)
+                )
 
             pn_data = scheme.get_policy_number(pricing_plan_name)
             print(f"PN. Data: {pn_data}")
@@ -197,4 +204,6 @@ class BulkTelesalesUploadMixin(object):
             #CycleStatusUpdates.objects.create(
             #    cycle=cycle, previous_status="created", next_status="awaiting_payment"
             #)
+            data.processed = True
+            data.save()
             print("****************End of Member sales****************")

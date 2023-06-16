@@ -11,7 +11,8 @@ from apps.sales.bulk_upload_methods import (
 from apps.sales.date_formatting_methods import date_format_method
 from apps.sales.new_members_onboarding_functions import (
     create_policy, create_scheme_group, create_profile,
-    create_policy_holder, create_user, create_membership, create_payment, create_membership_pemium
+    create_policy_holder, create_user, create_membership, 
+    create_payment, create_membership_pemium, create_retail_scheme_group
 )
 
 # Apps Imports
@@ -63,7 +64,7 @@ class BulkRetailMemberOnboardingMixin(object):
             pricing_plan_name = get_pricing_plan(product)
 
             scheme_group = SchemeGroup.objects.create(
-                **create_scheme_group(scheme, pricing_plan, pricing_plan_name)
+                **create_retail_scheme_group(scheme, pricing_plan, pricing_plan_name, first_name, last_name)
             )
 
             pn_data = scheme.get_policy_number(pricing_plan_name)
