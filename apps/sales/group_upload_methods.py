@@ -9,6 +9,10 @@ from apps.sales.bulk_upload_methods import (
 
 )
 from apps.sales.date_formatting_methods import date_format_method
+from apps.sales.new_members_onboarding_functions import (
+    create_policy, create_scheme_group, create_profile, 
+    create_policy_holder, create_user, create_membership, create_payment, create_membership_pemium
+)
 
 
 # Apps Imports
@@ -33,7 +37,7 @@ from apps.prices.models import PricingPlan
 class BulkGroupMembersOnboardingMixin(object):
     def __init__(self, data, product):
         self.data = data
-        self.product
+        self.product = product
 
     def run(self):
         self.__onboard_group_scheme_members()
@@ -48,44 +52,18 @@ class BulkGroupMembersOnboardingMixin(object):
         scheme = Scheme.objects.get(name="Group Scheme")
 
         scheme_group = SchemeGroup.objects.create(
-            scheme_id=scheme.id,
-            name=get_pricing_plan(product),
-            payment_method="off_platform",
-            period_type="monthly",
-            period_frequency=1,
-            pricing_group=pricing_plan,
-            cycle_type="member",
-            description=get_pricing_plan(product),
+            **create_scheme_group(scheme, pricing_plan, pricing_plan_name)
         )
 
         pn_data = scheme.get_policy_number(pricing_plan_name)
         print(f"PN. Data: {pn_data}")
 
-        policy = Policy.objects.create(
-            policy_number=pn_data["policy_number"],
-            amount=0,
-            start_date=get_next_month_first_date(),
-            payment_due_day=2,
-            payment_frequency='monthly',
-            status='active',
-            terms_and_conditions_accepted=True,
-            claim_lodging_awaiting_period=0,
-            #insurance_product_id=1,
-            proxy_purchase=False,
-            is_group_policy=True,
-            dg_required=False,
-            config={},
-            policy_number_counter=pn_data["policy_number_counter"],
-            policy_document='',
-            welcome_letter=''
-        )
+        policy = Policy.objects.create(**create_policy(pn_data))
 
         scheme_group.policy = policy
         scheme_group.save()
 
-        PolicyDetails.objects.create(
-            policy=policy
-        )
+        PolicyDetails.objects.create(policy=policy)
 
         for member in data:
             email = member.email
@@ -103,158 +81,97 @@ class BulkGroupMembersOnboardingMixin(object):
             user = User.objects.filter(email=email).first()
 
             if not user:
-                user_obj = {
-                    "username": username,
-                    "email": email,
-                    "first_name": first_name,
-                    "last_name": last_name,
-                    "password": "temp_password",
-                    "is_staff": False,
-                    "is_superuser": False,
-                    "is_active": True,
-                    "role": "individual",
-                }
-                print("****************Start of Member sales****************")
-                user = User.objects.create(**user_obj)
-                user.save()
-
+                user = User.objects.create(**create_user(username, email, first_name, last_name))
+                
             individual_user = IndividualUser.objects.filter(user=user).first()
 
             if not individual_user:
                 individual_user = IndividualUser.objects.create(user=user)
                 individual_user.save()
 
-            profile = Profile.objects.filter(user=user).first()
 
+            profile = Profile.objects.filter(user=user).first()
             if not profile:
                 if identification_method == 1:
-
-                    profile = Profile.objects.filter(
-                        id_number=identification_number).first()
-
+                    profile = Profile.objects.filter(id_number=identification_number).first()
                     if not profile:
                         profile = Profile.objects.create(
-                            user=user,
-                            first_name=first_name,
-                            last_name=last_name,
-                            id_number=identification_number,
-                            address=postal_address,
-                            address1=postal_address,
-                            phone=phone_number,
-                            phone1=phone_number,
-                            gender=gender,
-                            date_of_birth=date_of_birth
-                        )
-                        profile.save()
+                            **create_profile(user, first_name, last_name, identification_method, 
+                                identification_number, postal_address, phone_number, gender, date_of_birth)) 
                 else:
-                    profile = Profile.objects.filter(
-                        passport_number=identification_number).first()
+                    profile = Profile.objects.filter(passport_number=identification_number).first()
                     if not profile:
                         profile = Profile.objects.create(
-                            user=user,
-                            first_name=first_name,
-                            last_name=last_name,
-                            passport_number=identification_number,
-                            address=postal_address,
-                            address1=postal_address,
-                            phone=phone_number,
-                            phone1=phone_number,
-                            gender=gender,
-                            date_of_birth=date_of_birth
-                        )
-                        profile.save()
+                            **create_profile(user, first_name, last_name, identification_method,
+                                identification_number, postal_address, phone_number, gender, date_of_birth))
+                        
 
             policy_holder = PolicyHolder.objects.filter(individual_user=individual_user).first()
-
             if not policy_holder:
-
                 if identification_method == 1:
-
                     policy_holder = PolicyHolder.objects.filter(id_number=identification_number).first()
                     if not policy_holder:
                         policy_holder = PolicyHolder.objects.create(
-                            individual_user=individual_user,
-                            name=f"{first_name} {last_name}",
-                            address=postal_address,
-                            address1=postal_address,
-                            phone_number=phone_number,
-                            phone=phone_number,
-                            phone1=phone_number,
-                            id_number=identification_number,
-                            gender=gender,
-                            date_of_birth=date_of_birth
-                        )
-                        policy_holder.save()
+                            **create_policy_holder(individual_user, first_name, last_name, postal_address, phone_number, 
+                            identification_method, identification_number, gender, date_of_birth))
+                       
                 else:
                     policy_holder = PolicyHolder.objects.filter(
                         passport_number=identification_number).first()
                     if not policy_holder:
                         policy_holder = PolicyHolder.objects.create(
-                            individual_user=individual_user,
-                            name=f"{first_name} {last_name}",
-                            address=postal_address,
-                            address1=postal_address,
-                            phone_number=phone_number,
-                            phone=phone_number,
-                            phone1=phone_number,
-                            passport_number=identification_number,
-                            gender=gender,
-                            date_of_birth=date_of_birth
+                            **create_policy_holder(individual_user, first_name, last_name, postal_address, phone_number,
+                            identification_method, identification_number, gender, date_of_birth)
                         )
-                        policy_holder.save()
+                        
 
             membership = Membership.objects.create(
-                user=user,
-                scheme_group=scheme_group,
-                # policy=policy,
-                properties={}
+                **create_membership(user, policy, scheme_group)
             )
-            membership.save()
-
+            
             print(f"Membership: {membership.id} Created Successfully!!!")
 
             # create policy payment
             total_premium = pricing_plan.total_premium
-
             policy_premium = PolicyPremium.objects.create(
-                policy=policy,
-                expected_payment=total_premium,
-                balance=-total_premium,
-                membership=membership,
-                expected_date=datetime.now().date(),
-                status="unpaid",
+                **create_membership_pemium(policy, total_premium, membership)
             )
-
             print(f"Policy Premium: {policy_premium.id} Created Successfully!!!")
-
             policy_payment = PolicyPayment.objects.create(
-                policy=policy,
-                membership=membership,
-                premium=total_premium,
-                payment_due_date=datetime.now().date(),
+                **create_payment(policy, membership, total_premium)
             )
-
             print(f"Policy Payment: {policy_payment.id} Created Successfully!!")
 
-            membership_configuration = MembershipConfiguration.objects.filter(
-                membership=membership, beneficiary__isnull=True).first()
+
+            """
+            : Membership Configuration 
+            : => Used to link Membership to Beneficiaries & Dependents & Cover Levels
+            : => If a membership configuration exists, one that does not link to beneficiary, then,
+            : ==> Update the existing one, else Create a new one!
+            """
+            membership_configuration = MembershipConfiguration.objects.filter(membership=membership, beneficiary__isnull=True).first()
             if membership_configuration:
                 membership_configuration.cover_level = 50000 #get_pricing_plan_base_cover(pricing_plan.name)
                 membership_configuration.save()
             else:
-                membership_configuration = MembershipConfiguration.objects.create(
-                    membership=membership, cover_level=50000
-                )
+                membership_configuration = MembershipConfiguration.objects.create(membership=membership, cover_level=50000)
 
             print(f"Membership Config: {membership_configuration.id} Created Successfully!!")
 
-            cycle = Cycle.objects.filter(membership=membership).first()
 
+            """
+            : Cycle - (Membership Cycle)
+            : => A cycle used to track membership status
+            : => I already a cycle exists, don't create a new one, 1 membership 1 cycle
+            : => => Note that, creation of a cycle triggers creation of a cycle status update instance
+            """
+            cycle = Cycle.objects.filter(membership=membership).first()
             if not cycle:
                 cycle = Cycle.objects.create(
-                    membership=membership, scheme_group=scheme_group, status="awaiting_payment"
+                    membership=membership, 
+                    scheme_group=scheme_group, 
+                    status="awaiting_payment"
                 )
-
             print(f"Cycle: {cycle.id} Created Successfully!!!")
 
             member.processed = True 
