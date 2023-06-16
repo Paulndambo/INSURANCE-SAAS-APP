@@ -4,7 +4,10 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
-from apps.sales.new_member_data_constructor import new_member_data_constructor, telesales_new_member_data_constructor
+from apps.sales.data_construction_methods import (
+    new_member_data_constructor,
+    new_family_member_data_constructor
+)
 
 
 # from apps.policies.mixins import CancelIndividualPolicyMixin, BulkMemberUploadMixin, SchemeGroupPolicyCancellationMixin
@@ -21,7 +24,12 @@ from apps.sales.serializers import (
     TelesalesBulkTemporaryMemberDataSerializer
 )
 # from apps.sales.useful_methods import bulk_policy_upload
-from apps.sales.models import FailedUploadData, TemporaryDataHolding, TemporaryMemberData
+from apps.sales.models import (
+    FailedUploadData, 
+    TemporaryDataHolding, 
+    TemporaryMemberData,
+    TemporaryDependentImport
+)
 from rest_framework_bulk import (
     BulkListSerializer,
     BulkSerializerMixin,
@@ -46,7 +54,6 @@ class OnboardingAPPAPIView(APIView):
 
 
 class BulkTemporaryMemberDataAPIView(generics.ListCreateAPIView):
-    #queryset = TemporaryMemberData.objects.all()
     serializer_class = BulkTemporaryMemberDataSerializer
 
     def post(self, request, *args, **kwargs):
@@ -64,25 +71,6 @@ class BulkTemporaryMemberDataAPIView(generics.ListCreateAPIView):
             raise e
         return Response({"message": "Data Uploaded Successfully"}, status=status.HTTP_201_CREATED)
 
-
-class TelesalesBulkTemporaryMemberDataAPIView(generics.ListCreateAPIView):
-    # queryset = TemporaryMemberData.objects.all()
-    serializer_class = TelesalesBulkTemporaryMemberDataSerializer
-
-    def post(self, request, *args, **kwargs):
-        try:
-            upload_data = request.data["upload_data"]
-            new_members = []
-            for data in upload_data:
-                new_members.append(
-                    TemporaryMemberData(
-                        **telesales_new_member_data_constructor(data)
-                    )
-                )
-            TemporaryMemberData.objects.bulk_create(new_members)
-        except Exception as e:
-            raise e
-        return Response({"message": "Data Uploaded Successfully"}, status=status.HTTP_201_CREATED)
 
 
 class NewMembersAPIView(generics.ListAPIView):
@@ -136,39 +124,23 @@ class BulkTemporaryPaidMemberUploadAPIView(generics.ListCreateAPIView):
 
 
 class BulkTemporaryDependentUploadAPIView(generics.ListCreateAPIView):
-    # queryset = TemporaryDependentImport.objects.all()
     serializer_class = BulkTemporaryDependentUploadSerializer
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        upload_data = request.data.get("upload_data")
-        upload_type = request.data.get("upload_type")
-        onboarding_mode = request.data.get('onboarding_mode')
-
-        if onboarding_mode and upload_type and upload_data:
-            data = {
-                "upload_type": "family_members",
-                "upload_data": upload_data,
-                "onboarding_mode": "background"
-            }
-
-            serializer = TemporaryDataHoldingSerializer(data=data)
-            if serializer.is_valid(raise_exception=True):
-                x = serializer.save()
-                print(x.id)
-                try:
-                    onboard_family_members()
-                except Exception as e:
-                    raise e
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response(
-                {
-                    "message": f"Please make sure your request body contains, upload_type: str, onboarding_model: str, upload_data: list"
-                },
-                status=status.HTTP_400_BAD_REQUEST
-            )
+        try:
+            upload_data = request.data["upload_data"]
+            new_family_members = []
+            for member in upload_data:
+                new_family_members.append(
+                    TemporaryDependentImport(
+                        **new_family_member_data_constructor(member)
+                    )
+                )
+            TemporaryDependentImport.objects.bulk_create(new_family_members)
+        except Exception as e:
+            raise e 
+        return Response({"message": "Data loaded successfully, onboarding should start soon, check back on the platform"}, status=status.HTTP_201_CREATED)
 
 
 class BulkTemporaryCancelledMemberUploadAPIView(generics.ListCreateAPIView):

@@ -10,7 +10,6 @@ from apps.sales.views import (
     FailedUploadDataAPIView,
     BulkTemporaryMemberDataAPIView,
     NewMembersAPIView,
-    TelesalesBulkTemporaryMemberDataAPIView
 )
 
 urlpatterns = [

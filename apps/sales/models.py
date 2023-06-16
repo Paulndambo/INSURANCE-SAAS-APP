@@ -27,11 +27,10 @@ class TemporaryMemberData(AbstractBaseModel):
 
 class TemporaryDependentImport(AbstractBaseModel):
     main_member_identification_number = models.CharField(max_length=255)
-    use_type = models.CharField(max_length=255)
-    dependent_type = models.CharField(max_length=255)
-    cover_level = models.DecimalField(
-        max_digits=10, decimal_places=2, null=True, blank=True
-    )
+    #use_type = models.CharField(max_length=255, null=True)
+    relationship = models.CharField(max_length=255, null=True)
+    relationship_type = models.CharField(max_length=255, null=True)
+    cover_level = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     firstname = models.CharField(max_length=255)
     lastname = models.CharField(max_length=255)
     identification_method = models.IntegerField()

@@ -7,23 +7,17 @@ from apps.sales.date_formatting_methods import date_format_method
 
 
 def beneficiary_object_constructor(data):
-    main_member_identification_number = data.get("main_member_identification_number") if data.get(
-        "main_member_identification_number") else data.get("main member identification number")
-    identification_method = data.get("identification method") if data.get(
-        "identification method") else data.get("identification_method")
+    main_member_identification_number = data.get("main_member_identification_number") if data.get("main_member_identification_number") else data.get("main member identification number")
+    identification_method = data.get("identification method") if data.get("identification method") else data.get("identification_method")
     product = data.get("product")
-    identification_number = data.get("identification_number") if data.get(
-        "identification_number") else data.get("identification number")
+    identification_number = data.get("identification_number") if data.get("identification_number") else data.get("identification number")
     relationship = data.get("relationship")
     # cover_level = data.get("cover_level") if data.get("cover_level") else data.get("cover level")
-    first_name = data.get("firstname") if data.get(
-        "firstname") else data.get("first_name")
-    last_name = data.get("lastname") if data.get(
-        "lastname") else data.get("last_name")
-    date_of_birth = data.get("date of birth") if data.get(
-        "date of birth") else data.get("date_of_birth")
-    phone_number = data.get("phone_number") if data.get(
-        "phone_number") else data.get("phone number")
+    first_name = data.get("firstname") if data.get("firstname") else data.get("first_name")
+    last_name = data.get("lastname") if data.get("lastname") else data.get("last_name")
+    date_of_birth = data.get("date of birth") if data.get("date of birth") else data.get("date_of_birth")
+    phone_number = data.get("phone_number") if data.get("phone_number") else data.get("phone number")
+    
     policy_id, scheme_group_id, membership_id = get_policy_scheme_group_and_membership(
         main_member_identification_number=main_member_identification_number,
         identification_method=identification_method,
