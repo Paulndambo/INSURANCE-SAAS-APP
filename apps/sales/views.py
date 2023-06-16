@@ -6,7 +6,9 @@ from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from apps.sales.data_construction_methods import (
     new_member_data_constructor,
-    new_family_member_data_constructor
+    new_family_member_data_constructor,
+    new_paid_member_data_constructor,
+    new_cancelled_member_data_constructor
 )
 
 
@@ -149,35 +151,16 @@ class BulkTemporaryCancelledMemberUploadAPIView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        upload_data = request.data.get("upload_data")
-        upload_type = request.data.get("upload_type")
-        onboarding_mode = request.data.get('onboarding_mode')
+        upload_data = request.data["upload_data"]
 
-        if onboarding_mode and upload_type and upload_data:
-            data = {
-                "upload_type": "cancelled_members",
-                "upload_data": upload_data,
-                "onboarding_mode": "background"
-            }
+        new_cancelled_members = []
 
-            serializer = TemporaryDataHoldingSerializer(data=data)
-            if serializer.is_valid(raise_exception=True):
-                x = serializer.save()
-                print(x.id)
-                try:
-                    mark_members_as_cancelled()
-                except Exception as e:
-                    raise e
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response(
-                {
-                    "message": f"Please make sure your request body contains, upload_type: str, onboarding_model: str, upload_data: list"
-                },
-                status=status.HTTP_400_BAD_REQUEST
+        for member in upload_data:
+            new_cancelled_members.append(
+                
             )
 
+        
 
 class BulkTemporaryNewMemberUploadAPIView(generics.CreateAPIView):
     # queryset = TemporaryMemberData.objects.all()

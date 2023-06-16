@@ -21,8 +21,7 @@ def mark_members_as_paid(identification_method: int, identification_number: str,
                 membership=membership).order_by("-expected_date").first()
 
             if premium:
-                print(
-                    f"Membership ID: {membership.id}, Premium ID: {premium.id}")
+                print(f"Membership ID: {membership.id}, Premium ID: {premium.id}")
                 premium.status = 'paid'
                 premium.balance = 0
                 premium.save()
