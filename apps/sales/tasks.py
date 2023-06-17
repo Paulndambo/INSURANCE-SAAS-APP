@@ -4,19 +4,27 @@ from celery import shared_task
 from backend.celery import app
 from django.db.models import Count
 
-from apps.sales.models import TemporaryDataHolding, TemporaryMemberData
+from apps.sales.models import (
+    TemporaryDataHolding, 
+    TemporaryMemberData,
+    TemporaryCancelledMemberData,
+    TemporaryDependentImport,
+    TemporaryPaidMemberData
+)
 
 
 from apps.sales.mixins import (
     BulkMembersOnboardingMixin,
     FamilyMemberOnboardingMixin,
     MembersCancellationMixin,
-    BulkPaidMembersMixin
+    BulkPaidMembersMixin,
+    BulkLapsedMembersMixin
 )
 
 from apps.sales.telesales_upload_methods import BulkTelesalesUploadMixin
 from apps.sales.group_upload_methods import BulkGroupMembersOnboardingMixin
 from apps.sales.retail_upload_methods import BulkRetailMemberOnboardingMixin
+
 
 
 @app.task(name="salimiana")
@@ -38,7 +46,6 @@ def onboard_new_members_task():
 @app.task(name="bulk_onboard_telesales_members_task")
 def bulk_onboard_telesales_members_task():
     data = TemporaryMemberData.objects.filter(product=8, processed=False)
-
     if data.count() > 0:
         telesales_mixin = BulkTelesalesUploadMixin(data, product=8)
         telesales_mixin.run()
@@ -76,23 +83,31 @@ def bulk_onboard_group_members_task():
 
 @shared_task
 def mark_members_as_paid_task():
-    data = TemporaryDataHolding.objects.filter(
-        upload_type="paid_members").order_by("-created").first()
+    data = TemporaryPaidMemberData.objects.filter(processed=False)[:150]
 
-    if data:
+    if data.count() > 0:
         paid_members_mixin = BulkPaidMembersMixin(data)
         paid_members_mixin.run()
+    
 
 
 @app.task
 def mark_members_as_cancelled():
-    data = TemporaryDataHolding.objects.filter(
-        upload_type="cancelled_members").order_by("-created").first()
+    data = TemporaryCancelledMemberData.objects.filter(processed=False, action_type="Cancel")[:150]
 
-    if data:
+    if data.count() > 0:
         cancel_members_mixin = MembersCancellationMixin(data)
         cancel_members_mixin.run()
+    
 
+@app.task
+def mark_policy_members_as_lapsed():
+    data = TemporaryCancelledMemberData.objects.filter(action_type="Lapsed", processed=False)[:150]
+
+    if data.count() > 0:
+        lapsed_mixin = BulkLapsedMembersMixin(data)
+        lapsed_mixin.run()
+    
 
 @app.task
 def onboard_family_members():

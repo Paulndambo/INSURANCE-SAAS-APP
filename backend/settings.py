@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "apps.policies",
     "apps.payments",
     "apps.products",
+    "apps.reports",
     "apps.notifications",
     "apps.dependents",
     "apps.schemes",

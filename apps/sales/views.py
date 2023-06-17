@@ -106,7 +106,6 @@ class BulkTemporaryPaidMemberUploadAPIView(generics.ListCreateAPIView):
                         **new_paid_member_data_constructor(member)
                     )
                 )
-
             TemporaryPaidMemberData.objects.bulk_create(new_paid_members)
         except Exception as e:
             raise e

@@ -59,7 +59,7 @@ class Membership(AbstractBaseModel):
     description = models.TextField(null=True)
     #price_request = models.ForeignKey('generic_policy_prices.PolicyPriceRequest', null=True, on_delete=models.CASCADE)
     user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
-    scheme_group = models.ForeignKey('schemes.SchemeGroup', on_delete=models.CASCADE)
+    scheme_group = models.ForeignKey('schemes.SchemeGroup', on_delete=models.CASCADE, related_name="schemegroupmembers")
     policy = models.ForeignKey('policies.Policy', null=True, on_delete=models.CASCADE)
     membership_status = models.CharField(max_length=255, choices=MEMBERSHIP_STATUS_CHOICES, null=True, blank=True)
     membership_certificate = models.FileField(upload_to="membership_certificates", null=True, blank=True)
@@ -69,10 +69,34 @@ class Membership(AbstractBaseModel):
 
     def __str__(self):
         return self.user.username
+    
+    def get_profile(self):
+        user = self.user
+        profile = Profile.objects.filter(user=user).first()
+        if profile:
+            user_profile = {
+                "name": f"{profile.first_name} {profile.last_name}",
+                "phone_number": profile.phone if profile.phone else profile.phone1,
+                "postal_address": profile.address if profile.address else profile.address1,
+                "identification_number": profile.id_number if profile.id_number else profile.passport_number,
+                "date_of_birth": profile.date_of_birth,
+                "gender": profile.gender,
+                "occupation": profile.occupation,
+                "nationality": profile.nationality,
+                "identification_method": 1 if profile.id_number else 0
+            }
+            return user_profile
+        
+    def get_membership_configuration(self):
+        membership_config = self.membershipconfigs.filter(beneficiary__isnull=True).first()
+        if membership_config:
+            return membership_config
+        else:
+            return None
 
 
 class MembershipConfiguration(AbstractBaseModel):
-    membership = models.ForeignKey(Membership, on_delete=models.CASCADE)
+    membership = models.ForeignKey(Membership, on_delete=models.CASCADE, related_name="membershipconfigs")
     beneficiary = models.ForeignKey("dependents.Beneficiary", on_delete=models.CASCADE, blank=True, null=True)
     pricing_plan = models.ForeignKey("prices.PricingPlan", on_delete=models.SET_NULL, null=True, blank=True)
     cover_level = models.DecimalField(max_digits=10, decimal_places=2, null=True)
@@ -91,7 +115,7 @@ class MembershipStatusUpdates(AbstractBaseModel):
 
 
 class Profile(AbstractBaseModel):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profiles")
     first_name = models.CharField(max_length=255, blank=True)
     last_name = models.CharField(max_length=255, blank=True)
     id_number = models.CharField(max_length=255, null=True, unique=True)
@@ -112,7 +136,7 @@ class Profile(AbstractBaseModel):
 
 
 class PolicyHolder(AbstractBaseModel):
-    individual_user = models.OneToOneField(IndividualUser, null=True, on_delete=models.CASCADE)
+    individual_user = models.OneToOneField(IndividualUser, null=True, on_delete=models.CASCADE, related_name="policyholders")
     name = models.CharField(max_length=255, null=True, blank=True)
     phone_number = models.CharField(max_length=255, null=True, blank=True)
     address = models.CharField(max_length=255, null=True, blank=True)
