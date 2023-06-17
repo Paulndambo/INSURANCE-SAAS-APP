@@ -9,6 +9,7 @@ from apps.sales.family_members_upload_methods import upload_beneficiaries, uploa
 
 from apps.sales.mark_members_as_paid import mark_members_as_paid
 from apps.sales.mark_members_as_cancelled import mark_members_as_cancelled
+from apps.sales.mark_members_as_lapsed import mark_policy_members_as_lapsed
 
 from apps.prices.models import PricingPlan, PricingPlanSchemeMapping
 from apps.sales.retail_upload_methods import BulkRetailMemberOnboardingMixin
@@ -89,19 +90,16 @@ class BulkPaidMembersMixin(object):
 
     @transaction.atomic
     def __mark_members_as_paid(self):
-        data = self.data
-        for member in data:
-            identification_method = member.identification_method
-            identification_number = member.identification_number
-            product = member.product
-            try:
+        try:
+            data = self.data
+            for member in data:
                 mark_members_as_paid(
-                    identification_method=identification_method,
-                    identification_number=identification_number,
-                    product=product,
+                    identification_method=member.identification_method,
+                    identification_number=member.identification_number,
+                    product=member.product
                 )
-            except Exception as e:
-                raise e
+        except Exception as e:
+            raise e
 
 
 class MembersCancellationMixin(object):
@@ -113,33 +111,38 @@ class MembersCancellationMixin(object):
 
     @transaction.atomic
     def __cancel_membership(self):
-        data = self.data
-
-        for member in data:
-            identification_method = member.identification_method
-            identification_number = member.identification_number
-            product = member.product
-            action_type = member.action_type
-            reference_reason = member.reference_reason
-            try:
+        try:
+            data = self.data
+            for member in data:
                 mark_members_as_cancelled(
-                    identification_method=identification_method,
-                    identification_number=identification_number,
-                    product=product,
-                    reference_reason=reference_reason,
-                    action_type=action_type
+                    identification_method=member.identification_method,
+                    identification_number=member.identification_number,
+                    product=member.product,
+                    action_type=member.action_type,
+                    reference_reason=member.reference_reason
                 )
-            except Exception as e:
-                raise e
+        except Exception as e:
+            raise e
 
 
 class BulkLapsedMembersMixin(object):
     def __init__(self, data):
-        data = self.data
+        self.data = data
 
     def run(self, *args, **kwargs):
         self.__lapse_members()
 
     @transaction.atomic
     def __lapse_members(self):
-        data = self.data
+        try:
+            data = self.data
+            for member in data:
+                mark_policy_members_as_lapsed(
+                    identification_method=member.identification_method,
+                    identification_number=member.identification_number,
+                    product=member.product,
+                    action_type=member.action_type,
+                    reference_reason=member.reference_reason
+                )
+        except Exception as e:
+            raise e

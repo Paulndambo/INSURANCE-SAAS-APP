@@ -4,19 +4,12 @@ from apps.policies.models import (
     PolicyStatusUpdates,
     CycleStatusUpdates,
     Cycle,
-    CancellationNotification,
-    LapseNotification
+    CancellationNotification
 )
-from apps.sales.bulk_upload_methods import (
-    get_pricing_plan
-)
-from apps.sales.models import FailedUploadData
+from apps.sales.bulk_upload_methods import get_pricing_plan
 
-from apps.users.models import Profile, Membership
-from apps.users.utils import is_fake_email
-from datetime import datetime
+from apps.users.models import Membership
 from apps.sales.member_transition_methods import (
-    lapse_notification, 
     cancellation_notification, 
     policy_cancellation,
     create_cycle_status_updates,
@@ -52,7 +45,6 @@ def mark_members_as_cancelled(identification_method: int, identification_number:
                         cycle.status = "cancelled"
                         cycle.save()
                         CycleStatusUpdates.objects.create(**create_cycle_status_updates(cycle, "active", "cancelled"))
-                    
                         CancellationNotification.objects.create(**cancellation_notification(policy, membership, profile))
 
                 else:
@@ -61,8 +53,8 @@ def mark_members_as_cancelled(identification_method: int, identification_number:
                     policy.save()
 
                     PolicyStatusUpdates.objects.create(policy=policy, previous_status="active", next_status="cancelled")
-
                     PolicyCancellation.objects.create(**policy_cancellation(policy, reference_reason))
+
                     cycle = Cycle.objects.filter(membership=membership).first()
                     if cycle.status.lower() == "cancelled".lower():
                         create_upload_error_log("Cancel", data, "cancelled_member", "Membership is already cancelled")
@@ -72,10 +64,7 @@ def mark_members_as_cancelled(identification_method: int, identification_number:
                         cycle.save()
                         CycleStatusUpdates.objects.create(**create_cycle_status_updates(cycle, "active", "cancelled"))
                         CancellationNotification.objects.create(**cancellation_notification(policy, membership, profile))
-
-
+        else:
+            create_upload_error_log("Cancel", data, "cancelled_member", "Membership not found")
     else:
-        if data['reference_reason'] == 'Lapsed':
-            create_upload_error_log("Lapsed", data, "lapsed_member", "Profile not found")
-        elif data['reference_reason'] == 'Cancel':
-            create_upload_error_log("Cancel", data, "cancelled_member", "Profile not found")
+        create_upload_error_log("Cancel", data, "cancelled_member", "Profile not found")

@@ -1,24 +1,14 @@
 from apps.policies.models import (
-    Policy,
-    PolicyCancellation,
     PolicyStatusUpdates,
     CycleStatusUpdates,
     Cycle,
-    CancellationNotification,
     LapseNotification
 )
-from apps.sales.bulk_upload_methods import (
-    get_pricing_plan
-)
-from apps.sales.models import FailedUploadData
-
-from apps.users.models import Profile, Membership
-from apps.users.utils import is_fake_email
+from apps.sales.bulk_upload_methods import get_pricing_plan
+from apps.users.models import Membership
 from datetime import datetime
 from apps.sales.member_transition_methods import (
     lapse_notification,
-    cancellation_notification,
-    policy_cancellation,
     create_cycle_status_updates,
     get_membership_profile
 )
