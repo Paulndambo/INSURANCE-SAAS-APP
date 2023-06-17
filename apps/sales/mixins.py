@@ -89,13 +89,11 @@ class BulkPaidMembersMixin(object):
 
     @transaction.atomic
     def __mark_members_as_paid(self):
-        data = self.data.upload_data
+        data = self.data
         for member in data:
-            identification_method = member.get("identification method") if member.get(
-                "identification method") else member.get("identification_method")
-            identification_number = member.get("identification number") if member.get(
-                "identification number") else member.get("identification_number")
-            product = member.get("product")
+            identification_method = member.identification_method
+            identification_number = member.identification_number
+            product = member.product
             try:
                 mark_members_as_paid(
                     identification_method=identification_method,
@@ -133,3 +131,15 @@ class MembersCancellationMixin(object):
                 )
             except Exception as e:
                 raise e
+
+
+class BulkLapsedMembersMixin(object):
+    def __init__(self, data):
+        data = self.data
+
+    def run(self, *args, **kwargs):
+        self.__lapse_members()
+
+    @transaction.atomic
+    def __lapse_members(self):
+        data = self.data

@@ -1,4 +1,5 @@
 from apps.users.utils import is_fake_email
+from apps.users.models import Profile, Membership
 def policy_cancellation(policy, reference_reason):
     return {
         "policy": policy,
@@ -39,3 +40,14 @@ def create_cycle_status_updates(cycle, previous_status, next_status):
         "previous_status": previous_status,
         "next_status": next_status,
     }
+
+def get_membership_profile(identification_method, identification_number):
+    profile = ''
+    if identification_method == 1:
+        profile = Profile.objects.filter(id_number=identification_number).first()
+    else:
+        profile = Profile.objects.filter(passport_number=identification_number).first()
+    
+    return profile
+
+
