@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "apps.claims",
     "apps.sales",
     "apps.queue_system",
+    "apps.entities",
 ]
 
 MIDDLEWARE = [

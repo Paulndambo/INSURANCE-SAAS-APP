@@ -8,16 +8,12 @@ from rest_framework_bulk import (
 )
 
 
-class BulkTemporaryMemberDataSerializer(serializers.ModelSerializer):
+class BulkTemporaryMemberDataSerializer(serializers.Serializer):
     onboarding_mode = serializers.CharField(max_length=255)
     upload_type = serializers.CharField(max_length=255)
     upload_data = serializers.JSONField()
-    # date_of_birth = serializers.SerializerMethodField()
-    # class Meta:
-    #    model = TemporaryMemberData
-    #    fields = "__all__"
-    # only necessary in DRF3
-    # list_serializer_class = BulkListSerializer
+   
+   
 
 
 class TelesalesBulkTemporaryMemberDataSerializer(serializers.ModelSerializer):
@@ -83,3 +79,18 @@ class FailedUploadDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = FailedUploadData
         fields = "__all__"
+
+
+class PolicyPurchaseSerializer(serializers.Serializer):
+    seller_details = serializers.JSONField()
+    members = serializers.JSONField()
+    dependents = serializers.JSONField()
+    extended_dependents = serializers.JSONField()
+    beneficiaries = serializers.JSONField()
+    
+
+class CreditLifePolicyPurchaseSerializer(serializers.Serializer):
+    seller_details = serializers.JSONField()
+    members = serializers.JSONField()
+    obligations = serializers.JSONField()
+    beneficiaries = serializers.JSONField()

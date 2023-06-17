@@ -23,7 +23,8 @@ from apps.sales.serializers import (
     FailedUploadDataSerializer,
     BulkTemporaryMemberDataSerializer,
     NewMembersSerializer,
-    TelesalesBulkTemporaryMemberDataSerializer
+    PolicyPurchaseSerializer,
+    CreditLifePolicyPurchaseSerializer
 )
 # from apps.sales.useful_methods import bulk_policy_upload
 from apps.sales.models import (
@@ -166,3 +167,24 @@ class FailedUploadDataAPIView(generics.ListAPIView):
     queryset = FailedUploadData.objects.all()
     serializer_class = FailedUploadDataSerializer
     permission_classes = [IsAuthenticated]
+
+
+class PolicyPurchaseAPIView(generics.CreateAPIView):
+    serializer_class = PolicyPurchaseSerializer
+
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        serializer = self.serializer_class(data=data)
+        if serializer.is_valid(raise_exception=True):
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class CreditLifePolicyPurchaseAPIView(generics.CreateAPIView):
+    serializer_class = CreditLifePolicyPurchaseSerializer
+
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        serializer = self.serializer_class(data=data)
+        if serializer.is_valid(raise_exception=True):
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

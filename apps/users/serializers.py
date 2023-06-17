@@ -116,7 +116,7 @@ class MembershipSerializer(serializers.ModelSerializer):
         model = Membership
         fields = "__all__"
 
-    
+    """
     def create(self, validated_data):
         try:
             membership = Membership.objects.create(**validated_data)
@@ -128,7 +128,7 @@ class MembershipSerializer(serializers.ModelSerializer):
             return membership
         except Exception as e:
             raise e
-
+    """
 
 class PolicyHolderSerializer(serializers.ModelSerializer):
     class Meta:

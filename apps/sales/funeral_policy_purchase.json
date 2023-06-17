@@ -1,0 +1,122 @@
+{
+    "user_details": {
+        "sales_agent": 1,
+        "broker": 2
+    },
+    "members": [
+        {
+            "username": "7011190788083@nomail.com",
+            "first_name": "PHOPHI",
+            "last_name": "MUFAMADI",
+            "email": "7011190788083@nomail.com",
+            "identification method": 1,
+            "identification number": 7011190788083,
+            "mobile number": 123934086,
+            "landline": 123934086,
+            "date of birth": "1970/11/19",
+            "physical address": "3383 PHASE 3  ITSOSENG  0001",
+            "postal address": "3383 PHASE 3  ITSOSENG  0001",
+            "gender": "Female",
+            "product": 2
+          },
+          {
+            "username": "7806295131083@nomail.com",
+            "first_name": "GRANT",
+            "last_name": "REES-BEVAN",
+            "email": "7806295131083@nomail.com",
+            "identification method": 1,
+            "identification number": 7806295131083,
+            "mobile number": 117285510,
+            "landline": 117285510,
+            "date of birth": "1978/06/29",
+            "physical address": "57 NORTHUMBERLAND ROAD  KENSINGTON B  2194",
+            "postal address": "57 NORTHUMBERLAND ROAD  KENSINGTON B  2194",
+            "gender": "Male",
+            "product": 2
+          }
+    ],
+    "dependents": [
+        {
+            "main_member_id": "1234576556",
+            "identification_method": 1,
+            "identification_number": "45678987655676",
+            "product": 2,
+            "relationship": "Child",
+            "relationship_type": "Dependent",
+            "cover_level": 50000,
+            "last_name": "Doe",
+            "first_name": "John",
+            "date_of_birth": "1998/06/13",
+            "gender": "Male"
+        },
+        {
+            "main_member_id": "1234576556",
+            "identification_method": 1,
+            "identification_number": "45678987655676",
+            "product": 2,
+            "relationship": "Child",
+            "relationship_type": "Dependent",
+            "cover_level": 50000,
+            "last_name": "Doe",
+            "first_name": "John",
+            "date_of_birth": "1998/06/13",
+            "gender": "Male"
+        }
+    ],
+    "extended_family_members": [
+        {
+            "main_member_id": "1234576556",
+            "identification_method": 1,
+            "identification_number": "45678987655676",
+            "product": 2,
+            "relationship": "Child",
+            "relationship_type": "Extended",
+            "cover_level": 50000,
+            "last_name": "Doe",
+            "first_name": "John",
+            "date_of_birth": "1998/06/13",
+            "gender": "Male"
+        },
+        {
+            "main_member_id": "1234576556",
+            "identification_method": 1,
+            "identification_number": "45678987655676",
+            "product": 2,
+            "relationship": "Child",
+            "relationship_type": "Extended",
+            "cover_level": 50000,
+            "last_name": "Doe",
+            "first_name": "John",
+            "date_of_birth": "1998/06/13",
+            "gender": "Male"
+        }
+    ],
+    "beneficiaries": [
+        {
+            "main_member_id": "1234576556",
+            "identification_method": 1,
+            "identification_number": "45678987655676",
+            "product": 2,
+            "relationship": "Child",
+            "relationship_type": "Beneficiary",
+            "cover_level": 50000,
+            "last_name": "Doe",
+            "first_name": "John",
+            "date_of_birth": "1998/06/13",
+            "gender": "Male"
+        },
+        {
+            "main_member_id": "1234576556",
+            "identification_method": 1,
+            "identification_number": "45678987655676",
+            "product": 2,
+            "relationship": "Child",
+            "relationship_type": "Beneficiary",
+            "cover_level": 50000,
+            "last_name": "Doe",
+            "first_name": "John",
+            "date_of_birth": "1998/06/13",
+            "gender": "Male"
+        }
+    ]
+}
