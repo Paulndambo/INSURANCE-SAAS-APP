@@ -10,7 +10,7 @@ from apps.sales.data_construction_methods import (
     new_paid_member_data_constructor,
     new_cancelled_member_data_constructor
 )
-
+from apps.sales.tasks import onboard_sales_flow_member_task
 
 # from apps.policies.mixins import CancelIndividualPolicyMixin, BulkMemberUploadMixin, SchemeGroupPolicyCancellationMixin
 
@@ -18,7 +18,6 @@ from apps.sales.serializers import (
     BulkTemporaryPaidMemberDataBulkSerializer,
     BulkTemporaryMemberCancellationUploadSerializer,
     BulkTemporaryDependentUploadSerializer,
-    BulkTemporaryNewMemberUploadSerializer,
     TemporaryDataHoldingSerializer,
     FailedUploadDataSerializer,
     BulkTemporaryMemberDataSerializer,
@@ -35,13 +34,6 @@ from apps.sales.models import (
     TemporaryCancelledMemberData,
     TemporaryPaidMemberData
 )
-from rest_framework_bulk import (
-    BulkListSerializer,
-    BulkSerializerMixin,
-    ListBulkCreateUpdateDestroyAPIView,
-)
-
-from apps.sales.tasks import onboard_family_members, mark_members_as_paid_task, mark_members_as_cancelled, onboard_new_members_task
 
 # Create your views here.
 
@@ -178,7 +170,23 @@ class PolicyPurchaseAPIView(generics.CreateAPIView):
         if serializer.is_valid(raise_exception=True):
             policy_type = serializer.validated_data["policy_details"]["scheme_type"]
             if policy_type.lower() == "retail":
-                print("This is a retail policy")
+                members = serializer.validated_data.get("members")
+                dependents = serializer.validated_data.get("dependents")
+                beneficiaries = serializer.validated_data.get("beneficiaries")
+                extended_dependents = serializer.validated_data.get("extended_dependents")
+
+                print("******************Sales Flow Payload***********************")
+                print(members)
+                onboard_sales_flow_member_task(2, members)
+                print("******************Sales Flow Payload***********************")
+                print(dependents)
+                print("******************Sales Flow Payload***********************")
+                print(beneficiaries)
+                print("******************Sales Flow Payload***********************")
+                print(extended_dependents)
+                print("******************Sales Flow Payload***********************")
+
+                #onboard_sales_flow_member_task()
             elif policy_type.lower() == "group":
                 print("This is a group policy")
             return Response(serializer.data, status=status.HTTP_201_CREATED)

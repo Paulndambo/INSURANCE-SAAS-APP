@@ -24,6 +24,8 @@ from apps.sales.mixins import (
 from apps.sales.telesales_upload_methods import BulkTelesalesUploadMixin
 from apps.sales.group_upload_methods import BulkGroupMembersOnboardingMixin
 from apps.sales.retail_upload_methods import BulkRetailMemberOnboardingMixin
+from apps.sales.sales_flow_methods.retail_sales_flow_member import SalesFlowBulkRetailMemberOnboardingMixin
+from apps.sales.sales_flow_methods.telesales_sales_flow_member import SalesFlowBulkTelesalesUploadMixin
 
 
 
@@ -47,7 +49,7 @@ def onboard_new_members_task():
 def bulk_onboard_telesales_members_task():
     data = TemporaryMemberData.objects.filter(product=8, processed=False)
     if data.count() > 0:
-        telesales_mixin = BulkTelesalesUploadMixin(data, product=8)
+        telesales_mixin = BulkTelesalesUploadMixin(data, 8, "upload")
         telesales_mixin.run()
     else:
         print("No unprocessed telesales members found!!!!!")
@@ -57,8 +59,22 @@ def bulk_onboard_telesales_members_task():
 def bulk_onboard_retail_members_task():
     data = TemporaryMemberData.objects.filter(product__in=[1, 2], processed=False)[:150]
     if data.count() > 0:
-        retail_mixin = BulkRetailMemberOnboardingMixin(data)
+        retail_mixin = BulkRetailMemberOnboardingMixin(data, "upload")
         retail_mixin.run()
+
+
+@app.task(name="onboard_sales_member")
+def onboard_sales_flow_member_task(product, data):
+    try:
+        if product in [1, 2]:
+            retail_sales_flow_member_mixin = SalesFlowBulkRetailMemberOnboardingMixin(data)
+            retail_sales_flow_member_mixin.run()
+        elif product == 8:
+            telesales_sales_flow_member_mixin = SalesFlowBulkTelesalesUploadMixin(data, 8)
+            telesales_sales_flow_member_mixin.run()
+    except Exception as e:
+        raise e
+    
 
 
 @app.task(name="bulk_onboard_group_members_task")

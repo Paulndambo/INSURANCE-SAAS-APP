@@ -88,6 +88,8 @@ class BulkGroupMembersOnboardingMixin(object):
 
             if not user:
                 user = User.objects.create(**create_user(username, email, first_name, last_name))
+                user.set_password("Password")
+                user.save()
                 
             individual_user = IndividualUser.objects.filter(user=user).first()
 
