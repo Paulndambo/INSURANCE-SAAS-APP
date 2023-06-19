@@ -32,13 +32,13 @@ class UserTokenObtainPairSerializer(TokenObtainPairSerializer):
         token["id"] = user.id
         return token
 
-'''
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ("id", "username", "email")
 
-'''
+
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
