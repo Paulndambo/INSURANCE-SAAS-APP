@@ -1,7 +1,11 @@
 {
-    "user_details": {
+    "seller_details": {
         "sales_agent": 1,
         "broker": 2
+    },
+    "policy_details": {
+        "scheme_type": "retail",
+        "product": 2
     },
     "members": [
         {
@@ -63,7 +67,7 @@
             "gender": "Male"
         }
     ],
-    "extended_family_members": [
+    "extended_dependents": [
         {
             "main_member_id": "1234576556",
             "identification_method": 1,

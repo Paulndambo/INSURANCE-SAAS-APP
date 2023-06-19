@@ -176,8 +176,15 @@ class PolicyPurchaseAPIView(generics.CreateAPIView):
         data = request.data
         serializer = self.serializer_class(data=data)
         if serializer.is_valid(raise_exception=True):
+            policy_type = serializer.validated_data["policy_details"]["scheme_type"]
+            if policy_type.lower() == "retail":
+                print("This is a retail policy")
+            elif policy_type.lower() == "group":
+                print("This is a group policy")
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    
     
 class CreditLifePolicyPurchaseAPIView(generics.CreateAPIView):
     serializer_class = CreditLifePolicyPurchaseSerializer
