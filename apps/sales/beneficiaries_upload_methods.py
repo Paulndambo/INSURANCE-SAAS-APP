@@ -6,7 +6,10 @@ from apps.sales.useful_methods import get_policy_scheme_group_and_membership
 from apps.sales.date_formatting_methods import date_format_method
 
 
-def beneficiary_object_constructor(data):
+def beneficiary_object_constructor(
+    main_member_identification_number: str, identification_method: int, identification_number: str, product: int, relationship: str, 
+    first_name: str, last_name: str, date_of_birth
+):
     main_member_identification_number = data.get("main_member_identification_number") if data.get("main_member_identification_number") else data.get("main member identification number")
     identification_method = data.get("identification method") if data.get("identification method") else data.get("identification_method")
     product = data.get("product")
