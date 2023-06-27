@@ -34,7 +34,6 @@ def salimiana():
     print("**************Salimiana***************")
 
 
-
 def onboard_new_members_task():
     members = TemporaryDataHolding.objects.filter(upload_type="new_members").order_by("-created").first()
 
@@ -83,18 +82,21 @@ def bulk_onboard_group_members_task():
         .annotate(num_members=Count('product')) \
         .order_by('-num_members') \
         .first()
-    
-    number_of_processed_members = most_unprocessed["num_members"]
-    product = most_unprocessed["product"]
 
-    if number_of_processed_members < 200:
-        data = TemporaryMemberData.objects.filter(product=product, processed=False)
-        group_mixin = BulkGroupMembersOnboardingMixin(data, product)
-        group_mixin.run()
-    elif number_of_processed_members > 200:
-        data = TemporaryMemberData.objects.filter(product=product, processed=False)[:200]
-        group_mixin = BulkGroupMembersOnboardingMixin(data, product)
-        group_mixin.run()
+    if most_unprocessed:
+        number_of_processed_members = most_unprocessed["num_members"]
+        product = most_unprocessed["product"]
+
+        if number_of_processed_members < 200:
+            data = TemporaryMemberData.objects.filter(product=product, processed=False)
+            group_mixin = BulkGroupMembersOnboardingMixin(data, product)
+            group_mixin.run()
+        elif number_of_processed_members > 200:
+            data = TemporaryMemberData.objects.filter(product=product, processed=False)[:200]
+            group_mixin = BulkGroupMembersOnboardingMixin(data, product)
+            group_mixin.run()
+    else:
+        print("There are no group members to process at the moment!!")
 
 
 @shared_task
@@ -104,31 +106,37 @@ def mark_members_as_paid_task():
     if data.count() > 0:
         paid_members_mixin = BulkPaidMembersMixin(data)
         paid_members_mixin.run()
+    else:
+        print("No more payments to process")
     
 
 
 @app.task
 def mark_members_as_cancelled():
-    data = TemporaryCancelledMemberData.objects.filter(processed=False, action_type="Cancel")[:150]
+    data = TemporaryCancelledMemberData.objects.filter(processed=False, action_type="Cancel")
 
     if data.count() > 0:
-        cancel_members_mixin = MembersCancellationMixin(data)
+        data_to_process = data[:200]
+        cancel_members_mixin = MembersCancellationMixin(data_to_process)
         cancel_members_mixin.run()
+    else:
+        print("No more cancellations to process")
     
 
 @app.task
 def mark_policy_members_as_lapsed():
     data = TemporaryCancelledMemberData.objects.filter(action_type="Lapsed", processed=False)[:150]
-
+    
     if data.count() > 0:
         lapsed_mixin = BulkLapsedMembersMixin(data)
         lapsed_mixin.run()
+    else:
+        print("No more lapsed members to process!")
     
 
 @app.task
 def onboard_family_members():
-    data = TemporaryDataHolding.objects.filter(
-        upload_type="family_members").order_by("-created").first()
+    data = TemporaryDataHolding.objects.filter(upload_type="family_members").order_by("-created").first()
 
     if data:
         # print('You are uploading family members')

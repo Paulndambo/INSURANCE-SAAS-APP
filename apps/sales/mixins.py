@@ -121,6 +121,8 @@ class MembersCancellationMixin(object):
                     action_type=member.action_type,
                     reference_reason=member.reference_reason
                 )
+                member.processed = True
+                member.save()
         except Exception as e:
             raise e
 
@@ -144,5 +146,7 @@ class BulkLapsedMembersMixin(object):
                     action_type=member.action_type,
                     reference_reason=member.reference_reason
                 )
+                member.processed = True
+                member.save()
         except Exception as e:
             raise e

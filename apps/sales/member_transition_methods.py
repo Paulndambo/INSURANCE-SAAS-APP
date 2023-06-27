@@ -1,12 +1,15 @@
 from apps.users.utils import is_fake_email
 from apps.users.models import Profile, Membership
+from apps.sales.bulk_upload_methods import validate_id_number_length, validate_phone_number_length
+from django.db.models import Q
+
+
 def policy_cancellation(policy, reference_reason):
     return {
         "policy": policy,
         "cancel_reason": reference_reason if reference_reason else None,
-        "policy_next_status": "cancelled",
         "policy_previous_status": "active",
-        "cancellation_status": "confirmed",
+        "status": "confirmed",
         "cancellation_origin": "insurer"
     }
 
@@ -23,14 +26,14 @@ def lapse_notification(membership, profile):
         "product": membership.scheme_group.pricing_group,
     }
 
-def cancellation_notification(policy, membership, profile):
+def cancellation_notification(policy, membership, profile, policy_type):
     return {
         "policy": policy,
         "membership": membership,
         "email": membership.user.email,
         "mobile_number": profile.phone if profile.phone else profile.phone1,
         "notification_send": False,
-        "policy_type": "Retail Scheme",
+        "policy_type": policy_type,
         "product": membership.scheme_group.pricing_group
     }
 
@@ -41,13 +44,12 @@ def create_cycle_status_updates(cycle, previous_status, next_status):
         "next_status": next_status,
     }
 
-def get_membership_profile(identification_method, identification_number):
-    profile = ''
-    if identification_method == 1:
-        profile = Profile.objects.filter(id_number=identification_number).first()
+def get_membership_profile(identification_number):
+    profile = Profile.objects.filter(Q(id_number=identification_number) | Q(passport_number=identification_number)).first()
+
+    if profile:
+        return profile
     else:
-        profile = Profile.objects.filter(passport_number=identification_number).first()
-    
-    return profile
+        return None
 
 
