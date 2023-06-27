@@ -44,6 +44,7 @@ ROLE_CHOICES = (
     ("funeral_validator", "Funeral Validator"),
     ("brokerage_admin", "Brokerage Admin"),
     ("broker", "Broker"),
+    ("sales_agent", "Sales Agent"),
     ("claim_validator", "Claim Validator"),
     ("retail_agent", "Retail Agent"),
 )

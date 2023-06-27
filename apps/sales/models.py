@@ -27,11 +27,10 @@ class TemporaryMemberData(AbstractBaseModel):
 
 class TemporaryDependentImport(AbstractBaseModel):
     main_member_identification_number = models.CharField(max_length=255)
-    use_type = models.CharField(max_length=255)
-    dependent_type = models.CharField(max_length=255)
-    cover_level = models.DecimalField(
-        max_digits=10, decimal_places=2, null=True, blank=True
-    )
+    #use_type = models.CharField(max_length=255, null=True)
+    relationship = models.CharField(max_length=255, null=True)
+    relationship_type = models.CharField(max_length=255, null=True)
+    cover_level = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     firstname = models.CharField(max_length=255)
     lastname = models.CharField(max_length=255)
     identification_method = models.IntegerField()
@@ -46,7 +45,7 @@ class TemporaryDependentImport(AbstractBaseModel):
 
 class TemporaryPaidMemberData(AbstractBaseModel):
     identification_number = models.CharField(max_length=255)
-    identification_method = models.IntegerField()
+    identification_method = models.IntegerField(null=True)
     product = models.IntegerField()
     processed = models.BooleanField(default=False)
 
@@ -55,9 +54,10 @@ class TemporaryPaidMemberData(AbstractBaseModel):
 
 
 class TemporaryCancelledMemberData(AbstractBaseModel):
-    main_member_identification_number = models.CharField(max_length=255)
     identification_number = models.CharField(max_length=255)
     identification_method = models.IntegerField()
+    action_type = models.CharField(max_length=255, null=True)
+    reference_reason = models.CharField(max_length=255, null=True)
     product = models.IntegerField()
     processed = models.BooleanField(default=False)
 
@@ -81,10 +81,8 @@ ONBOARDING_MODES = (
 
 class TemporaryDataHolding(AbstractBaseModel):
     upload_type = models.CharField(max_length=255, choices=UPLOAD_TYPES)
-    upload_data = models.JSONField(default=[])
-    onboarding_mode = models.CharField(
-        max_length=255, choices=ONBOARDING_MODES, default="background"
-    )
+    upload_data = models.JSONField(null=True)
+    onboarding_mode = models.CharField(max_length=255, choices=ONBOARDING_MODES, default="background")
 
     def __str__(self):
         return self.upload_type

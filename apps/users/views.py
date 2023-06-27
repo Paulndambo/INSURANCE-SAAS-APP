@@ -28,7 +28,7 @@ from .serializers import (
     MembershipSerializer,
     PolicyHolderRelativeSerializer,
     ProfileSerializer,
-   
+    UserSerializer,
     IndividualRegisterSerializer,
     PolicyHolderSerializer,
 )
@@ -101,7 +101,7 @@ class ChangePasswordAPIView(APIView):
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = UserTokenObtainPairSerializer
 
-'''
+
 class UserModelViewSet(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -111,7 +111,7 @@ class UserModelViewSet(ModelViewSet):
             return IndividualRegisterSerializer
         else:
             return UserSerializer
-'''
+
 
 class MembershipViewSet(ModelViewSet):
     queryset = Membership.objects.all()

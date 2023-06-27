@@ -4,8 +4,13 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
-from apps.sales.new_member_data_constructor import new_member_data_constructor, telesales_new_member_data_constructor
-
+from apps.sales.data_construction_methods import (
+    new_member_data_constructor,
+    new_family_member_data_constructor,
+    new_paid_member_data_constructor,
+    new_cancelled_member_data_constructor
+)
+from apps.sales.tasks import onboard_sales_flow_member_task
 
 # from apps.policies.mixins import CancelIndividualPolicyMixin, BulkMemberUploadMixin, SchemeGroupPolicyCancellationMixin
 
@@ -13,22 +18,22 @@ from apps.sales.serializers import (
     BulkTemporaryPaidMemberDataBulkSerializer,
     BulkTemporaryMemberCancellationUploadSerializer,
     BulkTemporaryDependentUploadSerializer,
-    BulkTemporaryNewMemberUploadSerializer,
     TemporaryDataHoldingSerializer,
     FailedUploadDataSerializer,
     BulkTemporaryMemberDataSerializer,
     NewMembersSerializer,
-    TelesalesBulkTemporaryMemberDataSerializer
+    PolicyPurchaseSerializer,
+    CreditLifePolicyPurchaseSerializer
 )
 # from apps.sales.useful_methods import bulk_policy_upload
-from apps.sales.models import FailedUploadData, TemporaryDataHolding, TemporaryMemberData
-from rest_framework_bulk import (
-    BulkListSerializer,
-    BulkSerializerMixin,
-    ListBulkCreateUpdateDestroyAPIView,
+from apps.sales.models import (
+    FailedUploadData, 
+    TemporaryDataHolding, 
+    TemporaryMemberData,
+    TemporaryDependentImport,
+    TemporaryCancelledMemberData,
+    TemporaryPaidMemberData
 )
-
-from apps.sales.tasks import onboard_family_members, mark_members_as_paid_task, mark_members_as_cancelled, onboard_new_members_task
 
 # Create your views here.
 
@@ -45,8 +50,7 @@ class OnboardingAPPAPIView(APIView):
         return Response(routes)
 
 
-class BulkTemporaryMemberDataAPIView(generics.ListCreateAPIView):
-    #queryset = TemporaryMemberData.objects.all()
+class BulkTemporaryNewMemberUploadAPIView(generics.ListCreateAPIView):
     serializer_class = BulkTemporaryMemberDataSerializer
 
     def post(self, request, *args, **kwargs):
@@ -64,25 +68,6 @@ class BulkTemporaryMemberDataAPIView(generics.ListCreateAPIView):
             raise e
         return Response({"message": "Data Uploaded Successfully"}, status=status.HTTP_201_CREATED)
 
-
-class TelesalesBulkTemporaryMemberDataAPIView(generics.ListCreateAPIView):
-    # queryset = TemporaryMemberData.objects.all()
-    serializer_class = TelesalesBulkTemporaryMemberDataSerializer
-
-    def post(self, request, *args, **kwargs):
-        try:
-            upload_data = request.data["upload_data"]
-            new_members = []
-            for data in upload_data:
-                new_members.append(
-                    TemporaryMemberData(
-                        **telesales_new_member_data_constructor(data)
-                    )
-                )
-            TemporaryMemberData.objects.bulk_create(new_members)
-        except Exception as e:
-            raise e
-        return Response({"message": "Data Uploaded Successfully"}, status=status.HTTP_201_CREATED)
 
 
 class NewMembersAPIView(generics.ListAPIView):
@@ -102,146 +87,67 @@ class OnboardingInitiateAPIView(APIView):
 class BulkTemporaryPaidMemberUploadAPIView(generics.ListCreateAPIView):
     # queryset = TemporaryPaidMemberData.objects.all()
     serializer_class = BulkTemporaryPaidMemberDataBulkSerializer
-    permission_classes = [IsAuthenticated]
+    #permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        upload_data = request.data.get("upload_data")
-        upload_type = request.data.get("upload_type")
-        onboarding_mode = request.data.get('onboarding_mode')
-
-        if onboarding_mode and upload_type and upload_data:
-            data = {
-                "upload_type": "paid_members",
-                "upload_data": upload_data,
-                "onboarding_mode": "background"
-            }
-
-            serializer = TemporaryDataHoldingSerializer(data=data)
-            if serializer.is_valid(raise_exception=True):
-                x = serializer.save()
-                print(x.id)
-                try:
-                    mark_members_as_paid_task()
-                except Exception as e:
-                    raise e
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response(
-                {
-                    "message": f"Please make sure your request body contains, upload_type: str, onboarding_model: str, upload_data: list"
-                },
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
+        try:
+            upload_data = request.data["upload_data"]
+            new_paid_members = []
+            for member in upload_data:
+                new_paid_members.append(
+                    TemporaryPaidMemberData(
+                        **new_paid_member_data_constructor(member)
+                    )
+                )
+            TemporaryPaidMemberData.objects.bulk_create(new_paid_members)
+        except Exception as e:
+            raise e
+        return Response({"message": "Data loaded successfully, onboarding should start soon, check back on the platform"}, status=status.HTTP_201_CREATED)
+        
 
 class BulkTemporaryDependentUploadAPIView(generics.ListCreateAPIView):
-    # queryset = TemporaryDependentImport.objects.all()
     serializer_class = BulkTemporaryDependentUploadSerializer
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        upload_data = request.data.get("upload_data")
-        upload_type = request.data.get("upload_type")
-        onboarding_mode = request.data.get('onboarding_mode')
-
-        if onboarding_mode and upload_type and upload_data:
-            data = {
-                "upload_type": "family_members",
-                "upload_data": upload_data,
-                "onboarding_mode": "background"
-            }
-
-            serializer = TemporaryDataHoldingSerializer(data=data)
-            if serializer.is_valid(raise_exception=True):
-                x = serializer.save()
-                print(x.id)
-                try:
-                    onboard_family_members()
-                except Exception as e:
-                    raise e
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response(
-                {
-                    "message": f"Please make sure your request body contains, upload_type: str, onboarding_model: str, upload_data: list"
-                },
-                status=status.HTTP_400_BAD_REQUEST
-            )
+        try:
+            upload_data = request.data["upload_data"]
+            new_family_members = []
+            for member in upload_data:
+                new_family_members.append(
+                    TemporaryDependentImport(
+                        **new_family_member_data_constructor(member)
+                    )
+                )
+            TemporaryDependentImport.objects.bulk_create(new_family_members)
+        except Exception as e:
+            raise e 
+        return Response({"message": "Data loaded successfully, onboarding should start soon, check back on the platform"}, status=status.HTTP_201_CREATED)
 
 
 class BulkTemporaryCancelledMemberUploadAPIView(generics.ListCreateAPIView):
     # queryset = TemporaryCancelledMemberData.objects.all()
     serializer_class = BulkTemporaryMemberCancellationUploadSerializer
-    permission_classes = [IsAuthenticated]
+    #permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        upload_data = request.data.get("upload_data")
-        upload_type = request.data.get("upload_type")
-        onboarding_mode = request.data.get('onboarding_mode')
+        try:
+            upload_data = request.data["upload_data"]
+            new_cancelled_members = []
 
-        if onboarding_mode and upload_type and upload_data:
-            data = {
-                "upload_type": "cancelled_members",
-                "upload_data": upload_data,
-                "onboarding_mode": "background"
-            }
+            for member in upload_data:
+                new_cancelled_members.append(
+                    TemporaryCancelledMemberData(
+                        **new_cancelled_member_data_constructor(member)
+                    )
+                )
+            TemporaryCancelledMemberData.objects.bulk_create(new_cancelled_members)
+        except Exception as e:
+            raise e
+        
+        return Response({"message": "Data loaded successfully, onboarding should start soon, check on the platform later"}, status=status.HTTP_201_CREATED)
 
-            serializer = TemporaryDataHoldingSerializer(data=data)
-            if serializer.is_valid(raise_exception=True):
-                x = serializer.save()
-                print(x.id)
-                try:
-                    mark_members_as_cancelled()
-                except Exception as e:
-                    raise e
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response(
-                {
-                    "message": f"Please make sure your request body contains, upload_type: str, onboarding_model: str, upload_data: list"
-                },
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-
-class BulkTemporaryNewMemberUploadAPIView(generics.CreateAPIView):
-    # queryset = TemporaryMemberData.objects.all()
-    serializer_class = BulkTemporaryNewMemberUploadSerializer
-    permission_classes = [AllowAny]
-
-    def post(self, request, *args, **kwargs):
-        upload_data = request.data.get("upload_data")
-        upload_type = request.data.get("upload_type")
-        onboarding_mode = request.data.get('onboarding_mode')
-
-        if onboarding_mode and upload_type and upload_data:
-            data = {
-                "upload_type": "new_members",
-                "upload_data": upload_data,
-                "onboarding_mode": "background"
-            }
-
-            serializer = TemporaryDataHoldingSerializer(data=data)
-            if serializer.is_valid(raise_exception=True):
-                x = serializer.save()
-                print(x.id)
-                try:
-                    onboard_new_members_task()
-                except Exception as e:
-                    raise e
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response(
-                {
-                    "message": f"Please make sure your request body contains, upload_type: str, onboarding_model: str, upload_data: list"
-                },
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
+        
 
 class TemporaryDataHoldingAPIView(generics.ListCreateAPIView):
     queryset = TemporaryDataHolding.objects.all()
@@ -253,3 +159,47 @@ class FailedUploadDataAPIView(generics.ListAPIView):
     queryset = FailedUploadData.objects.all()
     serializer_class = FailedUploadDataSerializer
     permission_classes = [IsAuthenticated]
+
+
+class PolicyPurchaseAPIView(generics.CreateAPIView):
+    serializer_class = PolicyPurchaseSerializer
+
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        serializer = self.serializer_class(data=data)
+        if serializer.is_valid(raise_exception=True):
+            policy_type = serializer.validated_data["policy_details"]["scheme_type"]
+            if policy_type.lower() == "retail":
+                members = serializer.validated_data.get("members")
+                dependents = serializer.validated_data.get("dependents")
+                beneficiaries = serializer.validated_data.get("beneficiaries")
+                extended_dependents = serializer.validated_data.get("extended_dependents")
+
+                print("******************Sales Flow Payload***********************")
+                print(members)
+                onboard_sales_flow_member_task(2, members)
+                print("******************Sales Flow Payload***********************")
+                print(dependents)
+                print("******************Sales Flow Payload***********************")
+                print(beneficiaries)
+                print("******************Sales Flow Payload***********************")
+                print(extended_dependents)
+                print("******************Sales Flow Payload***********************")
+
+                #onboard_sales_flow_member_task()
+            elif policy_type.lower() == "group":
+                print("This is a group policy")
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    
+    
+class CreditLifePolicyPurchaseAPIView(generics.CreateAPIView):
+    serializer_class = CreditLifePolicyPurchaseSerializer
+
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        serializer = self.serializer_class(data=data)
+        if serializer.is_valid(raise_exception=True):
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

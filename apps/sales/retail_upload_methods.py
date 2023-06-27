@@ -38,6 +38,7 @@ from apps.prices.models import PricingPlan
 class BulkRetailMemberOnboardingMixin(object):
     def __init__(self, data):
         self.data = data
+        
 
     def run(self):
         self.__onboard_retail_members()
@@ -82,6 +83,8 @@ class BulkRetailMemberOnboardingMixin(object):
             user = User.objects.filter(email=email).first()
             if not user:
                 user = User.objects.create(**create_user(username, email, first_name, last_name))
+                user.set_password("Password")
+                user.save()
             
 
             individual_user = IndividualUser.objects.filter(user=user).first()
@@ -153,6 +156,7 @@ class BulkRetailMemberOnboardingMixin(object):
                 )
             print(f"Cycle: {cycle.id} Created Successfully!!!")
         
+            
             member.processed = True
             member.save()
             print(f"Member: {member.id} Processed Successfully")

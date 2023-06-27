@@ -8,9 +8,9 @@ from apps.sales.views import (
     BulkTemporaryNewMemberUploadAPIView,
     TemporaryDataHoldingAPIView,
     FailedUploadDataAPIView,
-    BulkTemporaryMemberDataAPIView,
     NewMembersAPIView,
-    TelesalesBulkTemporaryMemberDataAPIView
+    PolicyPurchaseAPIView,
+    CreditLifePolicyPurchaseAPIView
 )
 
 urlpatterns = [
@@ -22,7 +22,7 @@ urlpatterns = [
     path("bulk-upload/family-members/", BulkTemporaryDependentUploadAPIView.as_view(), name="family-members"),
     path("bulk-upload/temporary-data-upload/", TemporaryDataHoldingAPIView.as_view(), name="temporary-data-upload"),
     path("bulk-upload/failed-uploads/", FailedUploadDataAPIView.as_view(), name="failed-uploads"),
-    path("bulk-upload/bulk-new-members/", BulkTemporaryMemberDataAPIView.as_view(), name="bulk-new-members"),
     path("bulk-upload/bulk-new-members-list/", NewMembersAPIView.as_view(), name="bulk-new-members-list"),
-    
+    path("policy-purchase/", PolicyPurchaseAPIView.as_view(), name="policy-purchase"),
+    path("credit-life-policy-purchase/", CreditLifePolicyPurchaseAPIView.as_view(), name="credit-life-policy-purchase"),
 ]

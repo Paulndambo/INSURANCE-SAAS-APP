@@ -8,8 +8,7 @@ from apps.constants.choice_constants import (
     POLICY_SUB_STATUS_CHOICES, 
     PAYMENT_PERIOD_CHOICES, 
     CYCLE_STATUS_CHOICES,
-    CANCELLATION_ORIGIN,
-    POLICY_CANCELLATION_STATUS
+    CANCELLATION_ORIGIN
 )
 from apps.users.utils import is_fake_email
 
@@ -36,8 +35,8 @@ class Policy(AbstractBaseModel):
     claim_lodging_awaiting_period = models.IntegerField(default=0)
     lapse_date = models.DateField(null=True)
     change_premium_reason = models.TextField(blank=True, null=True)
-    broker = models.ForeignKey("users.User", null=True, on_delete=models.CASCADE, related_name='broker_policies')
-    broker_information = models.CharField(null=True, max_length=255)
+    #broker = models.ForeignKey("users.User", null=True, on_delete=models.CASCADE, related_name='broker_policies')
+    broker_information = models.JSONField(null=True)
     creator = models.ForeignKey("users.User", null=True, on_delete=models.CASCADE)
     creator_information = models.CharField(null=True, max_length=255)
     damage_reason_expiration = models.DateField(null=True)
