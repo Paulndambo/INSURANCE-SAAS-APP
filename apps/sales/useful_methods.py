@@ -1,6 +1,18 @@
 from apps.users.models import Profile, Membership
 from apps.sales.bulk_upload_methods import get_pricing_plan
 from apps.prices.models import PricingPlanSchemeMapping
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+
+
+def get_same_date_next_month(expected_date):
+    next_month = expected_date + relativedelta(months=1)
+    day = expected_date.day
+
+    if next_month.day < day:
+        next_month = next_month.replace(day=next_month.day - 1)
+
+    return next_month
 
 
 def get_policy_scheme_group_and_membership(main_member_identification_number: str, identification_method: int, product: int):
