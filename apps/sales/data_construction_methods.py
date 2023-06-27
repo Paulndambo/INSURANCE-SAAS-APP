@@ -53,7 +53,7 @@ def new_family_member_data_constructor(data):
         "main_member_identification_number": main_member_id,
         "identification_method": id_method,
         "product": data.get("product"),
-        "identification_number": id_number,
+        "identification_number": validate_id_number_length(id_method, id_number),
         "relationship": data.get("relationship"),
         "relationship_type": data.get("relationship_type") if data.get("relationship_type") else data.get("relationship type"),
         "cover_level": get_cover_level_value(data),
@@ -69,11 +69,15 @@ def new_family_member_data_constructor(data):
 def new_cancelled_member_data_constructor(data):
     id_number = data.get("identification_number") if data.get("identification_number") else data.get("identification number")
     id_method = data.get("identification method") if data.get("identification method") else data.get("identification_method")
+    reference_reason = data.get("reference_reason") if data.get("reference_reason") else data.get("reference reason")
+    action_type = data.get("action_type") if data.get("action_type") else data.get("action type")
 
     new_cancelled_member_object = {
         "identification_method": id_method,
         "identification_number": id_number,
-        "product": data
+        "action_type": action_type,
+        "reference_reason": reference_reason,
+        "product": data.get("product")
     }
     return new_cancelled_member_object
 
@@ -84,7 +88,7 @@ def new_paid_member_data_constructor(data):
 
     new_paid_member_object = {
         "idententification_method": id_method,
-        "identification_number": id_number,
+        "identification_number": validate_id_number_length(id_method, id_number),
         "product": data.get("product")
     }
 

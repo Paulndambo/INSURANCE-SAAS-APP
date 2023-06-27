@@ -14,7 +14,7 @@ def mark_members_as_paid(identification_method: int, identification_number: str,
         "product": get_pricing_plan(product)
     }
     try:
-        profile = get_membership_profile(identification_method, identification_number)
+        profile = get_membership_profile(identification_number)
         if profile:
             membership = Membership.objects.filter(user=profile.user, scheme_group__pricing_group=get_pricing_plan(product)).first()
             if membership:
