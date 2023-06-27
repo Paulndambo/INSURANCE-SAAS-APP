@@ -61,7 +61,6 @@ def mark_members_as_cancelled(identification_method: int, identification_number:
                     cycle = Cycle.objects.filter(membership=membership).first()
                     if cycle.status.lower() == "cancelled".lower():
                         create_upload_error_log("Cancel", data, "cancelled_member", "Membership is already cancelled")
-
                         print(f"Cycle: {cycle.id} For Membership: {cycle.membership.id} Is already Cancelled")
 
                     else:

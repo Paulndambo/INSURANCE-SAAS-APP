@@ -31,10 +31,10 @@ def mark_members_as_paid(identification_method: int, identification_number: str,
                     if cycle.status in ["awaiting_payment", "created"]:
                         cycle.status = "active"
                         cycle.save()
-
-                        latest_cycle_status_update = CycleStatusUpdates.objects.filter(cycle=cycle).order_by("-created").first()
-                        latest_cycle_status_update.next_status = "active"
-                        latest_cycle_status_update.save()
+                        CycleStatusUpdates.objects.create(**create_cycle_status_updates(cycle, cycle.status, "active"))
+                        #CycleStatusUpdates.objects.filter(cycle=cycle).order_by("-created").first()
+                        #latest_cycle_status_update.next_status = "active"
+                        #latest_cycle_status_update.save()
 
                     elif cycle.status.lower() == "Lapsed".lower():
                         cycle.status = "active"

@@ -98,6 +98,8 @@ class BulkPaidMembersMixin(object):
                     identification_number=member.identification_number,
                     product=member.product
                 )
+                member.processed = True 
+                member.save()
         except Exception as e:
             raise e
 
