@@ -34,7 +34,6 @@ def salimiana():
     print("**************Salimiana***************")
 
 
-
 def onboard_new_members_task():
     members = TemporaryDataHolding.objects.filter(upload_type="new_members").order_by("-created").first()
 
@@ -114,10 +113,11 @@ def mark_members_as_paid_task():
 
 @app.task
 def mark_members_as_cancelled():
-    data = TemporaryCancelledMemberData.objects.filter(processed=False, action_type="Cancel")[:150]
+    data = TemporaryCancelledMemberData.objects.filter(processed=False, action_type="Cancel")
 
     if data.count() > 0:
-        cancel_members_mixin = MembersCancellationMixin(data)
+        data_to_process = data[:200]
+        cancel_members_mixin = MembersCancellationMixin(data_to_process)
         cancel_members_mixin.run()
     else:
         print("No more cancellations to process")
@@ -126,7 +126,7 @@ def mark_members_as_cancelled():
 @app.task
 def mark_policy_members_as_lapsed():
     data = TemporaryCancelledMemberData.objects.filter(action_type="Lapsed", processed=False)[:150]
-
+    
     if data.count() > 0:
         lapsed_mixin = BulkLapsedMembersMixin(data)
         lapsed_mixin.run()

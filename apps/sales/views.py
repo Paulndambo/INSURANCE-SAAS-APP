@@ -87,7 +87,7 @@ class OnboardingInitiateAPIView(APIView):
 class BulkTemporaryPaidMemberUploadAPIView(generics.ListCreateAPIView):
     # queryset = TemporaryPaidMemberData.objects.all()
     serializer_class = BulkTemporaryPaidMemberDataBulkSerializer
-    permission_classes = [IsAuthenticated]
+    #permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
         try:

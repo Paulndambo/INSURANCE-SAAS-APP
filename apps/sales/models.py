@@ -45,7 +45,7 @@ class TemporaryDependentImport(AbstractBaseModel):
 
 class TemporaryPaidMemberData(AbstractBaseModel):
     identification_number = models.CharField(max_length=255)
-    identification_method = models.IntegerField()
+    identification_method = models.IntegerField(null=True)
     product = models.IntegerField()
     processed = models.BooleanField(default=False)
 
