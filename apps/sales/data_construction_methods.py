@@ -87,7 +87,7 @@ def new_paid_member_data_constructor(data):
     id_method = data.get("identification method") if data.get("identification method") else data.get("identification_method")
 
     new_paid_member_object = {
-        "identification_method": id_method,
+        "idententification_method": id_method,
         "identification_number": validate_id_number_length(id_method, id_number),
         "product": data.get("product")
     }
