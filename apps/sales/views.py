@@ -107,7 +107,7 @@ class BulkTemporaryPaidMemberUploadAPIView(generics.ListCreateAPIView):
 
 class BulkTemporaryDependentUploadAPIView(generics.ListCreateAPIView):
     serializer_class = BulkTemporaryDependentUploadSerializer
-    permission_classes = [IsAuthenticated]
+    #permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
         try:

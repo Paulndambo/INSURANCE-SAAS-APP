@@ -33,6 +33,7 @@ class TemporaryDependentImport(AbstractBaseModel):
     cover_level = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     firstname = models.CharField(max_length=255)
     lastname = models.CharField(max_length=255)
+    identification_number = models.CharField(max_length=255, null=True)
     identification_method = models.IntegerField()
     date_of_birth = models.DateField(null=True, blank=True)
     gender = models.CharField(max_length=255, blank=True, null=True)
