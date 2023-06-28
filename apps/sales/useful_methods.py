@@ -3,6 +3,8 @@ from apps.sales.bulk_upload_methods import get_pricing_plan
 from apps.prices.models import PricingPlanSchemeMapping
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+from apps.sales.member_transition_methods import get_membership_profile
+from apps.prices.models import PricingPlan
 
 
 def get_same_date_next_month(expected_date):
@@ -15,32 +17,21 @@ def get_same_date_next_month(expected_date):
     return next_month
 
 
-def get_policy_scheme_group_and_membership(main_member_identification_number: str, identification_method: int, product: int):
+def get_policy_scheme_group_and_membership(main_member_identification_number: str, product: int):
 
     membership_id = None
     scheme_group_id = None
     policy_id = None
 
-    if identification_method == 1:
-        profile = Profile.objects.filter(
-            id_number=main_member_identification_number).first()
-        if profile:
-            membership = Membership.objects.filter(
-                user=profile.user, scheme_group__pricing_group=get_pricing_plan(product)).first()
-            if membership:
-                policy_id = membership.scheme_group.policy_id
-                scheme_group_id = membership.scheme_group_id
-                membership_id = membership.id
+    profile = get_membership_profile(main_member_identification_number)
+    pricing_group = PricingPlan.objects.get(name=get_pricing_plan(product))
+    if profile:
+        membership = Membership.objects.filter(user=profile.user, scheme_group__pricing_group=pricing_group).first()
+        if membership:
+            policy_id = membership.scheme_group.policy_id
+            scheme_group_id = membership.scheme_group_id
+            membership_id = membership.id
 
-    elif identification_method == 0:
-        profile = Profile.objects.filter(
-            passport_number=main_member_identification_number).first()
-        if profile:
-            membership = Membership.objects.filter(
-                user=profile.user, scheme_group__pricing_group=get_pricing_plan(product)).first()
-            if membership:
-                scheme_group_id = membership.scheme_group_id
-                membership_id = membership.id
 
     return policy_id, scheme_group_id, membership_id
 
@@ -104,10 +95,13 @@ def get_extended_family_member_premium(cover_level: int, pricing_plan: str):
     pass
 
 
-def get_product_whose_members_to_onboard():
-    most_unprocessed = TemporaryMemberData.objects.exclude(product__in=[1, 2, 8]).filter(processed=False).values('product') \
-        .annotate(num_members=Count('product')) \
-        .order_by('-num_members') \
-        .first()
 
-    print(f"Product With Most Unprocessed Members: {most_unprocessed}")
+def get_identification_numbers(identification_method: int, identification_number: str):
+    id_number = ''
+    passport_number = ''
+    if identification_method == 0:
+        passport_number = identification_number 
+    elif identification_method == 1:
+        id_number = identification_number
+    
+    return id_number, passport_number

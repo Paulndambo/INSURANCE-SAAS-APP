@@ -1,5 +1,6 @@
 from apps.sales.date_formatting_methods import date_format_method
 from apps.sales.bulk_upload_methods import validate_id_number_length, validate_phone_number_length
+from apps.sales.family_members_constants import get_relationship_types
 
 
 def get_cover_level_value(data):
@@ -48,18 +49,19 @@ def new_family_member_data_constructor(data):
     id_number = data.get("identification_number") if data.get("identification_number") else data.get("identification number")
     id_method = data.get("identification method") if data.get("identification method") else data.get("identification_method")
     main_member_id = data.get("main_member_identification_number") if data.get("main_member_identification_number") else data.get("main member identification number")
-    
+    date_of_birth = data.get("date of birth") if data.get("date of birth") else data.get("date_of_birth")
+    relationship = data.get("relationship")
     new_family_member_object = {
         "main_member_identification_number": main_member_id,
         "identification_method": id_method,
         "product": data.get("product"),
         "identification_number": validate_id_number_length(id_method, id_number),
-        "relationship": data.get("relationship"),
+        "relationship": get_relationship_types(relationship),
         "relationship_type": data.get("relationship_type") if data.get("relationship_type") else data.get("relationship type"),
         "cover_level": get_cover_level_value(data),
-        "first_name": data.get("firstname") if data.get("firstname") else data.get("first_name"),
-        "last_name": data.get("lastname") if data.get("lastname") else data.get("last_name"),
-        "date_of_birth": data.get("date of birth") if data.get("date of birth") else data.get("date_of_birth"),
+        "firstname": data.get("firstname") if data.get("firstname") else data.get("first_name"),
+        "lastname": data.get("lastname") if data.get("lastname") else data.get("last_name"),
+        "date_of_birth": date_format_method(date_of_birth),
         "gender": data.get("gender")
     }
 
