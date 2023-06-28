@@ -1,4 +1,16 @@
 
+
+def check_missing_beneficiary_data(identification_number, first_name, last_name):
+    if not identification_number and not first_name and not last_name:
+        pass
+    elif not identification_number:
+        pass
+    elif not first_name:
+        pass
+    elif not last_name:
+        pass
+
+
 def validate_id_number_length(identification_method, identification_number):
     validated_id_number = ""
     identification_number = str(identification_number)
