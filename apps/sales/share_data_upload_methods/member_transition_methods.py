@@ -1,6 +1,5 @@
 from apps.users.utils import is_fake_email
-from apps.users.models import Profile, Membership
-from apps.sales.bulk_upload_methods import validate_id_number_length, validate_phone_number_length
+from apps.users.models import Profile, PolicyHolder
 from django.db.models import Q
 
 
@@ -46,10 +45,15 @@ def create_cycle_status_updates(cycle, previous_status, next_status):
 
 def get_membership_profile(identification_number):
     profile = Profile.objects.filter(Q(id_number=identification_number) | Q(passport_number=identification_number)).first()
-
     if profile:
         return profile
     else:
         return None
 
+def get_membership_policy_holder(identification_number):
+    policy_holder = PolicyHolder.objects.filter(Q(id_number=identification_number) | Q(passport_number=identification_number)).first()
+    if policy_holder:
+        return policy_holder
+    else:
+        return None
 

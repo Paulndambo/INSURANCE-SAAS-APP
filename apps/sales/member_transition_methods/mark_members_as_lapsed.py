@@ -5,16 +5,16 @@ from apps.policies.models import (
     LapseNotification
 )
 from apps.prices.models import PricingPlan
-from apps.sales.bulk_upload_methods import get_pricing_plan
+from apps.sales.share_data_upload_methods.bulk_upload_methods import get_pricing_plan
 from apps.users.models import Membership
 from datetime import datetime
 from apps.sales.models import FailedUploadData
-from apps.sales.member_transition_methods import (
+from apps.sales.share_data_upload_methods.member_transition_methods import (
     lapse_notification,
     create_cycle_status_updates,
     get_membership_profile
 )
-from apps.sales.upload_data_error_log import create_upload_error_log
+from apps.sales.share_data_upload_methods.upload_data_error_log import create_upload_error_log
 
 
 def mark_policy_members_as_lapsed(identification_method: int, identification_number: str, product: int, reference_reason: str, action_type: str):

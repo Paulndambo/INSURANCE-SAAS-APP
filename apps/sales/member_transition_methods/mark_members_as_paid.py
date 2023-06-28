@@ -1,12 +1,12 @@
 from apps.users.models import User, Membership, Profile
 from apps.schemes.models import SchemeGroup, Scheme
-from apps.sales.bulk_upload_methods import get_pricing_plan
+from apps.sales.share_data_upload_methods.bulk_upload_methods import get_pricing_plan
 from apps.payments.models import PolicyPayment, PolicyPremium
 from apps.policies.models import Cycle, CycleStatusUpdates
 from apps.prices.models import PricingPlan
-from apps.sales.upload_data_error_log import create_upload_error_log
-from apps.sales.member_transition_methods import create_cycle_status_updates, get_membership_profile
-from apps.sales.useful_methods import get_same_date_next_month
+from apps.sales.share_data_upload_methods.upload_data_error_log import create_upload_error_log
+from apps.sales.share_data_upload_methods.member_transition_methods import create_cycle_status_updates, get_membership_profile
+from apps.sales.share_data_upload_methods.bulk_upload_methods import get_same_date_next_month
 
 def mark_members_as_paid(identification_method: int, identification_number: str, product: int):
     data = {

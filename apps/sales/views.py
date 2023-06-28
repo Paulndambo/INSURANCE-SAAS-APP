@@ -2,9 +2,9 @@ from django.shortcuts import render
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.decorators import api_view
+
 from rest_framework.views import APIView
-from apps.sales.data_construction_methods import (
+from apps.sales.share_data_upload_methods.data_construction_methods import (
     new_member_data_constructor,
     new_family_member_data_constructor,
     new_paid_member_data_constructor,
@@ -12,7 +12,6 @@ from apps.sales.data_construction_methods import (
 )
 from apps.sales.tasks import onboard_sales_flow_member_task
 
-# from apps.policies.mixins import CancelIndividualPolicyMixin, BulkMemberUploadMixin, SchemeGroupPolicyCancellationMixin
 
 from apps.sales.serializers import (
     BulkTemporaryPaidMemberDataBulkSerializer,
@@ -25,7 +24,7 @@ from apps.sales.serializers import (
     PolicyPurchaseSerializer,
     CreditLifePolicyPurchaseSerializer
 )
-# from apps.sales.useful_methods import bulk_policy_upload
+
 from apps.sales.models import (
     FailedUploadData, 
     TemporaryDataHolding, 

@@ -15,15 +15,14 @@ from apps.sales.models import (
 
 from apps.sales.mixins import (
     BulkMembersOnboardingMixin,
-    FamilyMemberOnboardingMixin,
     MembersCancellationMixin,
     BulkPaidMembersMixin,
     BulkLapsedMembersMixin
 )
 
-from apps.sales.telesales_upload_methods import BulkTelesalesUploadMixin
-from apps.sales.group_upload_methods import BulkGroupMembersOnboardingMixin
-from apps.sales.retail_upload_methods import BulkRetailMemberOnboardingMixin
+from apps.sales.main_member_upload_methods.telesales_upload_methods import BulkTelesalesUploadMixin
+from apps.sales.main_member_upload_methods.group_upload_methods import BulkGroupMembersOnboardingMixin
+from apps.sales.main_member_upload_methods.retail_upload_methods import BulkRetailMemberOnboardingMixin
 from apps.sales.sales_flow_methods.retail_sales_flow_member import SalesFlowBulkRetailMemberOnboardingMixin
 from apps.sales.sales_flow_methods.telesales_sales_flow_member import SalesFlowBulkTelesalesUploadMixin
 
@@ -134,11 +133,3 @@ def mark_policy_members_as_lapsed():
         print("No more lapsed members to process!")
     
 
-@app.task
-def onboard_family_members():
-    data = TemporaryDataHolding.objects.filter(upload_type="family_members").order_by("-created").first()
-
-    if data:
-        # print('You are uploading family members')
-        family_members_mixin = FamilyMemberOnboardingMixin(data)
-        family_members_mixin.run()

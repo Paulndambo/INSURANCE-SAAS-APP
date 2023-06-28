@@ -1,20 +1,20 @@
-from django.db import connection, transaction
-from datetime import datetime, date
-
-from apps.sales.bulk_upload_methods import (
-    get_pricing_plan
-)
-
-from apps.sales.family_members_upload_methods import upload_beneficiaries, upload_dependents, upload_extended_family_members
-
-from apps.sales.mark_members_as_paid import mark_members_as_paid
-from apps.sales.mark_members_as_cancelled import mark_members_as_cancelled
-from apps.sales.mark_members_as_lapsed import mark_policy_members_as_lapsed
+from django.db import transaction
 
 from apps.prices.models import PricingPlan, PricingPlanSchemeMapping
-from apps.sales.retail_upload_methods import BulkRetailMemberOnboardingMixin
-from apps.sales.group_upload_methods import BulkGroupMembersOnboardingMixin
-from apps.sales.telesales_upload_methods import BulkTelesalesUploadMixin
+
+
+from apps.sales.share_data_upload_methods.bulk_upload_methods import get_pricing_plan
+from apps.sales.member_transition_methods.mark_members_as_paid import mark_members_as_paid
+from apps.sales.member_transition_methods.mark_members_as_cancelled import mark_members_as_cancelled
+from apps.sales.member_transition_methods.mark_members_as_lapsed import mark_policy_members_as_lapsed
+from apps.sales.family_member_upload_methods.beneficiaries_upload_methods import beneficiary_object_constructor
+from apps.sales.family_member_upload_methods.dependents_upload_methods import dependent_object_constructor
+from apps.sales.family_member_upload_methods.extended_family_members_upload import extended_dependent_object_constructor
+
+
+from apps.sales.main_member_upload_methods.retail_upload_methods import BulkRetailMemberOnboardingMixin
+from apps.sales.main_member_upload_methods.group_upload_methods import BulkGroupMembersOnboardingMixin
+from apps.sales.main_member_upload_methods.telesales_upload_methods import BulkTelesalesUploadMixin
 
 
 class BulkMembersOnboardingMixin(object):
@@ -32,11 +32,9 @@ class BulkMembersOnboardingMixin(object):
 
         first_member = self.data.upload_data[0]
         pricing_plan = PricingPlan.objects.get(name=get_pricing_plan(first_member["product"]))
-
         pricing_plan_name = pricing_plan.name
 
-        #print(pricing_plan_name)
-        # print(group_plans)
+
         if pricing_plan_name in telesales_plans:
             telesales_mixin = BulkTelesalesUploadMixin(self.data)
             telesales_mixin.run()
@@ -50,35 +48,63 @@ class BulkMembersOnboardingMixin(object):
             bulk_group_mixin.run()
 
 
-class FamilyMemberOnboardingMixin(object):
+
+class DependentOnboardingMixin(object):
     def __init__(self, data):
         self.data = data
 
     def run(self):
-        self.__onboard_family_members()
+        self.__onboard_dependent_family_members()
 
-    @transaction.atomic
-    def __onboard_family_members(self):
-        data = self.data.upload_data
 
-        dependent_types = ["Dependent", "Dependant"]
+    def __onboard_dependent_family_members(self):
+        dependents = self.data
 
-        for x in data:
-            if x["relationship_type"].lower() in [x.lower() for x in dependent_types]:
-                try:
-                    upload_dependents(x)
-                except Exception as e:
-                    raise e
-            elif x["relationship_type"].lower() == "extended":
-                try:
-                    upload_extended_family_members(x)
-                except Exception as e:
-                    raise e
-            elif x["relationship_type"].lower() == "beneficiary":
-                try:
-                    upload_beneficiaries(x)
-                except Exception as e:
-                    raise e
+        try:
+            for dependent in dependents:
+                dependent_object_constructor(dependent)
+                dependent.processed = True 
+                dependent.save()
+        except Exception as e:
+            raise e
+        
+
+class ExtendedDependentOnboardingMixin(object):
+    def __init__(self, data):
+        self.data = data  
+
+    def run(self):
+        self.__onboard_extended_family_members()
+
+
+    def __onboard_extended_family_members(self):
+        extendent_dependents = self.data 
+        try:
+            for extendent_dependent in extendent_dependents:
+                extended_dependent_object_constructor(extendent_dependent)
+                extendent_dependent.processed = True
+                extendent_dependent.save()
+        except Exception as e:
+            raise e
+        
+
+class BeneficiaryOnboardingMixin(object):
+    def __init__(self, data):
+        self.data = data 
+
+    def run(self):
+        self.__onboard_member_beneficiaries()
+
+
+    def __onboard_member_beneficiaries(self):
+        beneficiaries = self.data
+        try:
+            for beneficiary in beneficiaries:
+                beneficiary_object_constructor(beneficiary)
+                beneficiary.processed = True
+                beneficiary.save()
+        except Exception as e:
+            raise e
 
 
 class BulkPaidMembersMixin(object):
