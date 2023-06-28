@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import (
     RegisterSerializer,
-    UserSerializer,
+    #UserSerializer,
     MyTokenObtainPairSerializer,
     ChangePasswordSerializer,
     ForgotPasswordSerializer,
@@ -113,9 +113,19 @@ class UserModelViewSet(ModelViewSet):
             return UserSerializer
 
 
-class MembershipModelViewSet(ModelViewSet):
+class MembershipViewSet(ModelViewSet):
     queryset = Membership.objects.all()
     serializer_class = MembershipSerializer
+
+    def get_queryset(self):
+        scheme_group_id = self.kwargs.get("scheme_group_pk")
+        if scheme_group_id:
+            return self.queryset.filter(scheme_group_id=scheme_group_id)
+        else:
+            return self.queryset
+
+    def get_serializer_context(self):
+        return {"request": self.request}
 
 
 class ProfileModelViewSet(ModelViewSet):

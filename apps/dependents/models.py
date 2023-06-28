@@ -19,13 +19,8 @@ class Beneficiary(AbstractBaseModel):
     address = models.TextField(null=True)
     is_deleted = models.BooleanField(default=False)
     date_of_birth = models.DateField(null=True)
-    membership = models.ForeignKey(
-        "users.Membership", on_delete=models.SET_NULL, null=True, blank=True
-    )
-    schemegroup = models.ForeignKey(
-        "schemes.SchemeGroup", on_delete=models.SET_NULL, null=True, blank=True
-    )
-    # Required for minor beneficiaries
+    membership = models.ForeignKey("users.Membership", on_delete=models.SET_NULL, null=True, blank=True)
+    schemegroup = models.ForeignKey("schemes.SchemeGroup", on_delete=models.SET_NULL, null=True, blank=True)
     guardian_or_trustee_first_name = models.CharField(max_length=255, null=True)
     guardian_or_trustee_last_name = models.CharField(max_length=255, null=True)
     guardian_or_trustee_phone_number = models.CharField(max_length=255, null=True)
@@ -52,10 +47,10 @@ class Dependent(AbstractBaseModel):
     )
 
     GENDER_CHOICES = (("female", "Female"), ("male", "Male"))
-
-    membership = models.ForeignKey(
-        "users.Membership", null=True, on_delete=models.CASCADE
-    )
+    policy = models.ForeignKey(Policy, on_delete=models.CASCADE, null=True)
+    schemegroup = models.ForeignKey("schemes.SchemeGroup", on_delete=models.SET_NULL, null=True, blank=True)
+    membership = models.ForeignKey("users.Membership", null=True, on_delete=models.CASCADE)
+    membership_configuration = models.ForeignKey("users.MembershipConfiguration", on_delete=models.CASCADE, null=True)
     is_additional_family_member = models.BooleanField(default=False)
     dependent_type = models.CharField(max_length=200, choices=DEPENDENT_TYPE)
     dependent_type_notes = models.TextField(null=True, blank=True)
@@ -63,9 +58,7 @@ class Dependent(AbstractBaseModel):
     age_min = models.PositiveSmallIntegerField(null=True)
     age_max = models.PositiveSmallIntegerField(null=True)
     age_metric = models.CharField(max_length=100, choices=AGE_METRIC_CHOICES)
-    relative = models.ForeignKey(
-        PolicyHolderRelative, on_delete=models.CASCADE, null=True
-    )
+    relative = models.ForeignKey(PolicyHolderRelative, on_delete=models.CASCADE, null=True)
     relative_option = models.CharField(max_length=200, null=True)
     first_name = models.CharField(max_length=200, null=True)
     last_name = models.CharField(max_length=200, null=True)
@@ -81,3 +74,35 @@ class Dependent(AbstractBaseModel):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+
+
+RELATIVE_TYPE_CHOICES = (
+    ("spouse", "Spouse"),
+    ("child", "Child"),
+    ("extended", "Extended"),
+    ("stillborn", "Stillborn")
+)
+
+MEMBER_TYPE_CHOICES = (
+    ("dependent", "Dependent"),
+    ("extended", "Extended")
+)
+
+PRICING_GROUP = (
+    ("credit", "Credit Life"),
+    ("funeral", "Funeral"),
+    ("group", "Group"),
+    ("retail", "Retail"),
+)
+
+class FamilyMemberPricing(AbstractBaseModel):
+    pricing_group = models.CharField(max_length=255, choices=PRICING_GROUP)
+    member_type = models.CharField(max_length=255, choices=MEMBER_TYPE_CHOICES)
+    relative_type = models.CharField(max_length=255, choices=RELATIVE_TYPE_CHOICES)
+    min_age = models.IntegerField(default=0)
+    max_age = models.IntegerField(default=0)
+    cover_amount = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    premium = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
+    def __str__(self):
+        return self.relative_type

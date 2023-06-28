@@ -1,38 +1,28 @@
 from django.urls import path, include
 from apps.sales.views import (
+    OnboardingAPPAPIView,
+    BulkTemporaryPaidMemberUploadAPIView,
+    OnboardingInitiateAPIView,
+    BulkTemporaryDependentUploadAPIView,
+    BulkTemporaryCancelledMemberUploadAPIView,
+    BulkTemporaryNewMemberUploadAPIView,
     TemporaryDataHoldingAPIView,
-    TemporaryCancelledMemberDataAPIView,
-    TemporaryDependentDataAPIView,
-    TemporaryNewMemberDataAPIView,
-    TemporaryPaidMemberDataAPIView,
-    GenerateGWPReportAPIView,
+    FailedUploadDataAPIView,
+    NewMembersAPIView,
+    PolicyPurchaseAPIView,
+    CreditLifePolicyPurchaseAPIView
 )
 
 urlpatterns = [
-    path(
-        "new-members-upload/",
-        TemporaryNewMemberDataAPIView.as_view(),
-        name="new-members-upload",
-    ),
-    path(
-        "paid-members-upload/",
-        TemporaryPaidMemberDataAPIView.as_view(),
-        name="paid-members-upload",
-    ),
-    path(
-        "dependents-and-beneficiaries-upload/",
-        TemporaryDependentDataAPIView.as_view(),
-        name="dependents-and-beneficiaries-upload",
-    ),
-    path(
-        "cancelled-members-upload/",
-        TemporaryCancelledMemberDataAPIView.as_view(),
-        name="cancelled-members-upload",
-    ),
-    path(
-        "bulk-data-upload/",
-        TemporaryDataHoldingAPIView.as_view(),
-        name="bulk-data-upload",
-    ),
-    path("generate-gwp-report/", GenerateGWPReportAPIView.as_view(), name="generate-gwp-report"),
+    path("", OnboardingAPPAPIView.as_view(), name="get-routes"),
+    path("bulk-upload/initiate-onboarding/", OnboardingInitiateAPIView.as_view(), name="initiate-onboarding"),
+    path("bulk-upload/paid-members/", BulkTemporaryPaidMemberUploadAPIView.as_view(), name="paid-members"),
+    path("bulk-upload/cancelled-members/", BulkTemporaryCancelledMemberUploadAPIView.as_view(), name="cancelled-members"),
+    path("bulk-upload/new-members/", BulkTemporaryNewMemberUploadAPIView.as_view(), name="new-members"),
+    path("bulk-upload/family-members/", BulkTemporaryDependentUploadAPIView.as_view(), name="family-members"),
+    path("bulk-upload/temporary-data-upload/", TemporaryDataHoldingAPIView.as_view(), name="temporary-data-upload"),
+    path("bulk-upload/failed-uploads/", FailedUploadDataAPIView.as_view(), name="failed-uploads"),
+    path("bulk-upload/bulk-new-members-list/", NewMembersAPIView.as_view(), name="bulk-new-members-list"),
+    path("policy-purchase/", PolicyPurchaseAPIView.as_view(), name="policy-purchase"),
+    path("credit-life-policy-purchase/", CreditLifePolicyPurchaseAPIView.as_view(), name="credit-life-policy-purchase"),
 ]

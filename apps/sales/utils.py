@@ -1,5 +1,6 @@
 from django.db import connection
 
+
 def generate_gwp_report():
     with connection.cursor() as cursor:
         query = """
@@ -9,4 +10,3 @@ def generate_gwp_report():
             ORDER BY date_trunc('month', created)
         """
         cursor.execute(query)
-

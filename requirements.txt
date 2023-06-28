@@ -10,3 +10,6 @@ django-cors-headers
 pillow
 psycopg2-binary
 djangorestframework-bulk
+drf-nested-routers
+djoser
+celery

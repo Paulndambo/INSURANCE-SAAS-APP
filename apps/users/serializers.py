@@ -7,6 +7,7 @@ from apps.users.models import (
     PolicyHolder,
     Profile,
     PolicyHolderRelative,
+    MembershipConfiguration
 )
 from apps.constants.token_generator import generate_unique_key
 from django.utils import timezone
@@ -115,6 +116,19 @@ class MembershipSerializer(serializers.ModelSerializer):
         model = Membership
         fields = "__all__"
 
+    """
+    def create(self, validated_data):
+        try:
+            membership = Membership.objects.create(**validated_data)
+            MembershipConfiguration.objects.create(
+                membership=membership,
+                cover_level=50000,
+                pricing_plan=membership.scheme_group.pricing_group
+            )
+            return membership
+        except Exception as e:
+            raise e
+    """
 
 class PolicyHolderSerializer(serializers.ModelSerializer):
     class Meta:
