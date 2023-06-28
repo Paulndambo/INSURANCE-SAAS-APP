@@ -9,7 +9,7 @@ from apps.constants.choice_constants import (
     SCHEME_TYPE_CHOICES
 )
 
-from apps.sales.bulk_upload_methods import get_product_id_from_pricing_plan, get_policy_number_prefix
+from apps.sales.share_data_upload_methods.bulk_upload_methods import get_product_id_from_pricing_plan, get_policy_number_prefix
 
 
 class Scheme(AbstractBaseModel):

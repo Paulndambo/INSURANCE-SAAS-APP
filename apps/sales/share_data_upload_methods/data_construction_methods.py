@@ -1,6 +1,6 @@
-from apps.sales.date_formatting_methods import date_format_method
-from apps.sales.bulk_upload_methods import validate_id_number_length, validate_phone_number_length
-from apps.sales.family_members_constants import get_relationship_types
+from apps.sales.share_data_upload_methods.date_formatting_methods import date_format_method
+from apps.sales.share_data_upload_methods.data_validation_methods import validate_id_number_length, validate_phone_number_length
+from apps.sales.family_member_upload_methods.family_members_constants import get_relationship_types
 
 
 def get_cover_level_value(data):
@@ -11,12 +11,6 @@ def get_cover_level_value(data):
         cover_level = value
 
     return cover_level
-
-
-def get_main_member_identification_number(data):
-    identification_number = ''
-    main_member_identification_number = data.get("main_member_identification_number") if data.get(
-        "main_member_identification_number") else data.get("main member identification number")
 
 
 def new_member_data_constructor(data):

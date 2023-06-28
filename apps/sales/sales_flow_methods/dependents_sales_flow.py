@@ -2,8 +2,8 @@ from apps.users.models import PolicyHolderRelative, MembershipConfiguration
 from apps.sales.models import FailedUploadData
 
 
-from apps.sales.useful_methods import get_policy_scheme_group_and_membership
-from apps.sales.date_formatting_methods import date_format_method
+from apps.sales.share_data_upload_methods.bulk_upload_methods import get_membership
+from apps.sales.share_data_upload_methods.date_formatting_methods import date_format_method
 import uuid
 
 child_dependent_types = ["Child", "Son", "Daughter"]
@@ -22,7 +22,7 @@ def dependent_object_constructor(data):
     date_of_birth = data.get("date of birth") if data.get("date of birth") else data.get("date_of_birth")
     gender = data.get("gender")
 
-    policy_id, scheme_group_id, membership_id = get_policy_scheme_group_and_membership(
+    policy_id, scheme_group_id, membership_id = get_membership(
         main_member_identification_number=main_member_identification_number,
         identification_method=identification_method,
         product=product

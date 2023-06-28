@@ -1,19 +1,13 @@
 from django.db import connection, transaction
 from datetime import datetime, date
 
-from apps.sales.bulk_upload_methods import (
-    get_policy_number_prefix,
-    get_pricing_plan,
-    get_pricing_plan_base_cover,
-    get_next_month_first_date
-
-)
-from apps.sales.date_formatting_methods import date_format_method
-from apps.sales.new_members_onboarding_functions import (
-    create_policy, create_scheme_group, create_profile,
+from apps.sales.share_data_upload_methods.bulk_upload_methods import get_pricing_plan
+from apps.sales.main_member_upload_methods.new_members_onboarding_functions import (
+    create_policy, create_profile,
     create_policy_holder, create_user, create_membership, 
     create_payment, create_membership_pemium, create_retail_scheme_group
 )
+from apps.sales.share_data_upload_methods.member_transition_methods import get_membership_profile, get_membership_policy_holder
 
 # Apps Imports
 from apps.schemes.models import Scheme, SchemeGroup
@@ -21,8 +15,7 @@ from apps.policies.models import (
     Policy,
     PolicyDetails,
     PolicyHolder,
-    Cycle,
-    CycleStatusUpdates,
+    Cycle
 )
 from apps.users.models import (
     User,
@@ -96,36 +89,40 @@ class BulkRetailMemberOnboardingMixin(object):
 
             profile = Profile.objects.filter(user=user).first()
             if not profile:
-                if identification_method == 1:
-                    profile = Profile.objects.filter(id_number=identification_number).first()
-                    if not profile:
-                        profile = Profile.objects.create(
-                            **create_profile(user, first_name, last_name, identification_method, 
-                                identification_number, postal_address, phone_number, gender, date_of_birth))   
-                else:
-                    profile = Profile.objects.filter(passport_number=identification_number).first()
-                    if not profile:
-                        profile = Profile.objects.create(
-                            **create_profile(user, first_name, last_name, identification_method,
-                                identification_number, postal_address, phone_number, gender, date_of_birth))
+                profile = get_membership_profile(identification_number)
+                if not profile:
+                    profile = Profile.objects.create(
+                        **create_profile(
+                            user=user, 
+                            first_name=first_name, 
+                            last_name=last_name, 
+                            identification_method=identification_method, 
+                            identification_number=identification_number, 
+                            postal_address=postal_address, 
+                            phone_number=phone_number, 
+                            gender=gender, 
+                            date_of_birth=date_of_birth
+                        )
+                    )   
                         
-
             policy_holder = PolicyHolder.objects.filter(individual_user=individual_user).first()
             if not policy_holder:
-                if identification_method == 1:
-                    policy_holder = PolicyHolder.objects.filter(id_number=identification_number).first()
-                    if not policy_holder:
-                        policy_holder = PolicyHolder.objects.create(
-                            **create_policy_holder(individual_user, first_name, last_name, postal_address, 
-                            phone_number, identification_method, identification_number, gender, date_of_birth))
-                else:
-                    policy_holder = PolicyHolder.objects.filter(
-                        passport_number=identification_number).first()
-                    if not policy_holder:
-                        policy_holder = PolicyHolder.objects.create(
-                            **create_policy_holder(individual_user, first_name, last_name, postal_address,
-                            phone_number, identification_method, identification_number, gender, date_of_birth))
-                     
+                policy_holder = get_membership_policy_holder(identification_number)
+                if not policy_holder:
+                    policy_holder = PolicyHolder.objects.create(
+                        **create_policy_holder(
+                            individual_user=individual_user, 
+                            first_name=first_name, 
+                            last_name=last_name, 
+                            postal_address=postal_address, 
+                            phone_number=phone_number, 
+                            identification_method=identification_method, 
+                            identification_number=identification_number, 
+                            gender=gender, 
+                            date_of_birth=date_of_birth
+                        )
+                    )
+                
 
             membership = Membership.objects.create(**create_membership(user, policy, scheme_group))
             print(f"Membership: {membership.id} Created Successfully!!!")

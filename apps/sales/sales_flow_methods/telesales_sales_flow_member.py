@@ -1,11 +1,11 @@
 from django.db import connection, transaction
 from datetime import datetime, date
 
-from apps.sales.bulk_upload_methods import (
+from apps.sales.share_data_upload_methods.bulk_upload_methods import (
     get_policy_number_prefix,
     get_pricing_plan
 )
-from apps.sales.date_formatting_methods import date_format_method
+from apps.sales.share_data_upload_methods.date_formatting_methods import date_format_method
 
 # Apps Imports
 from apps.schemes.models import Scheme, SchemeGroup
@@ -26,13 +26,13 @@ from apps.users.models import (
 from apps.payments.models import PolicyPayment, PolicyPremium
 from apps.prices.models import PricingPlan
 
-from apps.sales.new_members_onboarding_functions import (
+from apps.sales.main_member_upload_methods.new_members_onboarding_functions import (
     create_policy, create_scheme_group, create_profile,
     create_policy_holder, create_user, create_membership, 
     create_payment, create_membership_pemium, create_retail_scheme_group
 )
 
-from apps.sales.data_construction_methods import new_member_data_constructor
+from apps.sales.share_data_upload_methods.data_construction_methods import new_member_data_constructor
 
 
 def calculate_telesales_premium_by_cover_level(cover_level):

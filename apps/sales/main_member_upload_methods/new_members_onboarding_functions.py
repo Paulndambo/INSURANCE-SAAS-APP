@@ -1,4 +1,4 @@
-from apps.sales.bulk_upload_methods import get_next_month_first_date
+from apps.sales.share_data_upload_methods.bulk_upload_methods import get_next_month_first_date
 from datetime import datetime
 
 def create_policy(pn_data):
@@ -11,7 +11,6 @@ def create_policy(pn_data):
         "status": 'active',
         "terms_and_conditions_accepted": True,
         "claim_lodging_awaiting_period": 0,
-        # insurance_product_id:1,
         "proxy_purchase": False,
         "is_group_policy": True,
         "dg_required": False,
@@ -65,65 +64,40 @@ def create_user(username, email, first_name, last_name):
     return user_object
 
 
-
 def create_policy_holder(individual_user, first_name, last_name, postal_address, phone_number, identification_method, identification_number, gender, date_of_birth):
-    if identification_method == 1:
-        policy_holder_object = {
-            "individual_user": individual_user,
-            "name": f"{first_name} {last_name}",
-            "address": postal_address,
-            "address1": postal_address,
-            "phone_number": phone_number,
-            "phone": phone_number,
-            "phone1": phone_number,
-            "id_number": identification_number,
-            "gender": gender,
-            "date_of_birth": date_of_birth
-        }
-    else:
-        policy_holder_object = {
-            "individual_user": individual_user,
-            "name": f"{first_name} {last_name}",
-            "address": postal_address,
-            "address1": postal_address,
-            "phone_number": phone_number,
-            "phone": phone_number,
-            "phone1": phone_number,
-            "passport_number": identification_number,
-            "gender": gender,
-            "date_of_birth": date_of_birth
-        }
-
+    id_method = identification_method
+    policy_holder_object = {
+        "individual_user": individual_user,
+        "name": f"{first_name} {last_name}",
+        "address": postal_address,
+        "address1": postal_address,
+        "phone_number": phone_number,
+        "phone": phone_number,
+        "phone1": phone_number,
+        "id_number": identification_number if id_method == 1 else "",
+        "passport_number": identification_number if id_method == 0 else "",
+        "gender": gender,
+        "date_of_birth": date_of_birth
+    }
+    
     return policy_holder_object
 
 
 def create_profile(user, first_name, last_name, identification_method, identification_number, postal_address, phone_number, gender, date_of_birth):
-    if identification_method == 1:
-        profile_object = {
-            "user": user,
-            "first_name": first_name,
-            "last_name": last_name,
-            "id_number": identification_number,
-            "address": postal_address,
-            "address1": postal_address,
-            "phone": phone_number,
-            "phone1": phone_number,
-            "gender":gender,
-            "date_of_birth": date_of_birth
-        }
-    else:
-        profile_object = {
-            "user": user,
-            "first_name": first_name,
-            "last_name": last_name,
-            "passport_number": identification_number,
-            "address": postal_address,
-            "address1": postal_address,
-            "phone": phone_number,
-            "phone1": phone_number,
-            "gender": gender,
-            "date_of_birth": date_of_birth
-        }
+    id_method = identification_method
+    profile_object = {
+        "user": user,
+        "first_name": first_name,
+        "last_name": last_name,
+        "id_number": identification_number if id_method == 1 else "",
+        "passport_number": identification_number if id_method == 0 else "",
+        "address": postal_address,
+        "address1": postal_address,
+        "phone": phone_number,
+        "phone1": phone_number,
+        "gender":gender,
+        "date_of_birth": date_of_birth
+    }
     
     return profile_object
 
