@@ -17,7 +17,10 @@ from apps.sales.mixins import (
     BulkMembersOnboardingMixin,
     MembersCancellationMixin,
     BulkPaidMembersMixin,
-    BulkLapsedMembersMixin
+    BulkLapsedMembersMixin,
+    DependentOnboardingMixin,
+    ExtendedDependentOnboardingMixin,
+    BeneficiaryOnboardingMixin
 )
 
 from apps.sales.main_member_upload_methods.telesales_upload_methods import BulkTelesalesUploadMixin
@@ -133,3 +136,34 @@ def mark_policy_members_as_lapsed():
         print("No more lapsed members to process!")
     
 
+@app.task(name="onboard_dependents_task")
+def onboard_dependents_task():
+    dependents = TemporaryDependentImport.objects.filter(relationship_type="Dependent", processed=False)[:300]
+
+    if dependents.count() > 0:
+        dependents_mixin = DependentOnboardingMixin(dependents)
+        dependents_mixin.run()
+    else:
+        print("No dependents to onboard!!")
+
+
+@app.task(name="onboard_extended_dependents_task")
+def onboard_extended_dependents_task():
+    dependents = TemporaryDependentImport.objects.filter(relationship_type="Extended", processed=False)[:300]
+
+    if dependents.count() > 0:
+        dependents_mixin = DependentOnboardingMixin(dependents)
+        dependents_mixin.run()
+    else:
+        print("No extended dependents to onboard!!")
+
+
+@app.task(name="onboard_beneficiaries_task")
+def onboard_beneficiaries_task():
+    beneficiaries = TemporaryDependentImport.objects.filter(relationship_type="Beneficiary", processed=False)[:300]
+
+    if beneficiaries.count() > 0:
+        beneficiaries_mixin = DependentOnboardingMixin(beneficiaries)
+        beneficiaries_mixin.run()
+    else:
+        print("No extended dependents to onboard!!")

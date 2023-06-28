@@ -36,63 +36,74 @@ def dependent_object_constructor(data):
         "last_name": last_name, 
         "gender": gender
     }
+    if not identification_number or not first_name or not last_name:
+        FailedUploadData.objects.create(
+            member=member_data,
+            member_type="dependent",
+            reason="Missing data, the data provided is incomplete!"
+        )
+        print("Missing Data!!")
+    else:
+        membership = get_membership(main_member_identification_number, product)
+        if membership:
+            scheme_group = membership.scheme_group
+            policy = membership.scheme_group.policy
+            id_number, passport_number = get_identification_numbers(identification_method, identification_number)
 
-    membership = get_membership(main_member_identification_number, product)
-    scheme_group = membership.scheme_group
-    policy = membership.scheme_group.policy
-    id_number, passport_number = get_identification_numbers(identification_method, identification_number)
+            relative_id = None
+            relative = PolicyHolderRelative.objects.filter(relative_name__in=[relationship, relationship.capitalize()]).first()
+            if relative:
+                relative_id = relative.id
 
-    relative_id = None
-    relative = PolicyHolderRelative.objects.filter(relative_name__in=[relationship, relationship.capitalize()]).first()
-    relative_id = relative.id
+            if policy and scheme_group and membership:
+                membership_config = MembershipConfiguration.objects.filter(
+                    membership_id=membership.id, beneficiary__isnull=True
+                ).first()
 
-    if policy and scheme_group and membership:
-        membership_config = MembershipConfiguration.objects.filter(
-            membership_id=membership.id, beneficiary__isnull=True
-        ).first()
-
-        if membership_config:
-            dependent_object = {
-                "guid": uuid.uuid4(),
-                "membership_configuration_id": membership_config.id,
-                "is_additional_family_member": False,
-                "dependent_type": relationship.lower(),
-                "dependent_type_notes": "",
-                "cover_level": cover_level,
-                "age_metric": "years",
-                "relative_id": relative_id,
-                "relative_option": relationship.lower(),
-                "first_name": first_name,
-                "last_name": last_name,
-                "gender": gender.upper(),
-                "date_of_birth": date_of_birth,
-                "id_number": id_number,
-                "passport_number": passport_number,
-                "add_on_premium": 0,
-                "is_deleted": False
-            }
-            dependent = Dependent.objects.create(
-                **dependent_object
-            )
-            print(f"Dependent: {dependent.id} Created Successfully!!")
-            
+                if membership_config:
+                    dependent_object = {
+                        "guid": uuid.uuid4(),
+                        "membership_configuration_id": membership_config.id,
+                        "is_additional_family_member": False,
+                        "dependent_type": relationship.lower(),
+                        "dependent_type_notes": "",
+                        "cover_level": cover_level,
+                        "age_metric": "years",
+                        "relative_id": relative_id,
+                        "relative_option": relationship.lower(),
+                        "first_name": first_name,
+                        "last_name": last_name,
+                        "gender": gender.upper(),
+                        "date_of_birth": date_of_birth,
+                        "id_number": id_number,
+                        "passport_number": passport_number,
+                        "add_on_premium": 0,
+                        "is_deleted": False
+                    }
+                    dependent = Dependent.objects.create(
+                        **dependent_object
+                    )
+                    print(f"Dependent: {dependent.id} Created Successfully!!")
+                    
+                else:
+                    try:
+                        print("Membership Configuration Not Found")
+                        FailedUploadData.objects.create(
+                            member=member_data,
+                            member_type="dependent",
+                            reason="Membership Configuration Not Found",
+                        )
+                    except Exception as e:
+                        raise e
         else:
             try:
+                print("Membership Not Found")
                 FailedUploadData.objects.create(
                     member=member_data,
                     member_type="dependent",
-                    reason="Membership Configuration Not Found",
+                    reason="Membership Not Found",
                 )
             except Exception as e:
                 raise e
-    else:
-        try:
-            FailedUploadData.objects.create(
-                member=member_data,
-                member_type="dependent",
-                reason="Membership Not Found",
-            )
-        except Exception as e:
-            raise e
 
-        return None
+                

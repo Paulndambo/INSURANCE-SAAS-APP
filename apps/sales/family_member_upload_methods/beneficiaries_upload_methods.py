@@ -31,47 +31,53 @@ def beneficiary_object_constructor(data):
         "last_name": last_name, 
         "gender": gender
     }
-    
 
-    membership = get_membership(main_member_identification_number, product)
-    scheme_group = membership.scheme_group
-    policy = membership.scheme_group.policy
-    id_number, passport_number = get_identification_numbers(identification_method, identification_number)
-
-   
-    relative_id = None
-    relative = PolicyHolderRelative.objects.filter(relative_name__in=[relationship, relationship.capitalize()]).first()
-    if relative:
-        relative_id = relative.id
-
-    if policy and scheme_group and membership:
-        beneficiary_object = {
-            "policy_id": policy.id,
-            "schemegroup_id": scheme_group.id,
-            "membership_id": membership.id,
-            "first_name": first_name,
-            "last_name": last_name,
-            "email": "",
-            "cover_level": cover_level,
-            "passport_number": passport_number,
-            "id_number": id_number,
-            "phone_number": "",
-            "date_of_birth": date_of_birth,
-            "relative_id": relative_id,
-            "address": "",
-        }
-
-        beneficiary = Beneficiary.objects.create(
-            **beneficiary_object
+    if not identification_number or not first_name or not last_name:
+        FailedUploadData.objects.create(
+            member=member_data,
+            member_type="beneficiary",
+            reason="Missing data, the data provided is incomplete!"
         )
-        print(f"Beneficiary: {beneficiary.id} Created Successfully!!")
-    else:
-        try:
-            FailedUploadData.objects.create(
-                member=member_data,
-                member_type="beneficiary",
-                reason="membership not found"
-            )
-        except Exception as e:
-            raise e
+    else:    
+        membership = get_membership(main_member_identification_number, product)
+        if membership:
+            scheme_group = membership.scheme_group
+            policy = membership.scheme_group.policy
+            id_number, passport_number = get_identification_numbers(identification_method, identification_number)
+
+            relative_id = None
+            relative = PolicyHolderRelative.objects.filter(relative_name__in=[relationship, relationship.capitalize()]).first()
+            if relative:
+                relative_id = relative.id
+
+            if policy and scheme_group and membership:
+                beneficiary_object = {
+                    "policy_id": policy.id,
+                    "schemegroup_id": scheme_group.id,
+                    "membership_id": membership.id,
+                    "first_name": first_name,
+                    "last_name": last_name,
+                    "email": "",
+                    "cover_level": cover_level,
+                    "passport_number": passport_number,
+                    "id_number": id_number,
+                    "phone_number": "",
+                    "date_of_birth": date_of_birth,
+                    "relative_id": relative_id,
+                    "address": "",
+                }
+
+                beneficiary = Beneficiary.objects.create(
+                    **beneficiary_object
+                )
+                print(f"Beneficiary: {beneficiary.id} Created Successfully!!")
+        else:
+            try:
+                FailedUploadData.objects.create(
+                    member=member_data,
+                    member_type="beneficiary",
+                    reason="Membership not found"
+                )
+            except Exception as e:
+                raise e
         

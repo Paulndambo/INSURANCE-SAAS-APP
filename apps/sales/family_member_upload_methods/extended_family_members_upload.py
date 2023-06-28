@@ -36,67 +36,74 @@ def extended_dependent_object_constructor(data):
         "last_name": last_name, 
         "gender": gender
     }
-
-    membership = get_membership(main_member_identification_number, product)
-    scheme_group = membership.scheme_group
-    policy = membership.scheme_group.policy
-    id_number, passport_number = get_identification_numbers(identification_method, identification_number)
-
-
-    pricing_plan = get_pricing_plan(product)
-    add_on_premium = calculate_extended_family_pricing(pricing_plan, cover_level, date_of_birth)
-
-    
-    relative_id = None
-    relative = PolicyHolderRelative.objects.filter(relative_name__in=[relationship, relationship.capitalize()]).first()
-    relative_id = relative.id
+    if not identification_number or not first_name or not last_name:
+        FailedUploadData.objects.create(
+            member=member_data,
+            member_type="extended",
+            reason="Missing data, the data provided is incomplete!"
+        )
+    else:   
+        membership = get_membership(main_member_identification_number, product)
+        if membership:
+            scheme_group = membership.scheme_group
+            policy = membership.scheme_group.policy
+            id_number, passport_number = get_identification_numbers(identification_method, identification_number)
 
 
-    if policy and scheme_group and membership:
-        membership_config = MembershipConfiguration.objects.filter(membership_id=membership.id, beneficiary__isnull=True).first()
-        if membership_config:
-            if identification_method == 0:
-                extended_dependent_object = {
-                    "guid": uuid.uuid4(),
-                    "membership_configuration_id": membership_config.id,
-                    "is_additional_family_member": True,
-                    "dependent_type": "extended",
-                    "dependent_type_notes": "",
-                    "cover_level": cover_level,
-                    "age_metric": "years",
-                    "relative_id": relative_id,
-                    "relative_option": relationship.lower(),
-                    "first_name": first_name,
-                    "last_name": last_name,
-                    "gender": gender.upper(),
-                    "date_of_birth": date_of_birth,
-                    "passport_number": passport_number,
-                    "id_number": id_number,
-                    "add_on_premium": add_on_premium if add_on_premium else 0,
-                    "is_deleted": False
-                }
-                dependent = Dependent.objects.create(
-                    **extended_dependent_object
-                )
-                print(f"Extended Dependent: {dependent.id} Created Successfully!!")
+            pricing_plan = get_pricing_plan(product)
+            add_on_premium = calculate_extended_family_pricing(pricing_plan, cover_level, date_of_birth)
 
+            
+            relative_id = None
+            relative = PolicyHolderRelative.objects.filter(relative_name__in=[relationship, relationship.capitalize()]).first()
+            relative_id = relative.id
+
+
+            if policy and scheme_group and membership:
+                membership_config = MembershipConfiguration.objects.filter(membership_id=membership.id, beneficiary__isnull=True).first()
+                if membership_config:
+                    if identification_method == 0:
+                        extended_dependent_object = {
+                            "guid": uuid.uuid4(),
+                            "membership_configuration_id": membership_config.id,
+                            "is_additional_family_member": True,
+                            "dependent_type": "extended",
+                            "dependent_type_notes": "",
+                            "cover_level": cover_level,
+                            "age_metric": "years",
+                            "relative_id": relative_id,
+                            "relative_option": relationship.lower(),
+                            "first_name": first_name,
+                            "last_name": last_name,
+                            "gender": gender.upper(),
+                            "date_of_birth": date_of_birth,
+                            "passport_number": passport_number,
+                            "id_number": id_number,
+                            "add_on_premium": add_on_premium if add_on_premium else 0,
+                            "is_deleted": False
+                        }
+                        dependent = Dependent.objects.create(
+                            **extended_dependent_object
+                        )
+                        print(f"Extended Dependent: {dependent.id} Created Successfully!!")
+
+                else:
+                    try:
+                        FailedUploadData.objects.create(
+                            member=member_data,
+                            member_type="dependent",
+                            reason="Membership Configuration Not Found",
+                        )
+                    except Exception as e:
+                        raise e
         else:
             try:
                 FailedUploadData.objects.create(
                     member=member_data,
                     member_type="dependent",
-                    reason="Membership Configuration Not Found",
+                    reason="Membership Not Found",
                 )
             except Exception as e:
                 raise e
-    else:
-        try:
-            FailedUploadData.objects.create(
-                member=member_data,
-                member_type="dependent",
-                reason="Membership Not Found",
-            )
-        except Exception as e:
-            raise e
 
-        return None
+            

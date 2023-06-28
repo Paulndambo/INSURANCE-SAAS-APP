@@ -102,7 +102,7 @@ class BulkGroupMembersOnboardingMixin(object):
 
             policy_holder = PolicyHolder.objects.filter(individual_user=individual_user).first()
             if not policy_holder:
-                policy_holder = PolicyHolder.objects.filter(id_number=identification_number).first()
+                policy_holder = get_membership_policy_holder(identification_number)
                 if not policy_holder:
                     policy_holder = PolicyHolder.objects.create(
                         **create_policy_holder(
