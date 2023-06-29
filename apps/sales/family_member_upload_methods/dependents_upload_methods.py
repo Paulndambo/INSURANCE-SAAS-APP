@@ -57,7 +57,8 @@ def dependent_object_constructor(data):
 
             if policy and scheme_group and membership:
                 membership_config = MembershipConfiguration.objects.filter(
-                    membership_id=membership.id, beneficiary__isnull=True
+                    membership_id=membership.id, 
+                    beneficiary__isnull=True
                 ).first()
 
                 if membership_config:
