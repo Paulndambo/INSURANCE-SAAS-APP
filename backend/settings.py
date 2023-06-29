@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     "apps.prices",
     "apps.claims",
     "apps.sales",
-    "apps.queue_system",
     "apps.entities",
 ]
 
@@ -172,7 +171,6 @@ REST_FRAMEWORK = {
 
 
 #DJOSER={"USER_ID_FIELD":"username"}
-
 
 
 CORS_ALLOW_ALL_ORIGINS = True
