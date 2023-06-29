@@ -80,24 +80,18 @@ WSGI_APPLICATION = "backend.wsgi.application"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 
-if DEBUG:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql_psycopg2",
-            "NAME": "smartsure",
-            "USER": "postgres",
-            "PASSWORD": "1234",
-            "HOST": "localhost",
-            "PORT": 5432,
-        }
-    }
-else:
-    DATABASES = {
+
+DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": os.environ.get("POSTGRES_DB", "smartsure"),
+        "USER": os.environ.get("POSTGRES_USER", "postgres"),
+        "PASSWORD": os.environ.get("POSTGRES_PASSWORD", "1234"),
+        "HOST": os.environ.get("POSTGRES_HOST", "localhost"),
+        "PORT": 5432,
     }
 }
+
 
 
 
