@@ -1,15 +1,16 @@
 from django.db import models
+from django.db.models.signals import post_save, pre_save
+from django.dispatch import receiver
+
 from apps.core.models import AbstractBaseModel
-from apps.users.models import PolicyHolderRelative
+from apps.users.models import PolicyHolderRelative, MembershipConfiguration
 from apps.policies.models import Policy
 
 
 # Create your models here.
 class Beneficiary(AbstractBaseModel):
     policy = models.ForeignKey(Policy, on_delete=models.CASCADE, null=True)
-    relative = models.ForeignKey(
-        PolicyHolderRelative, on_delete=models.CASCADE, null=True
-    )
+    relative = models.ForeignKey(PolicyHolderRelative, on_delete=models.CASCADE, null=True)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=255, null=True)
@@ -106,3 +107,17 @@ class FamilyMemberPricing(AbstractBaseModel):
 
     def __str__(self):
         return self.relative_type
+    
+
+
+@receiver(post_save, sender=Beneficiary)
+def create_membership_configuration(sender, instance, created, **kwargs):
+    if created:
+        pricing_plan_name = instance.scheme_group.pricing_group.name
+        cover_level = 5000 if pricing_plan_name in ["MBD Funeral", "Nutun Wellness", "Nutun Wellness Funeral"] else 50000
+        MembershipConfiguration.objects.create(
+            beneficiary=instance,
+            membership=instance.membership,
+            cover_level=cover_level,
+            pricing_plan=instance.scheme_group.pricing_group
+        )

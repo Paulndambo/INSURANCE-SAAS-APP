@@ -4,6 +4,21 @@ from django.dispatch import receiver
 
 from apps.users.models import Membership, MembershipConfiguration
 from apps.policies.models import Cycle, CycleStatusUpdates
+from apps.dependents.models import Beneficiary
+
+
+@receiver(post_save, sender=Beneficiary)
+def create_membership_configuration(sender, instance, created, **kwargs):
+    if created:
+        pricing_plan_name = instance.scheme_group.pricing_group.name
+        cover_level = 5000 if pricing_plan_name in ["MBD Funeral", "Nutun Wellness", "Nutun Wellness Funeral"] else 50000
+        MembershipConfiguration.objects.create(
+            beneficiary=instance,
+            membership=instance.membership,
+            cover_level=cover_level,
+            pricing_plan=instance.scheme_group.pricing_group
+        )
+
 
 @receiver(post_save, sender=Membership)
 def create_membership_config(sender, instance, created, **kwargs):
