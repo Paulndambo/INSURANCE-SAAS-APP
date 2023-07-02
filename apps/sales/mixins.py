@@ -1,7 +1,7 @@
 from django.db import transaction
 
 from apps.prices.models import PricingPlan, PricingPlanSchemeMapping
-
+from apps.schemes.models import Scheme
 
 from apps.sales.share_data_upload_methods.bulk_upload_methods import get_pricing_plan
 from apps.sales.member_transition_methods.mark_members_as_paid import mark_members_as_paid
@@ -178,3 +178,4 @@ class BulkLapsedMembersMixin(object):
                 member.save()
         except Exception as e:
             raise e
+
