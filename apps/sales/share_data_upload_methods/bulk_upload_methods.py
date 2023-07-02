@@ -116,7 +116,7 @@ def get_pricing_plan(pricing_plan_id):
     elif pricing_plan_id == 15:
         pricing_plan_name = "Nutun Kwande Group Scheme"
     elif pricing_plan_id == 16:
-        pricing_plan_name = "Credit Life"
+        pricing_plan_name = "Credit Life VAP"
 
     return pricing_plan_name
 
@@ -132,6 +132,8 @@ def get_premium_amount(pricing_plan):
         premium = 40.00
 
     return premium
+
+credit_life_plans = ["Credit Life", "Credit Life VAP"]
 
 
 def get_product_id_from_pricing_plan(pricing_plan: str):
@@ -168,7 +170,7 @@ def get_product_id_from_pricing_plan(pricing_plan: str):
         product_id = 14
     elif pricing_plan.lower() == "Nutun Kwande Group Scheme".lower():
         product_id = 15
-    elif pricing_plan.lower() == "Credit Life".lower():
+    elif pricing_plan.lower() in [x.lower() for x in credit_life_plans]:
         product_id = 16
     return product_id
 
