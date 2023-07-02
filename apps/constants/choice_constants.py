@@ -24,6 +24,11 @@ SCHEME_TYPE_CHOICES = (
     ("credit", "Credit"),
 )
 
+OBLIGATION_TYPES = (
+    ("obligation", "Obligation"),
+    ("3rd Party Insurance", "3rd Party Insurance")
+)
+
 
 CYCLE_CHOICE_TYPES = (
     ("member", "Member"),

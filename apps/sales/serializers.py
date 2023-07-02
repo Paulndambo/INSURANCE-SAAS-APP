@@ -97,3 +97,11 @@ class CreditLifePolicyPurchaseSerializer(serializers.Serializer):
     members = serializers.JSONField()
     obligations = serializers.JSONField()
     beneficiaries = serializers.JSONField()
+
+    def create_credit_life_policy(self):
+        seller_details = self.data.get("seller_details")
+        member_details = self.data.get("member")
+        policy_details = self.data.get("policy_details")
+        obligations = self.data.get("obligations")
+        beneficiaries = self.data.get("beneficiaries")
+

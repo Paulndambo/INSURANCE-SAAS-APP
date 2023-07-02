@@ -174,17 +174,7 @@ class PolicyPurchaseAPIView(generics.CreateAPIView):
                 beneficiaries = serializer.validated_data.get("beneficiaries")
                 extended_dependents = serializer.validated_data.get("extended_dependents")
 
-                print("******************Sales Flow Payload***********************")
-                print(members)
-                onboard_sales_flow_member_task(2, members)
-                print("******************Sales Flow Payload***********************")
-                print(dependents)
-                print("******************Sales Flow Payload***********************")
-                print(beneficiaries)
-                print("******************Sales Flow Payload***********************")
-                print(extended_dependents)
-                print("******************Sales Flow Payload***********************")
-
+                
                 #onboard_sales_flow_member_task()
             elif policy_type.lower() == "group":
                 print("This is a group policy")
@@ -200,5 +190,6 @@ class CreditLifePolicyPurchaseAPIView(generics.CreateAPIView):
         data = request.data
         serializer = self.serializer_class(data=data)
         if serializer.is_valid(raise_exception=True):
+            serializer.create_credit_life_policy()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
