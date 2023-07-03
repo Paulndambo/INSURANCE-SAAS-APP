@@ -65,6 +65,7 @@ class Membership(AbstractBaseModel):
     membership_certificate = models.FileField(upload_to="membership_certificates", null=True, blank=True)
     membership_certificate_generated = models.BooleanField(default=False)
     membership_welcome_letter = models.FileField(upload_to="membership_welcome_letters/", null=True, blank=True)
+    membership_premium = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     properties = models.JSONField(default=dict)
 
     def __str__(self):

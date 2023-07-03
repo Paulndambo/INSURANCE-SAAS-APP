@@ -84,7 +84,7 @@ class PolicyPremium(AbstractBaseModel):
     )
 
     policy = models.ForeignKey(Policy, on_delete=models.CASCADE)
-    membership = models.ForeignKey("users.Membership", on_delete=models.CASCADE, null=True)
+    membership = models.ForeignKey("users.Membership", on_delete=models.CASCADE, null=True, related_name="membershipprems")
     bank_statement = models.ForeignKey("payments.BankStatement", on_delete=models.CASCADE, null=True)
     payments = models.ManyToManyField(PolicyPayment, related_name="premiums")
     balance = models.FloatField()
