@@ -20,4 +20,8 @@ app.conf.beat_schedule = {
     #"run-every-600-seconds": {"task": "bulk_onboard_retail_members_task", "schedule": 600},
     #"run-every-900-seconds": {"task": "bulk_onboard_telesales_members_task", "schedule": 900},
     "run-every-180-seconds": {"task": "bulk_onboard_group_members_task", "schedule": 180},
+
+    ##Payments Tasks
+    "track_premiums_expected_today": {"task": "track_premiums_expected_today", "schedule": 1200 },
+    "raise_future_premiums": {"task": "raise_future_premiums", "schedule": 1800 },
 }
