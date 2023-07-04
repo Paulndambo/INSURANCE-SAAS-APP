@@ -130,3 +130,12 @@ class DebitOrder(AbstractBaseModel):
 
     def __str__(self):
         return self.account_name
+
+
+class FuturePremiumTracking(AbstractBaseModel):
+    membership = models.ForeignKey("users.Membership", on_delete=models.SET_NULL, null=True)
+    policy = models.ForeignKey("policies.Policy", on_delete=models.SET_NULL, null=True)
+    expected_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True)
+    expected_date = models.DateField()
+    future_expected_date = models.DateField(null=True)
+    processed = models.BooleanField(default=False)
