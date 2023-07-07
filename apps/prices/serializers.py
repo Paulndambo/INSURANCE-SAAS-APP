@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from apps.prices.models import PricingPlan, PricingPlanCoverMapping
+from apps.prices.models import PricingPlan, PricingPlanCoverMapping, PricingPlanExtendedPremiumMapping
 
 from rest_framework_bulk import (
     BulkSerializerMixin,
@@ -11,6 +11,10 @@ class PricingPlanSerializer(serializers.ModelSerializer):
         model = PricingPlan
         fields = "__all__"
 
+class PricingPlanExtendedPremiumMappingSerializer(BulkSerializerMixin, serializers.ModelSerializer):
+    class Meta(object):
+        model = PricingPlanExtendedPremiumMapping
+        fields = "__all__"
 
 class PricingPlanBulkUploadSerializer(BulkSerializerMixin, serializers.ModelSerializer):
     class Meta(object):
@@ -18,8 +22,8 @@ class PricingPlanBulkUploadSerializer(BulkSerializerMixin, serializers.ModelSeri
         fields = "__all__"
 
 
-class PricingPlanCoverMappingSerializer(serializers.ModelSerializer):
-    class Meta:
+class PricingPlanCoverMappingSerializer(BulkSerializerMixin, serializers.ModelSerializer):
+    class Meta(object):
         model = PricingPlanCoverMapping
         fields = "__all__"
 

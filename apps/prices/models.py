@@ -40,6 +40,8 @@ class PricingPlanExtendedPremiumMapping(AbstractBaseModel):
 
     def __str__(self):
         return self.pricing_class
+    
+
 
 
 class PricingPlanDependentCoverPremiumMapping(AbstractBaseModel):
