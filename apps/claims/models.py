@@ -55,7 +55,7 @@ class Claim(AbstractBaseModel):
 
 
 class ClaimDocument(AbstractBaseModel):
-    claim = models.ForeignKey(Claim, on_delete=models.CASCADE)
+    claim = models.ForeignKey(Claim, on_delete=models.CASCADE, related_name="claimdocuments")
     file_name = models.CharField(max_length=255)
     file_value = models.FileField(upload_to="claim_documents/", null=True)
 
@@ -64,7 +64,7 @@ class ClaimDocument(AbstractBaseModel):
 
 
 class ClaimStatusUpdates(AbstractBaseModel):
-    claim = models.ForeignKey(Claim, on_delete=models.CASCADE)
+    claim = models.ForeignKey(Claim, on_delete=models.CASCADE, related_name="claimstatuses")
     previous_status = models.CharField(max_length=255)
     next_status = models.CharField(max_length=255)
 
@@ -73,7 +73,7 @@ class ClaimStatusUpdates(AbstractBaseModel):
 
 
 class ClaimAdditionalInfo(AbstractBaseModel):
-    claim = models.ForeignKey(Claim, on_delete=models.CASCADE)
+    claim = models.ForeignKey(Claim, on_delete=models.CASCADE, related_name="claimadditionalinfo")
     title = models.CharField(max_length=255)
     is_file = models.BooleanField(default=False)
     file = models.FileField(upload_to="claim_additional_files/", null=True, blank=True)
@@ -84,7 +84,7 @@ class ClaimAdditionalInfo(AbstractBaseModel):
 
 
 class Claimant(AbstractBaseModel):
-    claim = models.OneToOneField(Claim, on_delete=models.SET_NULL, null=True)
+    claim = models.OneToOneField(Claim, on_delete=models.SET_NULL, null=True, related_name="claimants")
     first_name = models.CharField(max_length=255, null=True)
     last_name = models.CharField(max_length=255, null=True)
     id_number = models.CharField(max_length=255, null=True)
@@ -99,3 +99,4 @@ class Claimant(AbstractBaseModel):
 
     def __str__(self):
         return self.claim.reference_number
+    
