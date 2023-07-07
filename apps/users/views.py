@@ -21,6 +21,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework import generics, status
 from rest_framework.viewsets import ModelViewSet
 
+from apps.constants.utils import CustomPagination
+
 
 ##Serializer Imports
 from .serializers import (
@@ -138,6 +140,20 @@ class PolicyHolderViewSet(ModelViewSet):
     serializer_class = PolicyHolderSerializer
 
 
-class PolicyHolderRelativeSerializer(ModelViewSet):
+class PolicyHolderRelativeViewSet(ModelViewSet):
+    pagination_class = CustomPagination
     queryset = PolicyHolderRelative.objects.all()
     serializer_class = PolicyHolderRelativeSerializer
+
+    def get_queryset(self):
+        dependent_type = self.request.query_params.get("dependent_type")
+        print(f"Dependent Type: {dependent_type}")
+        if dependent_type:
+            if dependent_type.lower() == "dependent":
+                return self.queryset.filter(use_type__in=["Dependent", "dependent"])
+            elif dependent_type.lower() == "extended":
+                return self.queryset.filter(use_type__in=["extended", "Extended"])
+            elif dependent_type.lower() == "beneficiary":
+                return self.queryset.filter(use_type__in=["Beneficiary", "beneficiary"])
+        else:
+            return []

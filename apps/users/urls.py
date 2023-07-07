@@ -17,7 +17,7 @@ router.register("users", views.UserModelViewSet, basename="users")
 router.register("memberships", views.MembershipViewSet, basename="memberships")
 router.register("profiles", views.ProfileModelViewSet, basename="profiles")
 router.register("policyholders", views.PolicyHolderViewSet, basename="policy-holders")
-router.register("policyholder-relatives", views.PolicyHolderViewSet, basename="policyholder-relatives",)
+router.register("policyholder-relatives", views.PolicyHolderRelativeViewSet, basename="policyholder-relatives",)
 
 
 urlpatterns = [
