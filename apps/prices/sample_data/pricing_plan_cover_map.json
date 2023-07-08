@@ -1,0 +1,50 @@
+[
+    {
+        "pricing_plan": 1,
+        "relationship": 21,
+        "cover_level": 50000,
+        "min_age": 18,
+        "max_age": 85,
+        "add_on_premium": 0
+    },
+    {
+        "pricing_plan": 1,
+        "relationship": 1,
+        "cover_level": 50000,
+        "min_age": 18,
+        "max_age": 85,
+        "add_on_premium": 0
+    },
+    {
+        "pricing_plan": 1,
+        "relationship": 2,
+        "cover_level": 27000,
+        "min_age": 14,
+        "max_age": 21,
+        "add_on_premium": 0
+    },
+    {
+        "pricing_plan": 1,
+        "relationship": 2,
+        "cover_level": 18000,
+        "min_age": 6,
+        "max_age": 13,
+        "add_on_premium": 0
+    },
+    {
+        "pricing_plan": 1,
+        "relationship": 2,
+        "cover_level": 12500,
+        "min_age": 0,
+        "max_age": 5,
+        "add_on_premium": 0
+    },
+    {
+        "pricing_plan": 1,
+        "relationship": 3,
+        "cover_level": 12500,
+        "max_age": 0,
+        "min_age": 0,
+        "add_on_premium": 0
+    }
+]

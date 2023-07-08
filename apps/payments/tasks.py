@@ -34,9 +34,7 @@ def track_premiums_expected_today():
 def raise_future_premiums():
     try:
         premiums_expected_today = FuturePremiumTracking.objects.filter(processed=False).filter(expected_date=date_today)[:1000]
-
         premiums_to_raise_today = []
-
         if premiums_expected_today.count():
             for record in premiums_expected_today:
                 premiums_to_raise_today.append(
