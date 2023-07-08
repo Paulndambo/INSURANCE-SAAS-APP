@@ -139,3 +139,7 @@ class FuturePremiumTracking(AbstractBaseModel):
     expected_date = models.DateField()
     future_expected_date = models.DateField(null=True)
     processed = models.BooleanField(default=False)
+
+
+class CollectedPayment(AbstractBaseModel):
+    pass

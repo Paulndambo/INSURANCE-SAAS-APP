@@ -1,0 +1,58 @@
+[
+    {
+        "pricing_plan": "Synergy",
+        "min_age": 75,
+        "max_age": 200,
+        "cover_level": 15000,
+        "extended_premium": 240
+    },
+    {
+        "pricing_plan": "Synergy",
+        "min_age": 75,
+        "max_age": 200,
+        "cover_level": 10000,
+        "extended_premium": 170
+    },
+    {
+        "pricing_plan": "Synergy",
+        "min_age": 60,
+        "max_age": 74,
+        "cover_level": 15000,
+        "extended_premium": 120
+    },
+    {
+        "pricing_plan": "Synergy",
+        "min_age": 60,
+        "max_age": 74,
+        "cover_level": 10000,
+        "extended_premium": 70
+    },
+    {
+        "pricing_plan": "Synergy",
+        "min_age": 40,
+        "max_age": 59,
+        "cover_level": 15000,
+        "extended_premium": 50
+    },
+    {
+        "pricing_plan": "Synergy",
+        "min_age": 40,
+        "max_age": 59,
+        "cover_level": 10000,
+        "extended_premium": 40
+    },
+    {
+        "pricing_plan": "Synergy",
+        "min_age": 22,
+        "max_age": 39,
+        "cover_level": 15000,
+        "extended_premium": 30
+    },
+    {
+        "pricing_plan": "Synergy",
+        "min_age": 22,
+        "max_age": 39,
+        "cover_level": 10000,
+        "extended_premium": 20
+    }
+]
