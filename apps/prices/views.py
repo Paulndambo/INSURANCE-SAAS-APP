@@ -43,6 +43,18 @@ class PricingPlanCoverMappingAPIView(ListBulkCreateUpdateDestroyAPIView):
     serializer_class = PricingPlanCoverMappingSerializer
 
 
+
+class MainMemberPricingAPIView(APIView):
+    def get(self, request, **kwargs):
+        pricing_plan_name = request.query_params.get("pricing_plan")
+
+        premium = 0
+        if pricing_plan_name:
+            pricing_plan = PricingPlan.objects.filter(name__in=[pricing_plan_name, pricing_plan_name.title()]).first()
+            premium = pricing_plan.total_premium
+        return Response(premium)
+
+
 class DependentPricingAPIView(APIView):
     
     def get(self, request, **kwargs):
@@ -82,8 +94,6 @@ class ExtendedDependentPricingAPIView(APIView):
         if pricing_plan  and date_of_birth and cover_level:
             dob = date_of_birth if check_if_value_is_date(date_of_birth) == True else date_format_method(date_of_birth)
             age = calculate_age(dob)
-
-            print(f"Age: {age}")
 
             premiums_list = PricingPlanExtendedPremiumMapping.objects.filter(pricing_plan=pricing_plan, cover_level=cover_level)
             for cover in premiums_list:

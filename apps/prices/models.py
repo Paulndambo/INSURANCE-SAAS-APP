@@ -42,8 +42,6 @@ class PricingPlanExtendedPremiumMapping(AbstractBaseModel):
         return self.pricing_class
     
 
-
-
 class PricingPlanDependentCoverPremiumMapping(AbstractBaseModel):
     pricing_type = models.CharField(max_length=255)
     dependent_category = models.CharField(max_length=255)
