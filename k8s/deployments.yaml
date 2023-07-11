@@ -17,6 +17,15 @@ spec:
         resources:
           limits:
             memory: "128Mi"
-            cpu: "250m"
+            cpu: "50m"
         ports:
         - containerPort: 8000
+        env:
+          - name: DB_HOST
+            value: postgres
+          - name: POSTGRES_DB
+            value: smartsure
+          - name: POSTGRES_USER
+            value: postgres
+          - name: POSTGRES_PASSWORD
+            value: "1234"
