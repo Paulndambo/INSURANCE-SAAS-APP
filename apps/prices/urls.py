@@ -8,11 +8,13 @@ from apps.prices.views import (
     PricingPlanExtendedPremiumMappingAPIView,
     ExtendedDependentPricingAPIView,
     ExtendedCoverLevelsAPIView,
-    MainMemberPricingAPIView
+    MainMemberPricingAPIView,
+    PricingPlanAPIView
 )
 
 router = DefaultRouter()
 router.register("pricing-plans", PricingPlanViewSet, basename="pricing-plans")
+router.register("pricing-plan-api", PricingPlanAPIView, basename="pricing-plan-api")
 
 
 urlpatterns = [
@@ -24,4 +26,5 @@ urlpatterns = [
     path("extended-family-pricing/", ExtendedDependentPricingAPIView.as_view(), name="extended-family-pricing"),
     path("extended-family-cover-levels/", ExtendedCoverLevelsAPIView.as_view(), name="extended-family-cover-levels"),
     path("main-member-pricing/", MainMemberPricingAPIView.as_view(), name="main-member-pricing"),
+    #path("pricing-plan-api/", PricingPlanAPIView.as_view(), name="pricing-plan-api"),
 ]
