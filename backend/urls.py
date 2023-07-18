@@ -8,7 +8,7 @@ from django.conf.urls.static import static
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-from rest_framework.authtoken.views import obtain_auth_token
+#from rest_framework.authtoken.views import obtain_auth_token
 
 
 schema_view = get_schema_view(
@@ -27,7 +27,7 @@ schema_view = get_schema_view(
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("users/", include("apps.users.urls")),
-    path('api/login/', obtain_auth_token),
+    #path('api/login/', obtain_auth_token),
     #path('auth/', include('djoser.urls')),
     #path('auth/', include('djoser.urls.authtoken')),
     path("dependents/", include("apps.dependents.urls")),
