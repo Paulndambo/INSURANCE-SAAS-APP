@@ -10,7 +10,6 @@ from apps.schemes.models import SchemeGroup
 from apps.users.models import Membership
 
 
-
 # Create your views here.
 class DependentModelViewSet(ModelViewSet):
     queryset = Dependent.objects.all()
@@ -25,7 +24,7 @@ class DependentModelViewSet(ModelViewSet):
         membership_id = self.kwargs.get("membership_pk")
         policy_id = self.kwargs.get("policy_pk")
         user = self.request.user
-        
+
         user_role = user.role
         print(f"Role: {user_role}, Username: {user.username}, Email: {user.email}")
         if policy_id:
