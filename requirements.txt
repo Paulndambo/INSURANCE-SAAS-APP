@@ -13,3 +13,4 @@ djangorestframework-bulk
 drf-nested-routers
 djoser
 celery
+coreapi

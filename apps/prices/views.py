@@ -20,13 +20,31 @@ from rest_framework.views import APIView
 
 from apps.constants.shared_methods import calculate_age, date_format_method
 from apps.constants.type_checking_methods import check_if_value_is_date
+from apps.constants.utils import CustomPagination
 
 
 # Create your views here.
 class PricingPlanViewSet(ModelViewSet):
     queryset = PricingPlan.objects.all()
     serializer_class = PricingPlanSerializer
+    pagination_class = CustomPagination
 
+    def get_queryset(self):
+        group = self.request.query_params.get("group")
+        if group:
+            return self.queryset.filter(group=group)
+        else:
+            return []
+
+class PricingPlanAPIView(ModelViewSet):
+    queryset = PricingPlan.objects.all()
+    serializer_class = PricingPlanSerializer
+
+    def get_queryset(self):
+        plan_name = self.request.query_params.get("plan_name")
+        if plan_name:
+            return self.queryset.filter(name=plan_name)[0]
+        return self.queryset
 
 class BulkPricingPlanUploadAPIView(ListBulkCreateUpdateDestroyAPIView):
     queryset = PricingPlan.objects.all()
