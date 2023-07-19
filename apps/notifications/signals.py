@@ -2,10 +2,11 @@
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
-from apps.users.models import Membership, MembershipConfiguration
+from apps.users.models import Membership, MembershipConfiguration, User
 from apps.policies.models import Cycle, CycleStatusUpdates
 from apps.dependents.models import Beneficiary
 
+from rest_framework.authtoken.models import Token
 
 @receiver(post_save, sender=Beneficiary)
 def create_membership_configuration(sender, instance, created, **kwargs):
@@ -50,3 +51,9 @@ def create_membership_cycle(sender, instance, created, **kwargs):
             previous_status="created",
             next_status="awaiting_payment"
         )
+
+
+@receiver(post_save, sender=User)
+def create_user_token(sender, instance, created, **kwargs):
+    if created:
+        token = Token.objects.create(user=instance)

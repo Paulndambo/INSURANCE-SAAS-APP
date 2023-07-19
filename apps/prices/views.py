@@ -21,6 +21,7 @@ from rest_framework.views import APIView
 from apps.constants.shared_methods import calculate_age, date_format_method
 from apps.constants.type_checking_methods import check_if_value_is_date
 from apps.constants.utils import CustomPagination
+from apps.prices.main_members_pricing_methods import get_main_member_premium
 
 
 # Create your views here.
@@ -35,6 +36,7 @@ class PricingPlanViewSet(ModelViewSet):
             return self.queryset.filter(group=group)
         else:
             return []
+            
 
 class PricingPlanAPIView(ModelViewSet):
     queryset = PricingPlan.objects.all()
@@ -65,12 +67,15 @@ class PricingPlanCoverMappingAPIView(ListBulkCreateUpdateDestroyAPIView):
 class MainMemberPricingAPIView(APIView):
     def get(self, request, **kwargs):
         pricing_plan_name = request.query_params.get("pricing_plan")
+        cover_amount = int(request.query_params.get("cover_amount"))
 
-        premium = 0
-        if pricing_plan_name:
+        prem = 0
+        if pricing_plan_name and cover_amount:
             pricing_plan = PricingPlan.objects.filter(name__in=[pricing_plan_name, pricing_plan_name.title()]).first()
-            premium = pricing_plan.total_premium
-        return Response(premium)
+            cover_levels = pricing_plan.policy_holder_cover_levels
+            prem = get_main_member_premium(cover_levels, cover_amount)
+            
+        return Response(prem)
 
 
 class DependentPricingAPIView(APIView):
