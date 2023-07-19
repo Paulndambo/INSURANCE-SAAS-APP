@@ -1,6 +1,11 @@
 from apps.users.models import User
 from rest_framework import serializers
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from django.utils.translation import gettext_lazy as _
+from django.contrib.auth import authenticate
+
+from rest_framework.authtoken.serializers import AuthTokenSerializer
+from rest_framework.exceptions import AuthenticationFailed
+
 from apps.users.models import (
     User,
     Membership,
@@ -14,24 +19,34 @@ from django.utils import timezone
 import datetime
 
 
-class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-    @classmethod
-    def get_token(cls, user):
-        token = super().get_token(user)
 
-        # Add custom claims
-        token["username"] = user.username
-        # ...
+class AuthTokenCustomSerializer(AuthTokenSerializer):
 
+    def validate(self, attrs):
+        username = attrs.get('username')
+        password = attrs.get('password')
 
-class UserTokenObtainPairSerializer(TokenObtainPairSerializer):
-    @classmethod
-    def get_token(cls, user):
-        token = super().get_token(user)
-        # Add custom claims
-        token["id"] = user.id
-        return token
+        if username and password:
+            user = authenticate(username=username, password=password)
 
+            if user:
+                # From Django 1.10 onwards the `authenticate` call simply
+                # returns `None` for is_active=False users.
+                # (Assuming the default `ModelBackend` authentication backend.)
+                if not user.is_active:
+                    msg = _('User account is disabled.')
+                    raise serializers.ValidationError(msg, code='authorization')
+            else:
+                msg = _('Unable to log in with provided credentials.')
+                raise AuthenticationFailed(msg, code='authorization')
+        else:
+            msg = _('Must include "username" and "password".')
+            raise serializers.ValidationError(msg, code='authorization')
+
+        attrs['user'] = user
+        return attrs
+
+        
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

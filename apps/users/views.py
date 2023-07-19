@@ -1,16 +1,15 @@
 ## Django Imports
 from django.shortcuts import render
 from django.http import JsonResponse
+from django.utils import timezone
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import generics
 from rest_framework.views import APIView
 
-from rest_framework_simplejwt.views import TokenObtainPairView
+
 from .serializers import (
     RegisterSerializer,
-    #UserSerializer,
-    MyTokenObtainPairSerializer,
     ChangePasswordSerializer,
     ForgotPasswordSerializer,
 )
@@ -18,21 +17,23 @@ from rest_framework import status, generics, permissions
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 
 ## Rest Framework Imports
-from rest_framework import generics, status
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.views import ObtainAuthToken
 
 from apps.constants.utils import CustomPagination
 
 
 ##Serializer Imports
 from .serializers import (
-    UserTokenObtainPairSerializer,
     MembershipSerializer,
     PolicyHolderRelativeSerializer,
     ProfileSerializer,
     UserSerializer,
     IndividualRegisterSerializer,
     PolicyHolderSerializer,
+    AuthTokenCustomSerializer
 )
 
 ## Model Imports
@@ -44,7 +45,44 @@ from apps.users.models import (
     PolicyHolderRelative,
 )
 
-from rest_framework_simplejwt.views import TokenObtainPairView
+
+
+
+class GetAuthToken(ObtainAuthToken):
+    """
+    ---
+    POST:
+        serializer: AuthTokenSerializer
+    """
+    serializer_class = AuthTokenCustomSerializer
+    permission_classes = [AllowAny]
+
+    def get_serializer(self):
+        return self.serializer_class()
+
+    def post(self, request, *args, **kwargs):
+
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        token = Token.objects.get(user=user).key
+
+        # Update last_login of the current user
+        user.last_login = timezone.now()
+        user.save()
+
+        response = {
+            'token': token,
+            'pk': user.pk,
+            'role': user.role,
+            'sub_role': user.sub_role,
+            "username": user.username,
+            "email": user.email,
+            "name": f"{user.first_name} {user.last_name}"
+            #'view_id': user.get_view_id,
+        }
+
+        return Response(response)
 
 
 class RegisterAPI(generics.GenericAPIView):
@@ -100,8 +138,6 @@ class ChangePasswordAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class MyTokenObtainPairView(TokenObtainPairView):
-    serializer_class = UserTokenObtainPairSerializer
 
 
 class UserModelViewSet(ModelViewSet):
