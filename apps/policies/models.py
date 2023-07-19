@@ -16,7 +16,6 @@ from apps.users.utils import is_fake_email
 class Policy(AbstractBaseModel):
     insurance_product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
     policy_holder = models.ForeignKey(PolicyHolder, null=True, on_delete=models.CASCADE)
-    #long_term_price = models.ForeignKey(PolicyPriceEngine, null=True, on_delete=models.CASCADE)
     upgraded_policy = models.OneToOneField('self', blank=True, null=True, on_delete=models.CASCADE)
     policy_number = models.CharField(max_length=255, unique=True)
     policy_name = models.CharField(null=True, max_length=255)
@@ -45,6 +44,7 @@ class Policy(AbstractBaseModel):
     terms_and_conditions = models.FileField(upload_to="terms_conditions", null=True) #ForeignKey(InsuranceProductDocument, related_name='policies', null=True, on_delete=models.CASCADE)
     is_group_policy = models.BooleanField(default=False)
     payment_reference = models.CharField(null=True, max_length=100)
+    sold_by = models.ForeignKey("entities.SalesAgent", on_delete=models.PROTECT, null=True)
     dg_required = models.BooleanField(default=True)
     policy_number_counter = models.IntegerField(default=0)
     config = models.JSONField(default=dict)
