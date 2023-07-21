@@ -89,6 +89,16 @@ class PolicyPurchaseSerializer(serializers.Serializer):
     extended_dependents = serializers.JSONField()
     beneficiaries = serializers.JSONField()
 
+
+
+class RetailPolicyPurchaseSerializer(serializers.Serializer):
+    agent_details = serializers.JSONField()
+    scheme_group_details = serializers.JSONField()
+    member = serializers.JSONField()
+    dependents = serializers.JSONField()
+    extended_dependents = serializers.JSONField()
+    beneficiaries = serializers.JSONField()
+
     
 
 class CreditLifePolicyPurchaseSerializer(serializers.Serializer):

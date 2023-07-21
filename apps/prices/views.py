@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.db.models import Q
 from apps.prices.models import PricingPlan, PricingPlanCoverMapping, PricingPlanExtendedPremiumMapping
+from rest_framework.permissions import AllowAny
 from apps.prices.serializers import (
     PricingPlanSerializer,
     PricingPlanBulkUploadSerializer,
@@ -29,6 +30,7 @@ class PricingPlanViewSet(ModelViewSet):
     queryset = PricingPlan.objects.all()
     serializer_class = PricingPlanSerializer
     pagination_class = CustomPagination
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         group = self.request.query_params.get("group")
@@ -36,17 +38,18 @@ class PricingPlanViewSet(ModelViewSet):
             return self.queryset.filter(group=group)
         else:
             return []
-            
 
-class PricingPlanAPIView(ModelViewSet):
-    queryset = PricingPlan.objects.all()
-    serializer_class = PricingPlanSerializer
 
-    def get_queryset(self):
+class PricingPlanAPIView(APIView):
+    def get(self, request, *args, **kwargs):
         plan_name = self.request.query_params.get("plan_name")
+        if plan_name == "null":
+            return Response({})
+
         if plan_name:
-            return self.queryset.filter(name=plan_name)[0]
-        return self.queryset
+            plan = PricingPlan.objects.filter(name=plan_name).values().first()
+            return Response(plan)
+        return Response({})
 
 class BulkPricingPlanUploadAPIView(ListBulkCreateUpdateDestroyAPIView):
     queryset = PricingPlan.objects.all()
