@@ -14,6 +14,9 @@ class PricingPlan(AbstractBaseModel):
     value_added_service = models.DecimalField(max_digits=10, decimal_places=2)
     total_premium = models.DecimalField(max_digits=10, decimal_places=2)
     group = models.CharField(max_length=255, choices=SCHEME_TYPE_CHOICES, null=True, blank=True)
+    policy_holder_cover_levels = models.JSONField(default=list)
+    dependent_cover_levels = models.JSONField(default=list)
+    extended_family_cover_levels = models.JSONField(default=list)
 
     def __str__(self):
         return self.name

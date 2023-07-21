@@ -1,0 +1,72 @@
+{
+    "agent_details": {
+        "email": ""
+    },
+    "scheme_group": {
+        "scheme_type": "retail",
+        "pricing_plan": "Family Bima",
+        "payment_frequency": "",
+        "payment_method": "",
+        "description": ""
+    },
+    "members": [
+        {
+            "username": "",
+            "first_name": "",
+            "last_name": "",
+            "email": "",
+            "cover_level": "",
+            "premium": "",
+            "identification_method": "",
+            "identification number": "",
+            "phone_number": "",
+            "date_of_birth": "",
+            "physical_address": "",
+            "postal_address": "",
+            "gender": ""
+          }
+    ],
+    "dependents": [
+        {
+            "identification_method": "",
+            "identification_number": "",
+            "product": "",
+            "relationship": "",
+            "relationship_type": "Dependent",
+            "cover_level": "",
+            "phone_number": "",
+            "last_name": "",
+            "first_name": "",
+            "date_of_birth": "",
+            "gender": ""
+        }
+    ],
+    "extended_dependents": [
+        {
+            "identification_method": "",
+            "identification_number": "",
+            "relationship": "",
+            "relationship_type": "Extended",
+            "cover_level": "",
+            "phone_number": "",
+            "last_name": "",
+            "first_name": "",
+            "date_of_birth": "",
+            "gender": ""
+        }
+    ],
+    "beneficiaries": [
+        {
+            "identification_method": "",
+            "identification_number": "",
+            "relationship": "",
+            "relationship_type": "Beneficiary",
+            "cover_level": "",
+            "phone_number": "",
+            "last_name": "",
+            "first_name": "",
+            "date_of_birth": "",
+            "gender": ""
+        }
+    ]
+}

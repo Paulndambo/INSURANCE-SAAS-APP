@@ -46,11 +46,13 @@ class SalesFlowBulkRetailMemberOnboardingMixin(object):
 
     @transaction.atomic
     def __onboard_retail_members(self):
-
         data = self.data
         scheme = Scheme.objects.get(name="Retail Scheme")
+
+        member = data["members"]
+
+
         for x in data:
-            member = new_member_data_constructor(x)
             identification_number = member.get("identification_number")
             identification_method = member.get("identification_method")
             date_of_birth = member.get("date_of_birth")

@@ -1,0 +1,48 @@
+[
+    {
+        "name": "Family Bima",
+        "group": "retail",
+        "base_premium": 0,
+        "total_premium": 0,
+        "value_added_service": 0,
+        "policy_holder_cover_levels": [
+            {
+                "cover_amount": 150000,
+                "premium": 1500
+            },
+            {
+                "cover_amount": 500000,
+                "premium": 5000
+            },
+            {
+                "cover_amount": 1000000,
+                "premium": 10000
+            }
+        ],
+        "dependents_cover_levels": [],
+        "extended_family_cover_levels": []
+    },
+    {
+        "name": "Mtaa Bima",
+        "group": "group",
+        "base_premium": 0,
+        "total_premium": 0,
+        "value_added_service": 0,
+        "policy_holder_cover_levels": [
+            {
+                "cover_amount": 150000,
+                "premium": 1500
+            },
+            {
+                "cover_amount": 500000,
+                "premium": 5000
+            },
+            {
+                "cover_amount": 1000000,
+                "premium": 10000
+            }
+        ],
+        "dependents_cover_levels": [],
+        "extended_family_cover_levels": []
+    }
+]

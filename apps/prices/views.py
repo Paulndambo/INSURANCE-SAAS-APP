@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.db.models import Q
 from apps.prices.models import PricingPlan, PricingPlanCoverMapping, PricingPlanExtendedPremiumMapping
+from rest_framework.permissions import AllowAny
 from apps.prices.serializers import (
     PricingPlanSerializer,
     PricingPlanBulkUploadSerializer,
@@ -21,6 +22,7 @@ from rest_framework.views import APIView
 from apps.constants.shared_methods import calculate_age, date_format_method
 from apps.constants.type_checking_methods import check_if_value_is_date
 from apps.constants.utils import CustomPagination
+from apps.prices.main_members_pricing_methods import get_main_member_premium
 
 
 # Create your views here.
@@ -28,6 +30,7 @@ class PricingPlanViewSet(ModelViewSet):
     queryset = PricingPlan.objects.all()
     serializer_class = PricingPlanSerializer
     pagination_class = CustomPagination
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         group = self.request.query_params.get("group")
@@ -36,15 +39,17 @@ class PricingPlanViewSet(ModelViewSet):
         else:
             return []
 
-class PricingPlanAPIView(ModelViewSet):
-    queryset = PricingPlan.objects.all()
-    serializer_class = PricingPlanSerializer
 
-    def get_queryset(self):
+class PricingPlanAPIView(APIView):
+    def get(self, request, *args, **kwargs):
         plan_name = self.request.query_params.get("plan_name")
+        if plan_name == "null":
+            return Response({})
+
         if plan_name:
-            return self.queryset.filter(name=plan_name)[0]
-        return self.queryset
+            plan = PricingPlan.objects.filter(name=plan_name).values().first()
+            return Response(plan)
+        return Response({})
 
 class BulkPricingPlanUploadAPIView(ListBulkCreateUpdateDestroyAPIView):
     queryset = PricingPlan.objects.all()
@@ -65,12 +70,15 @@ class PricingPlanCoverMappingAPIView(ListBulkCreateUpdateDestroyAPIView):
 class MainMemberPricingAPIView(APIView):
     def get(self, request, **kwargs):
         pricing_plan_name = request.query_params.get("pricing_plan")
+        cover_amount = int(request.query_params.get("cover_amount"))
 
-        premium = 0
-        if pricing_plan_name:
+        prem = 0
+        if pricing_plan_name and cover_amount:
             pricing_plan = PricingPlan.objects.filter(name__in=[pricing_plan_name, pricing_plan_name.title()]).first()
-            premium = pricing_plan.total_premium
-        return Response(premium)
+            cover_levels = pricing_plan.policy_holder_cover_levels
+            prem = get_main_member_premium(cover_levels, cover_amount)
+            
+        return Response(prem)
 
 
 class DependentPricingAPIView(APIView):
