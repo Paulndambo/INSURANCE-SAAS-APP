@@ -37,7 +37,7 @@ class PricingPlanViewSet(ModelViewSet):
         if group:
             return self.queryset.filter(group=group)
         else:
-            return []
+            return self.queryset
 
 
 class PricingPlanAPIView(APIView):

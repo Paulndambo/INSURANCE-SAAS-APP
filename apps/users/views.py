@@ -192,4 +192,4 @@ class PolicyHolderRelativeViewSet(ModelViewSet):
             elif dependent_type.lower() == "beneficiary":
                 return self.queryset.filter(use_type__in=["Beneficiary", "beneficiary"])
         else:
-            return []
+            return self.queryset

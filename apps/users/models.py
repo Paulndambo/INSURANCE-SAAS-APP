@@ -166,6 +166,7 @@ class PolicyHolderRelative(AbstractBaseModel):
         ("beneficiary", "Beneficiary"),
         ("parents", "Parents"),
         ("stillborn", "Stillborn"),
+        ("extended", "Extended"),
     )
 
     relative_name = models.CharField(max_length=255)
