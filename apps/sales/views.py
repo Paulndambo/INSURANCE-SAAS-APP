@@ -22,7 +22,8 @@ from apps.sales.serializers import (
     BulkTemporaryMemberDataSerializer,
     NewMembersSerializer,
     PolicyPurchaseSerializer,
-    CreditLifePolicyPurchaseSerializer
+    CreditLifePolicyPurchaseSerializer,
+    RetailPolicyPurchaseSerializer
 )
 
 from apps.sales.models import (
@@ -179,6 +180,17 @@ class PolicyPurchaseAPIView(generics.CreateAPIView):
                 #onboard_sales_flow_member_task()
             elif policy_type.lower() == "group":
                 print("This is a group policy")
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class RetailPolicyPurchaseAPIView(generics.CreateAPIView):
+    serializer_class = RetailPolicyPurchaseSerializer
+
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        serializer = self.serializer_class(data=data)
+        if serializer.is_valid(raise_exception=True):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

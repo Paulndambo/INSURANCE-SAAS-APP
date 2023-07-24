@@ -10,7 +10,8 @@ from apps.sales.views import (
     FailedUploadDataAPIView,
     NewMembersAPIView,
     PolicyPurchaseAPIView,
-    CreditLifePolicyPurchaseAPIView
+    CreditLifePolicyPurchaseAPIView,
+    RetailPolicyPurchaseAPIView
 )
 
 urlpatterns = [
@@ -24,5 +25,6 @@ urlpatterns = [
     path("bulk-upload/failed-uploads/", FailedUploadDataAPIView.as_view(), name="failed-uploads"),
     path("bulk-upload/bulk-new-members-list/", NewMembersAPIView.as_view(), name="bulk-new-members-list"),
     path("policy-purchase/", PolicyPurchaseAPIView.as_view(), name="policy-purchase"),
+    path("retail-policy-purchase/", RetailPolicyPurchaseAPIView.as_view(), name="retail-policy-purchase"),
     path("credit-life-policy-purchase/", CreditLifePolicyPurchaseAPIView.as_view(), name="credit-life-policy-purchase"),
 ]
