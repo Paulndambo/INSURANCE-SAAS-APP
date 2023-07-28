@@ -19,7 +19,6 @@ from apps.policies.models import (
 )
 from apps.users.models import (
     User,
-    IndividualUser,
     Profile,
     Membership,
     MembershipConfiguration,
@@ -80,13 +79,7 @@ class BulkRetailMemberOnboardingMixin(object):
                 user.save()
             
 
-            individual_user = IndividualUser.objects.filter(user=user).first()
-
-            if not individual_user:
-                individual_user = IndividualUser.objects.create(user=user)
-                individual_user.save()
-
-
+          
             profile = Profile.objects.filter(user=user).first()
             if not profile:
                 profile = get_membership_profile(identification_number)
@@ -105,23 +98,20 @@ class BulkRetailMemberOnboardingMixin(object):
                         )
                     )   
                         
-            policy_holder = PolicyHolder.objects.filter(individual_user=individual_user).first()
-            if not policy_holder:
-                policy_holder = get_membership_policy_holder(identification_number)
-                if not policy_holder:
-                    policy_holder = PolicyHolder.objects.create(
-                        **create_policy_holder(
-                            individual_user=individual_user, 
-                            first_name=first_name, 
-                            last_name=last_name, 
-                            postal_address=postal_address, 
-                            phone_number=phone_number, 
-                            identification_method=identification_method, 
-                            identification_number=identification_number, 
-                            gender=gender, 
-                            date_of_birth=date_of_birth
-                        )
-                    )
+        policy_holder = get_membership_policy_holder(identification_number)
+        if not policy_holder:
+            policy_holder = PolicyHolder.objects.create(
+                **create_policy_holder(
+                    first_name=first_name, 
+                    last_name=last_name, 
+                    postal_address=postal_address, 
+                    phone_number=phone_number, 
+                    identification_method=identification_method, 
+                    identification_number=identification_number, 
+                    gender=gender, 
+                    date_of_birth=date_of_birth
+                )
+            )
                 
 
             membership = Membership.objects.create(**create_membership(user, policy, scheme_group))

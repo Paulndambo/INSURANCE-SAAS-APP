@@ -18,7 +18,6 @@ from apps.policies.models import (
 )
 from apps.users.models import (
     User,
-    IndividualUser,
     Profile,
     Membership,
     MembershipConfiguration,
@@ -120,12 +119,6 @@ class SalesFlowBulkTelesalesUploadMixin(object):
                 user.set_password("Password")
                 user.save()
 
-
-            individual_user = IndividualUser.objects.filter(user=user).first()
-            if not individual_user:
-                individual_user = IndividualUser.objects.create(user=user)
-                individual_user.save()
-
             profile = Profile.objects.filter(user=user).first()
             if not profile:
                 if identification_method == 1:
@@ -142,23 +135,15 @@ class SalesFlowBulkTelesalesUploadMixin(object):
                                 identification_number, postal_address, phone_number, gender, date_of_birth))
                     
 
-            policy_holder = PolicyHolder.objects.filter(individual_user=individual_user).first()
+        
+            
+                policy_holder = PolicyHolder.objects.filter(id_number=identification_number).first()
 
-            if not policy_holder:
-                if identification_method == 1:
-                    policy_holder = PolicyHolder.objects.filter(id_number=identification_number).first()
-
-                    if not policy_holder:
-                        policy_holder = PolicyHolder.objects.create(
-                            **create_policy_holder(individual_user, first_name, last_name, postal_address, 
-                            phone_number, identification_method, identification_number, gender, date_of_birth))
-                else:
-                    policy_holder = PolicyHolder.objects.filter(passport_number=identification_number).first()
-                    if not policy_holder:
-                        policy_holder = PolicyHolder.objects.create(
-                            **create_policy_holder(individual_user, first_name, last_name, postal_address,
-                                phone_number, identification_method, identification_number, gender, date_of_birth)
-                        )
+                if not policy_holder:
+                    policy_holder = PolicyHolder.objects.create(
+                        **create_policy_holder(user, first_name, last_name, postal_address, 
+                        phone_number, identification_method, identification_number, gender, date_of_birth))
+                
                         
 
             membership = Membership.objects.create(**create_membership(user, policy, scheme_group))

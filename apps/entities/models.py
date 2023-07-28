@@ -8,8 +8,7 @@ BROKER_TYPE_CHOICES = (
     ("internal", "Internal"),
 )
 
-class Broker(AbstractBaseModel):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
+class Brokerage(AbstractBaseModel):
     name = models.CharField(max_length=255, null=True)
     website = models.CharField(max_length=255, null=True)
     phone_number = models.CharField(max_length=255, null=True)
@@ -26,7 +25,7 @@ class Broker(AbstractBaseModel):
 
 class SalesAgent(AbstractBaseModel):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
-    broker = models.ForeignKey(Broker, on_delete=models.CASCADE, null=True)
+    broker = models.ForeignKey(Brokerage, on_delete=models.CASCADE, null=True)
     phone_number = models.CharField(max_length=255, null=True)
     postal_address = models.CharField(max_length=255, null=True)
     physical_address = models.CharField(max_length=255, null=True)

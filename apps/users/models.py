@@ -24,8 +24,7 @@ class User(AbstractUser, AbstractBaseModel):
         unique=True,
         error_messages={"unique": _("A user with that email already exists.")},
     )
-    role = models.CharField(choices=ROLE_CHOICES, max_length=32, default="individual")
-    sub_role = models.CharField(choices=SUB_ROLE_CHOICES, max_length=32, null=True)
+    role = models.CharField(choices=ROLE_CHOICES, max_length=32)
     image = models.ImageField(upload_to="user_images/", null=True)
     sent_emails = models.IntegerField(default=0)
     password_expiration_date = models.DateField(null=True)
@@ -48,10 +47,6 @@ MEMBERSHIP_STATUS_CHOICES = (
     ("active", "Active"),
     ("cancelled", "Cancelled"),
 )
-
-
-class IndividualUser(AbstractBaseModel):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
 
 class Membership(AbstractBaseModel):
@@ -120,40 +115,34 @@ class Profile(AbstractBaseModel):
     first_name = models.CharField(max_length=255, blank=True)
     last_name = models.CharField(max_length=255, blank=True)
     id_number = models.CharField(max_length=255, null=True, unique=True)
-    identification_number = models.CharField(max_length=255, null=True, blank=True)
-    registration_number = models.CharField(max_length=255, null=True, unique=True)
-    passport_number = models.CharField(max_length=255, null=True, unique=True)
     date_of_birth = models.DateField(null=True)
     occupation = models.TextField(null=True)
     nationality = models.CharField(max_length=120, null=True)
     gender = models.CharField(null=True, max_length=60, choices=GENDER_CHOICES)
-    address = models.CharField(max_length=255, null=True, blank=True)
-    address1 = models.CharField(max_length=255, null=True, blank=True)
-    phone = models.CharField(max_length=255, null=True, blank=True)
-    phone1 = models.CharField(max_length=255, null=True, blank=True)
+    physical_address = models.CharField(max_length=255, null=True, blank=True)
+    postal_address = models.CharField(max_length=255, null=True, blank=True)
+    phone_number = models.CharField(max_length=255, null=True, blank=True)
+    work_phone = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
 
 class PolicyHolder(AbstractBaseModel):
-    individual_user = models.OneToOneField(IndividualUser, null=True, on_delete=models.CASCADE, related_name="policyholders")
+    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE, related_name="policyholders")
     name = models.CharField(max_length=255, null=True, blank=True)
     phone_number = models.CharField(max_length=255, null=True, blank=True)
     address = models.CharField(max_length=255, null=True, blank=True)
     id_number = models.CharField(max_length=255, null=True, unique=True)
-    registration_number = models.CharField(max_length=255,null=True,unique=True)
-    passport_number = models.CharField(max_length=255,null=True,unique=True)
-    identification_number = models.CharField(max_length=255, null=True, blank=True)
     date_of_birth = models.DateField(null=True)
     gender = models.CharField(null=True, max_length=60)
     occupation = models.TextField(null=True)
     nationality = models.CharField(max_length=120, null=True)
     gender = models.CharField(null=True, max_length=60, choices=GENDER_CHOICES)
-    address = models.CharField(max_length=255, null=True, blank=True)
-    address1 = models.CharField(max_length=255, null=True, blank=True)
-    phone = models.CharField(max_length=255, blank=True)
-    phone1 = models.CharField(max_length=255, blank=True, null=True)
+    physical_address = models.CharField(max_length=255, null=True, blank=True)
+    postal_address = models.CharField(max_length=255, null=True, blank=True)
+    phone_number = models.CharField(max_length=255, null=True, blank=True)
+    work_phone = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
         return self.id_number

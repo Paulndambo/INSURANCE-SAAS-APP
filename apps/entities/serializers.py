@@ -1,10 +1,10 @@
 from rest_framework import serializers
-from apps.entities.models import Broker, SalesAgent
+from apps.entities.models import Brokerage, SalesAgent
 
 
 class BrokerSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Broker
+        model = Brokerage
         fields = "__all__"
 
 

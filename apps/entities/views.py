@@ -1,10 +1,10 @@
 from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
 from apps.entities.serializers import BrokerSerializer, SalesAgentSerializer
-from apps.entities.models import Broker, SalesAgent
+from apps.entities.models import Brokerage, SalesAgent
 # Create your views here.
 class BrokerViewSet(ModelViewSet):
-    queryset = Broker.objects.all()
+    queryset = Brokerage.objects.all()
     serializer_class = BrokerSerializer
 
 

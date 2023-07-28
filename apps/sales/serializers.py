@@ -82,8 +82,10 @@ class FailedUploadDataSerializer(serializers.ModelSerializer):
 
 
 class PolicyPurchaseSerializer(serializers.Serializer):
-    seller_details = serializers.JSONField()
+    agent_details = serializers.JSONField()
     policy_details = serializers.JSONField()
+    quote_details = serializers.JSONField()
+    scheme_group = serializers.JSONField()
     members = serializers.JSONField()
     dependents = serializers.JSONField()
     extended_dependents = serializers.JSONField()

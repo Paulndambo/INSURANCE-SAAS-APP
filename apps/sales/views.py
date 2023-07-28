@@ -13,6 +13,11 @@ from apps.sales.share_data_upload_methods.data_construction_methods import (
 from apps.sales.tasks import onboard_sales_flow_member_task
 
 
+from apps.sales.sales_flow_methods.retail_sales_flow_member import (
+    SalesFlowBulkRetailMemberOnboardingMixin
+)
+
+
 from apps.sales.serializers import (
     BulkTemporaryPaidMemberDataBulkSerializer,
     BulkTemporaryMemberCancellationUploadSerializer,
@@ -164,22 +169,14 @@ class FailedUploadDataAPIView(generics.ListAPIView):
 
 class PolicyPurchaseAPIView(generics.CreateAPIView):
     serializer_class = PolicyPurchaseSerializer
+    permission_classes = [AllowAny]
 
     def post(self, request, *args, **kwargs):
         data = request.data
         serializer = self.serializer_class(data=data)
         if serializer.is_valid(raise_exception=True):
-            policy_type = serializer.validated_data["policy_details"]["scheme_type"]
-            if policy_type.lower() == "retail":
-                members = serializer.validated_data.get("members")
-                dependents = serializer.validated_data.get("dependents")
-                beneficiaries = serializer.validated_data.get("beneficiaries")
-                extended_dependents = serializer.validated_data.get("extended_dependents")
-
-                
-                #onboard_sales_flow_member_task()
-            elif policy_type.lower() == "group":
-                print("This is a group policy")
+            retail_mixin = SalesFlowBulkRetailMemberOnboardingMixin(data)
+            retail_mixin.run()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

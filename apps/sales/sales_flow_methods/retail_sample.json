@@ -1,0 +1,77 @@
+{
+    "agent_details": {
+        "email": "paulkadabo@gmail.com"
+    },
+    "scheme_group": {
+        "scheme_type": "retail",
+        "pricing_plan": "Family Bima",
+        "payment_frequency": "30",
+        "payment_method": "cash",
+        "description": ""
+    },
+    "members": [
+        {
+            "username": "",
+            "first_name": "Paul",
+            "last_name": "Ndambo",
+            "email": "paulkadabo@gmail.com",
+            "cover_level": "500000",
+            "premium": "2500",
+            "identification_method": "id_number",
+            "identification_number": "36335171",
+            "phone_number": "+254745491093",
+            "date_of_birth": "2023-07-26",
+            "physical_address": "228, 59",
+            "postal_address": "228-90199, Matuu - Kenya",
+            "gender": "male"
+        }
+    ],
+    "dependents": [
+        {
+            "first_name": "Jane",
+            "last_name": "Doe",
+            "email": "janedoe@gmail.com",
+            "cover_level": "8000",
+            "product": "Family Bima",
+            "identification_method": "Id Number",
+            "identification_number": "",
+            "phone_number": "",
+            "date_of_birth": "2005-05-13",
+            "relationship": "",
+            "relationship_type": "Dependednt",
+            "gender": "Id Number"
+        }
+    ],
+    "extended_dependents": [
+        {
+            "first_name": "John",
+            "last_name": "Doe",
+            "email": "johndoe@gmail.com",
+            "cover_level": "9000",
+            "product": "Family Bima",
+            "identification_method": "Id Number",
+            "identification_number": "",
+            "phone_number": "",
+            "date_of_birth": "2008-01-07",
+            "relationship": "",
+            "relationship_type": "Extended",
+            "gender": "male"
+        }
+    ],
+    "beneficiaries": [
+        {
+            "first_name": "Junior",
+            "last_name": "Paul",
+            "email": "juniorpaul@gmail.com",
+            "cover_level": "50000",
+            "product": "Family Bima",
+            "identification_method": "Id Number",
+            "identification_number": "",
+            "phone_number": "",
+            "date_of_birth": "2018-01-10",
+            "relationship": "",
+            "relationship_type": "Beneficiary",
+            "gender": "male"
+        }
+    ]
+}
