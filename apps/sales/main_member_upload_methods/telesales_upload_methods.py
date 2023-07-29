@@ -3,7 +3,7 @@ from django.db import transaction
 # Apps Imports
 from apps.schemes.models import Scheme, SchemeGroup
 from apps.policies.models import Policy, PolicyDetails, PolicyHolder, Cycle
-from apps.users.models import User, IndividualUser, Profile, Membership, MembershipConfiguration
+from apps.users.models import User, Profile, Membership, MembershipConfiguration
 from apps.payments.models import PolicyPayment, PolicyPremium
 from apps.prices.models import PricingPlan
 
@@ -107,11 +107,6 @@ class BulkTelesalesUploadMixin(object):
                 user.save()
 
 
-            individual_user = IndividualUser.objects.filter(user=user).first()
-            if not individual_user:
-                individual_user = IndividualUser.objects.create(user=user)
-                individual_user.save()
-
             profile = Profile.objects.filter(user=user).first()
             if not profile:
                 profile = get_membership_profile(identification_number)
@@ -131,13 +126,11 @@ class BulkTelesalesUploadMixin(object):
                     )
                 
                     
-            policy_holder = PolicyHolder.objects.filter(individual_user=individual_user).first()
-            if not policy_holder:
                 policy_holder = get_membership_policy_holder(identification_number)
                 if not policy_holder:
                     policy_holder = PolicyHolder.objects.create(
                         **create_policy_holder(
-                            individual_user=individual_user, 
+                            user=user, 
                             first_name=first_name, 
                             last_name=last_name, 
                             postal_address=postal_address, 

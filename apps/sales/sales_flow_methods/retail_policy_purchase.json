@@ -1,72 +1,146 @@
 {
-    "agent_details": {
-        "email": ""
-    },
     "scheme_group": {
-        "scheme_type": "retail",
+        "scheme": "Retail Scheme",
+        "name": "Family Bima",
+        "period_frequency": "monthly",
+        "payment_method": "debit_order",
+        "description": "Family Bima",
         "pricing_plan": "Family Bima",
-        "payment_frequency": "",
-        "payment_method": "",
-        "description": ""
+        "cycle_type": "MEMBER"
     },
     "members": [
         {
-            "username": "",
-            "first_name": "",
-            "last_name": "",
-            "email": "",
-            "cover_level": "",
-            "premium": "",
-            "identification_method": "",
-            "identification number": "",
-            "phone_number": "",
-            "date_of_birth": "",
-            "physical_address": "",
-            "postal_address": "",
-            "gender": ""
-          }
+            "id_number": "36335171",
+            "first_name": "Paul",
+            "last_name": "Ndambo",
+            "email": "paul+f1505@click2sure.co.za",
+            "phone_number": "0621530807",
+            "gender": "Male",
+            "city": "Matuu",
+            "country": "Kenya",
+            "date_of_birth": "2023-07-12",
+            "physical_address": "228",
+            "postal_address": "228",
+            "marital_status": "Single"
+        }
     ],
     "dependents": [
         {
-            "identification_method": "",
-            "identification_number": "",
-            "product": "",
-            "relationship": "",
+            "first_name": "John ",
+            "last_name": "Doe",
+            "identification_number": "456787667899",
+            "date_of_birth": "2023-07-19",
+            "postal_address": "228",
+            "physical_address": "228",
+            "relationship": "Child",
+            "phone_number": "0621530807",
+            "email": "johndoe@gmail.com",
             "relationship_type": "Dependent",
-            "cover_level": "",
-            "phone_number": "",
-            "last_name": "",
-            "first_name": "",
-            "date_of_birth": "",
-            "gender": ""
+            "cover_level": 12500,
+            "is_extended_family_member": false,
+            "gender": "male",
+            "main_member_id_number": "36335171"
+        },
+        {
+            "first_name": "Jane",
+            "last_name": "Doe",
+            "identification_number": "782299290",
+            "date_of_birth": "1998-06-16",
+            "postal_address": "228",
+            "physical_address": "228",
+            "relationship": "Spouse",
+            "phone_number": "0621530807",
+            "email": "janedoe@gmail.com",
+            "relationship_type": "Dependent",
+            "cover_level": 50000,
+            "is_extended_family_member": false,
+            "gender": "female",
+            "main_member_id_number": "36335171"
         }
     ],
     "extended_dependents": [
         {
-            "identification_method": "",
-            "identification_number": "",
-            "relationship": "",
+            "first_name": "Grandma",
+            "last_name": "Doe",
+            "id_number": "67828828222",
+            "date_of_birth": "1970-01-13",
+            "postal_address": "228, 59",
+            "relationship": "Grandmother",
+            "phone_number": "+254745491093",
+            "email": "grandmadoe@gmail.com",
             "relationship_type": "Extended",
-            "cover_level": "",
-            "phone_number": "",
-            "last_name": "",
-            "first_name": "",
-            "date_of_birth": "",
-            "gender": ""
+            "cover_level": "15000",
+            "is_extended_family_member": true,
+            "gender": "female",
+            "add_on_premium": 50,
+            "main_member_id_number": "36335171"
+        },
+        {
+            "first_name": "Grandpa",
+            "last_name": "Doe",
+            "id_number": "8782789828",
+            "date_of_birth": "1927-06-22",
+            "postal_address": "228, 59",
+            "relationship": "Grandfather",
+            "phone_number": "+254745491093",
+            "email": "grandpa@gmail.com",
+            "relationship_type": "Extended",
+            "cover_level": "10000",
+            "is_extended_family_member": true,
+            "gender": "male",
+            "add_on_premium": 170,
+            "main_member_id_number": "36335171"
+        },
+        {
+            "first_name": "Aunty",
+            "last_name": "Doe",
+            "id_number": "567898789",
+            "date_of_birth": "1974-02-05",
+            "postal_address": "228, 59",
+            "relationship": "Aunt",
+            "phone_number": "+254745491093",
+            "email": "aunty@gmail.com",
+            "relationship_type": "Extended",
+            "cover_level": "15000",
+            "is_extended_family_member": true,
+            "gender": "female",
+            "add_on_premium": 50,
+            "main_member_id_number": "36335171"
         }
     ],
     "beneficiaries": [
         {
-            "identification_method": "",
-            "identification_number": "",
-            "relationship": "",
+            "first_name": "MaryAnn",
+            "last_name": "Doe",
+            "identification_number": "5678978999",
+            "date_of_birth": "2023-07-13",
+            "postal_address": "228",
+            "physical_address": "228",
+            "relationship": "Aunt",
+            "phone_number": "+254745491093",
+            "email": "maryann@gmail.com",
             "relationship_type": "Beneficiary",
-            "cover_level": "",
-            "phone_number": "",
-            "last_name": "",
-            "first_name": "",
-            "date_of_birth": "",
-            "gender": ""
+            "main_member_id_number": "36335171"
+        },
+        {
+            "first_name": "James",
+            "last_name": "Kioko",
+            "identification_number": "67898789992",
+            "date_of_birth": "2023-07-13",
+            "postal_address": "228",
+            "physical_address": "228",
+            "relationship": "Beneficiary",
+            "phone_number": "+254745491093",
+            "email": "james@gmail.com",
+            "relationship_type": "Beneficiary",
+            "main_member_id_number": "678993900"
         }
-    ]
+    ],
+    "policy_details": {
+        "start_date": "2023-07-19",
+        "tcs": "Accept"
+    },
+    "agent_details": {
+        "email": "paulkadabo@gmail.com"
+    }
 }

@@ -113,11 +113,9 @@ class FamilyMemberPricing(AbstractBaseModel):
 @receiver(post_save, sender=Beneficiary)
 def create_membership_configuration(sender, instance, created, **kwargs):
     if created:
-        pricing_plan_name = instance.scheme_group.pricing_group.name
-        cover_level = 5000 if pricing_plan_name in ["MBD Funeral", "Nutun Wellness", "Nutun Wellness Funeral"] else 50000
         MembershipConfiguration.objects.create(
             beneficiary=instance,
             membership=instance.membership,
-            cover_level=cover_level,
-            pricing_plan=instance.scheme_group.pricing_group
+            cover_level=0,
+            pricing_plan=instance.schemegroup.pricing_group
         )

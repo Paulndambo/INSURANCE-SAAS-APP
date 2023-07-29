@@ -4,7 +4,7 @@ from datetime import datetime
 # Apps Imports
 from apps.schemes.models import Scheme, SchemeGroup
 from apps.policies.models import Policy, PolicyDetails, PolicyHolder, Cycle
-from apps.users.models import User, IndividualUser, Profile, Membership, MembershipConfiguration
+from apps.users.models import User, Profile, Membership, MembershipConfiguration
 from apps.payments.models import PolicyPayment, PolicyPremium
 from apps.prices.models import PricingPlan
 
@@ -74,12 +74,7 @@ class BulkGroupMembersOnboardingMixin(object):
                 user.set_password("Password")
                 user.save()
                 
-            individual_user = IndividualUser.objects.filter(user=user).first()
-
-            if not individual_user:
-                individual_user = IndividualUser.objects.create(user=user)
-                individual_user.save()
-
+            
 
             profile = Profile.objects.filter(user=user).first()
             if not profile:
@@ -100,23 +95,21 @@ class BulkGroupMembersOnboardingMixin(object):
                     ) 
                 
 
-            policy_holder = PolicyHolder.objects.filter(individual_user=individual_user).first()
+            policy_holder = get_membership_policy_holder(identification_number)
             if not policy_holder:
-                policy_holder = get_membership_policy_holder(identification_number)
-                if not policy_holder:
-                    policy_holder = PolicyHolder.objects.create(
-                        **create_policy_holder(
-                            individual_user=individual_user, 
-                            first_name=first_name, 
-                            last_name=last_name, 
-                            postal_address=postal_address, 
-                            phone_number=phone_number, 
-                            identification_method=identification_method, 
-                            identification_number=identification_number, 
-                            gender=gender, 
-                            date_of_birth=date_of_birth
-                        )
+                policy_holder = PolicyHolder.objects.create(
+                    **create_policy_holder(
+                        user=user,
+                        first_name=first_name, 
+                        last_name=last_name, 
+                        postal_address=postal_address, 
+                        phone_number=phone_number, 
+                        identification_method=identification_method, 
+                        identification_number=identification_number, 
+                        gender=gender, 
+                        date_of_birth=date_of_birth
                     )
+                )
                        
                         
             membership = Membership.objects.create(

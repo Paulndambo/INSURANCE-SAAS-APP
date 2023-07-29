@@ -22,6 +22,7 @@ class Policy(AbstractBaseModel):
     policy_document = models.FileField(upload_to="policy_documents", null=True)
     welcome_letter = models.FileField(upload_to="policy_welcome_letters", null=True)
     amount = models.FloatField(default=0, validators=[MinValueValidator(limit_value=0), ])
+    cover_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     expiration_date = models.DateField(null=True)
     start_date = models.DateField(null=True)
     activation_date = models.DateField(null=True)

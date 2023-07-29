@@ -8,16 +8,17 @@ from apps.dependents.models import Beneficiary
 
 from rest_framework.authtoken.models import Token
 
+"""
 @receiver(post_save, sender=Beneficiary)
 def create_membership_configuration(sender, instance, created, **kwargs):
     if created:
-        pricing_plan_name = instance.scheme_group.pricing_group.name
+        pricing_plan_name = instance.schemegroup.pricing_group.name
         cover_level = 5000 if pricing_plan_name in ["MBD Funeral", "Nutun Wellness", "Nutun Wellness Funeral"] else 50000
         MembershipConfiguration.objects.create(
             beneficiary=instance,
             membership=instance.membership,
             cover_level=cover_level,
-            pricing_plan=instance.scheme_group.pricing_group
+            pricing_plan=instance.schemegroup.pricing_group
         )
 
 
@@ -31,7 +32,7 @@ def create_membership_config(sender, instance, created, **kwargs):
             pricing_plan=instance.scheme_group.pricing_group,
             cover_level=cover_level
         )
-
+"""
 
 @receiver(post_save, sender=Membership)
 def create_membership_cycle(sender, instance, created, **kwargs):

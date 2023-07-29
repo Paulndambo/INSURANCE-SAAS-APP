@@ -15,7 +15,7 @@ class MembershipAdmin(admin.ModelAdmin):
 
 @admin.register(MembershipConfiguration)
 class MembershipConfigurationAdmin(admin.ModelAdmin):
-    list_display = ["id", "membership_id"]
+    list_display = ["id", "membership_id", "beneficiary", "pricing_plan", "cover_level"]
 
 admin.site.register(MembershipStatusUpdates)
 

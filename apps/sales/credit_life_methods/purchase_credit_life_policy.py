@@ -3,7 +3,7 @@ from apps.schemes.models import Scheme, SchemeGroup
 from apps.prices.models import PricingPlan, Obligation
 from apps.policies.models import Policy, Cycle, CycleStatusUpdates
 from apps.users.models import (
-    Profile, Membership, MembershipConfiguration, PolicyHolder, IndividualUser, User, PolicyHolderRelative
+    Profile, Membership, MembershipConfiguration, PolicyHolder, User, PolicyHolderRelative
 )
 from apps.payments.models import PolicyPayment, PolicyPremium
 from apps.dependents.models import Beneficiary
@@ -80,7 +80,7 @@ class CreditLifePolicyOnboardingMixin(object):
         user = User.objects.create(**create_user(username=username, email=email, first_name=first_name, last_name=last_name))
         user.set_password("test_password")
         user.save()
-        individual_user = IndividualUser.objects.create(user=user)
+        
 
         profile = Profile.objects.create(
             **create_profile(
@@ -99,7 +99,6 @@ class CreditLifePolicyOnboardingMixin(object):
 
         PolicyHolder.objects.create(
             **create_policy_holder(
-                individual_user=individual_user, 
                 first_name=first_name, 
                 last_name=last_name, 
                 postal_address=postal_address, 

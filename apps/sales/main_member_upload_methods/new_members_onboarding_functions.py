@@ -1,11 +1,12 @@
 from apps.sales.share_data_upload_methods.bulk_upload_methods import get_next_month_first_date
 from datetime import datetime
 
-def create_policy(pn_data):
+def create_policy(pn_data, start_date, sales_agent, premium, cover_amount):
     policy_object = {
         "policy_number": pn_data["policy_number"],
-        "amount": 0,
-        "start_date": get_next_month_first_date(),
+        "amount": premium,
+        "cover_amount": cover_amount,
+        "start_date": start_date,
         "payment_due_day": 2,
         "payment_frequency": 'monthly',
         "status": 'active',
@@ -17,7 +18,8 @@ def create_policy(pn_data):
         "config": {},
         "policy_number_counter": pn_data["policy_number_counter"],
         "policy_document": '',
-        "welcome_letter": ''
+        "welcome_letter": '',
+        "sold_by": sales_agent
     }
     return policy_object
 
@@ -64,18 +66,16 @@ def create_user(username, email, first_name, last_name):
     return user_object
 
 
-def create_policy_holder(individual_user, first_name, last_name, postal_address, phone_number, identification_method, id_number, passport_number, gender, date_of_birth):
+def create_policy_holder(user, first_name, last_name, postal_address, phone_number, identification_method, id_number, gender, date_of_birth):
     id_method = identification_method
     policy_holder_object = {
-        "individual_user": individual_user,
+        "user": user,
         "name": f"{first_name} {last_name}",
-        "address": postal_address,
-        "address1": postal_address,
+        "postal_address": postal_address,
+        "physical_address": postal_address,
         "phone_number": phone_number,
-        "phone": phone_number,
-        "phone1": phone_number,
+        "work_phone": phone_number,
         "id_number": id_number,
-        "passport_number": passport_number,
         "gender": gender,
         "date_of_birth": date_of_birth
     }
@@ -83,18 +83,17 @@ def create_policy_holder(individual_user, first_name, last_name, postal_address,
     return policy_holder_object
 
 
-def create_profile(user, first_name, last_name, identification_method, id_number, passport_number, postal_address, phone_number, gender, date_of_birth):
+def create_profile(user, first_name, last_name, identification_method, id_number, postal_address, phone_number, gender, date_of_birth):
     id_method = identification_method
     profile_object = {
         "user": user,
         "first_name": first_name,
         "last_name": last_name,
         "id_number": id_number,
-        "passport_number": passport_number,
-        "address": postal_address,
-        "address1": postal_address,
-        "phone": phone_number,
-        "phone1": phone_number,
+        "postal_address": postal_address,
+        "physical_address": postal_address,
+        "phone_number": phone_number,
+        "work_phone": phone_number,
         "gender":gender,
         "date_of_birth": date_of_birth
     }

@@ -27,13 +27,13 @@ class Scheme(AbstractBaseModel):
         return self.name
 
     def get_policy_number(self, pricing_group) -> dict:
-        product_id = get_product_id_from_pricing_plan(pricing_plan=pricing_group)
+        
         prefix = ''
-        if pricing_group.lower() == "Nutun Wellness".lower():
-            prefix = "NW_"
-        else:
-            prefix = get_policy_number_prefix(product_id)
-        #prefix = get_policy_number_prefix(product_id)
+        if pricing_group.lower() == "Family Bima".lower():
+            prefix = "FB_"
+        elif pricing_group.lower() == "Elimu Bima".lower():
+            prefix = "EB_"
+        
         policies = Policy.objects.filter(policy_number__startswith=prefix).order_by('-policy_number_counter')
         
         policy_number_counter = self.policy_number_starting_counter
