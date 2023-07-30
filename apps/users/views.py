@@ -75,7 +75,6 @@ class GetAuthToken(ObtainAuthToken):
             'token': token,
             'pk': user.pk,
             'role': user.role,
-            'sub_role': user.sub_role,
             "username": user.username,
             "email": user.email,
             "name": f"{user.first_name} {user.last_name}"
