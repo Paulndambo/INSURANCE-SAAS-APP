@@ -46,6 +46,8 @@ class SalesFlowBulkRetailMemberOnboardingMixin(object):
     def run(self):
         self.__onboard_retail_member()
 
+
+
     @transaction.atomic
     def __onboard_retail_member(self):
         data = self.data
@@ -171,7 +173,7 @@ class SalesFlowBulkRetailMemberOnboardingMixin(object):
                         is_additional_family_member=False,
                         first_name=dependent.get("first_name"),
                         last_name=dependent.get("last_name"),
-                        id_number=dependent.get("identification_number") if dependent.get("identification_number") else dependent.get("id_number"),
+                        id_number=dependent.get("id_number"),
                         cover_level=dependent.get("cover_level"),
                         date_of_birth=dependent.get("date_of_birth"),
                         gender=dependent.get("gender"),
@@ -197,7 +199,7 @@ class SalesFlowBulkRetailMemberOnboardingMixin(object):
                         is_additional_family_member=True,
                         first_name=dependent.get("first_name"),
                         last_name=dependent.get("last_name"),
-                        id_number=dependent.get("identification_number") if dependent.get("identification_number") else dependent.get("id_number"),
+                        id_number=dependent.get("id_number"),
                         cover_level=dependent.get("cover_level"),
                         gender=dependent.get("gender"),
                         add_on_premium=dependent.get("add_on_premium"),
@@ -223,8 +225,7 @@ class SalesFlowBulkRetailMemberOnboardingMixin(object):
                         schemegroup=scheme_group,
                         date_of_birth=beneficiary.get("date_of_birth"),
                         phone_number=beneficiary.get("phone_number"),
-                        id_number=beneficiary.get("identification_number") if beneficiary.get(
-                            "identification_number") else beneficiary.get("id_number")
+                        id_number=beneficiary.get("id_number")
                     )
             
             print("****************End of Member sales****************")

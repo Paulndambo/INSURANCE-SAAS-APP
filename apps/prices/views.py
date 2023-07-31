@@ -98,7 +98,8 @@ class DependentPricingAPIView(APIView):
             dob = date_of_birth if check_if_value_is_date(date_of_birth) == True else date_format_method(date_of_birth)
             age = calculate_age(dob)
 
-            covers = PricingPlanCoverMapping.objects.filter(pricing_plan__name=pricing_plan, relationship__relative_name=dependent_type)
+            covers = PricingPlanCoverMapping.objects.filter(pricing_plan__name=pricing_plan, relationship__relative_name__in=[
+                                                            dependent_type, dependent_type.capitalize(), dependent_type.lower()])
 
             for cover in covers:
                 if age in range(cover.min_age, cover.max_age + 1):

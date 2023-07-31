@@ -28,7 +28,7 @@
         {
             "first_name": "John ",
             "last_name": "Doe",
-            "identification_number": "456787667899",
+            "id_number": "456787667899",
             "date_of_birth": "2023-07-19",
             "postal_address": "228",
             "physical_address": "228",
