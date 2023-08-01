@@ -1,20 +1,13 @@
 from django.db import connection, transaction
 from datetime import datetime, date
 
-from apps.sales.share_data_upload_methods.bulk_upload_methods import (
-    get_policy_number_prefix,
-    get_pricing_plan,
-    get_pricing_plan_base_cover,
-    get_next_month_first_date
 
-)
 from apps.sales.share_data_upload_methods.date_formatting_methods import date_format_method
 from apps.sales.main_member_upload_methods.new_members_onboarding_functions import (
     create_policy, create_scheme_group, create_profile,
     create_policy_holder, create_user, create_membership, 
     create_payment, create_membership_pemium, create_retail_scheme_group
 )
-from apps.sales.share_data_upload_methods.data_construction_methods import new_member_data_constructor
 
 # Apps Imports
 from apps.schemes.models import Scheme, SchemeGroup
@@ -23,7 +16,6 @@ from apps.policies.models import (
     PolicyDetails,
     PolicyHolder,
     Cycle,
-    CycleStatusUpdates,
 )
 from apps.users.models import (
     User,
@@ -38,20 +30,19 @@ from apps.prices.models import PricingPlan
 from apps.entities.models import SalesAgent
 
 
-class SalesFlowBulkRetailMemberOnboardingMixin(object):
+class SalesFlowBulkGroupMembersOnboardingMixin(object):
     def __init__(self, data):
         self.data = data
         
 
     def run(self):
-        self.__onboard_retail_member()
-
+        self.__onboard_group_member()
 
 
     @transaction.atomic
-    def __onboard_retail_member(self):
+    def __onboard_group_member(self):
         data = self.data
-        scheme = Scheme.objects.get(name="Retail Scheme")
+        scheme = Scheme.objects.get(name="Group Scheme")
 
         members = data["members"]
         dependents = data["dependents"]
@@ -62,8 +53,41 @@ class SalesFlowBulkRetailMemberOnboardingMixin(object):
         policy_details = data["policy_details"]
         quote_details = data["quote_details"]
 
+        pricing_plan_name = scheme_group_details.get("pricing_plan")
+        premium = quote_details.get("premium")
+        cover_amount = quote_details.get("cover_amount")
+
+        start_date = policy_details.get("start_date")
+
+        sales_agent_email = agent_details.get("email")
+        sales_agent = SalesAgent.objects.filter(user__email=sales_agent_email).first()
+        pricing_plan = PricingPlan.objects.get(name=pricing_plan_name)
+    
+    
+        scheme_group = SchemeGroup.objects.create(
+            **create_scheme_group(scheme, pricing_plan, pricing_plan_name)
+        )
+
+        pn_data = scheme.get_policy_number(pricing_plan_name)
+        print(f"PN. Data: {pn_data}")
+    
+        policy = Policy.objects.create(**create_policy(pn_data, start_date, sales_agent, premium, cover_amount))
+
+        scheme_group.policy = policy
+        scheme_group.save()
+
+        PolicyDetails.objects.create(
+            policy=policy
+        )
+
         for member in members:
             identification_number = member.get("id_number")
+
+            member_dependents = [x for x in dependents if x.get("main_member_id_number").lower() == identification_number.lower()]
+            member_beneficiaries = [x for x in beneficiaries if x.get("main_member_id_number").lower() == identification_number.lower()]
+            member_extended_family = [x for x in extended_dependents if x.get("main_member_id_number").lower() == identification_number.lower()]
+
+
             date_of_birth = member.get("date_of_birth")
             first_name = member.get("first_name")
             last_name = member.get("last_name")
@@ -72,36 +96,8 @@ class SalesFlowBulkRetailMemberOnboardingMixin(object):
             gender = member.get("gender")
             email = member.get("email")
             username = member.get("email")
-            pricing_plan_name = scheme_group_details.get("pricing_plan")
             identification_method = 1
 
-            premium = quote_details.get("premium")
-            cover_amount = quote_details.get("cover_amount")
-
-            start_date = policy_details.get("start_date")
-
-            sales_agent_email = agent_details.get("email")
-            sales_agent = SalesAgent.objects.filter(user__email=sales_agent_email).first()
-            
-
-            pricing_plan = PricingPlan.objects.get(name=pricing_plan_name)
-            
-
-            scheme_group = SchemeGroup.objects.create(
-                **create_retail_scheme_group(scheme, pricing_plan, pricing_plan_name, first_name, last_name)
-            )
-
-            pn_data = scheme.get_policy_number(pricing_plan_name)
-            print(f"PN. Data: {pn_data}")
-        
-            policy = Policy.objects.create(**create_policy(pn_data, start_date, sales_agent, premium, cover_amount))
-
-            scheme_group.policy = policy
-            scheme_group.save()
-
-            PolicyDetails.objects.create(
-                policy=policy
-            )
 
             user = User.objects.filter(email=email).first()
             if not user:
@@ -132,7 +128,6 @@ class SalesFlowBulkRetailMemberOnboardingMixin(object):
             print(f"Membership: {membership.id} Created Successfully!!!")
 
 
-        
             policy_premium = PolicyPremium.objects.create(**create_membership_pemium(policy, premium, membership))
             print(f"Policy Premium: {policy_premium.id} Created Successfully!!!")
             policy_payment = PolicyPayment.objects.create(**create_payment(policy, membership, premium))
@@ -145,7 +140,7 @@ class SalesFlowBulkRetailMemberOnboardingMixin(object):
                 membership_configuration.save()
             else:
                 membership_configuration = MembershipConfiguration.objects.create(
-                    membership=membership, cover_level=cover_amount#get_pricing_plan_base_cover(pricing_plan.name), pricing_plan=pricing_plan
+                    membership=membership, cover_level=cover_amount
                 )
             print(f"Membership Config: {membership_configuration.id} Created Successfully!!")
 
@@ -158,13 +153,13 @@ class SalesFlowBulkRetailMemberOnboardingMixin(object):
             print(f"Cycle: {cycle.id} Created Successfully!!!")
 
             """Create Dependents"""
-            if dependents:
-                for dependent in dependents:
+            if member_dependents:
+                dependents_list = []
+                for dependent in member_dependents:
                     relationship = dependent.get("relationship")
-                    relative = PolicyHolderRelative.objects.filter(
-                        relative_name__in=[relationship, relationship.capitalize(), relationship.lower()]
-                    ).first()
-                    dept = Dependent.objects.create(
+                    relationship_options = [relationship, relationship.capitalize(), relationship.lower()]
+                    relative = PolicyHolderRelative.objects.filter(relative_name__in=relationship_options).first()
+                    dependents_list.append(Dependent(
                         policy=policy, 
                         schemegroup=scheme_group,
                         membership=membership,
@@ -181,16 +176,18 @@ class SalesFlowBulkRetailMemberOnboardingMixin(object):
                         is_deleted=False,
                         age_metric="years",
                         relative=relative
-                    )
+                    ))
+                Dependent.objects.bulk_create(dependents_list)
             """Create Extended Family Members"""
-            if extended_dependents:
-                for dependent in extended_dependents:
+            
+            if member_extended_family:
+                extended_dependents_list = []
+                for dependent in member_extended_family:
                     relationship = dependent.get("relationship")
-                    relative = PolicyHolderRelative.objects.filter(
-                        relative_name__in=[
-                            relationship, relationship.capitalize(), relationship.lower()]
-                    ).first()
-                    dept = Dependent.objects.create(
+                    relationship_options = [relationship, relationship.capitalize(), relationship.lower()]
+                    relative = PolicyHolderRelative.objects.filter(relative_name__in=relationship_options).first()
+
+                    extended_dependents_list.append(Dependent(
                         policy=policy,
                         schemegroup=scheme_group,
                         membership=membership,
@@ -207,18 +204,17 @@ class SalesFlowBulkRetailMemberOnboardingMixin(object):
                         is_deleted=False,
                         age_metric="years",
                         relative=relative
-                    )
+                    ))
+                Dependent.objects.bulk_create(extended_dependents_list)
             """Create Beneficiaries"""
-            if beneficiaries:
-                for beneficiary in beneficiaries:
-                    relationship = beneficiary.get("relationship")
-                    relative = PolicyHolderRelative.objects.filter(
-                        relative_name__in=[
-                            relationship, relationship.capitalize(), relationship.lower()]
-                    ).first()
-                    ben = Beneficiary.objects.create(
+            if member_beneficiaries:
+                beneficiaries_list = []
+                for beneficiary in member_beneficiaries:
+                    relative = PolicyHolderRelative.objects.get(relative_name="Beneficiary")
+                    beneficiaries_list.append(Beneficiary(
                         policy=policy,
                         relative=relative,
+                        relationship=beneficiary.get("relationship"),
                         first_name=beneficiary.get("first_name"),
                         last_name=beneficiary.get("last_name"),
                         membership=membership,
@@ -226,6 +222,8 @@ class SalesFlowBulkRetailMemberOnboardingMixin(object):
                         date_of_birth=beneficiary.get("date_of_birth"),
                         phone_number=beneficiary.get("phone_number"),
                         id_number=beneficiary.get("id_number")
-                    )
+                    ))
+
+                Beneficiary.objects.bulk_create(beneficiaries_list)
             
             print("****************End of Member sales****************")

@@ -26,7 +26,7 @@ from apps.sales.mixins import (
 from apps.sales.main_member_upload_methods.telesales_upload_methods import BulkTelesalesUploadMixin
 from apps.sales.main_member_upload_methods.group_upload_methods import BulkGroupMembersOnboardingMixin
 from apps.sales.main_member_upload_methods.retail_upload_methods import BulkRetailMemberOnboardingMixin
-from apps.sales.sales_flow_methods.retail_sales_flow_member import SalesFlowBulkRetailMemberOnboardingMixin
+from apps.sales.sales_flow_methods.retail_policy_purchase import SalesFlowBulkRetailMemberOnboardingMixin
 from apps.sales.sales_flow_methods.telesales_sales_flow_member import SalesFlowBulkTelesalesUploadMixin
 
 

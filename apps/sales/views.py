@@ -10,11 +10,13 @@ from apps.sales.share_data_upload_methods.data_construction_methods import (
     new_paid_member_data_constructor,
     new_cancelled_member_data_constructor
 )
-from apps.sales.tasks import onboard_sales_flow_member_task
 
 
-from apps.sales.sales_flow_methods.retail_sales_flow_member import (
+from apps.sales.sales_flow_methods.retail_policy_purchase import (
     SalesFlowBulkRetailMemberOnboardingMixin
+)
+from apps.sales.sales_flow_methods.group_policy_purchase import (
+    SalesFlowBulkGroupMembersOnboardingMixin
 )
 
 
@@ -176,8 +178,13 @@ class PolicyPurchaseAPIView(generics.CreateAPIView):
         data = request.data
         serializer = self.serializer_class(data=data)
         if serializer.is_valid(raise_exception=True):
-            retail_mixin = SalesFlowBulkRetailMemberOnboardingMixin(data)
-            retail_mixin.run()
+            scheme_type = data.get("scheme_group")["scheme"]
+            if scheme_type.lower() == "Retail Scheme".lower():
+                retail_mixin = SalesFlowBulkRetailMemberOnboardingMixin(data=serializer.validated_data)
+                retail_mixin.run()
+            elif scheme_type.lower() == "Group Scheme".lower():
+                group_mixin = SalesFlowBulkGroupMembersOnboardingMixin(data=serializer.validated_data)
+                group_mixin.run()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

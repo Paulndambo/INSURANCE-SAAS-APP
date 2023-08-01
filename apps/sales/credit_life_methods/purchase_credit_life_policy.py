@@ -1,23 +1,26 @@
 from django.db import connection, transaction
 from apps.schemes.models import Scheme, SchemeGroup
 from apps.prices.models import PricingPlan, Obligation
-from apps.policies.models import Policy, Cycle, CycleStatusUpdates
+from apps.policies.models import Policy, Cycle
 from apps.users.models import (
-    Profile, Membership, MembershipConfiguration, PolicyHolder, User, PolicyHolderRelative
+    Profile, 
+    Membership, 
+    MembershipConfiguration, 
+    PolicyHolder, 
+    User, 
+    PolicyHolderRelative
 )
 from apps.payments.models import PolicyPayment, PolicyPremium
 from apps.dependents.models import Beneficiary
 from apps.entities.models import SalesAgent
 
 
-from apps.sales.share_data_upload_methods.bulk_upload_methods import get_policy_number_prefix, get_product_id_from_pricing_plan
 from apps.sales.main_member_upload_methods.new_members_onboarding_functions import (
     create_policy, create_retail_scheme_group, create_profile, 
-    create_policy_holder, create_user, create_membership, create_payment, create_membership_pemium
+    create_policy_holder, create_user, create_membership, 
+    create_payment, create_membership_pemium
 )
-from apps.sales.share_data_upload_methods.member_transition_methods import get_membership_profile, get_membership_policy_holder
-from apps.constants.type_checking_methods import check_if_value_is_date
-from apps.sales.share_data_upload_methods.date_formatting_methods import date_format_method
+
 
 class CreditLifePolicyOnboardingMixin(object):
     def __init__(self, data):
@@ -148,7 +151,7 @@ class CreditLifePolicyOnboardingMixin(object):
             if beneficiaries:
                 for x in beneficiaries:
                     relative = PolicyHolderRelative.objects.get(relative_name="Beneficiary")
-                
+        
                     beneficiaries_list.append(
                         Beneficiary(
                             membership = membership,
