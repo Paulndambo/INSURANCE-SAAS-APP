@@ -1,13 +1,19 @@
 from django.shortcuts import render
 from django.db.models import Q
-from apps.prices.models import PricingPlan, PricingPlanCoverMapping, PricingPlanExtendedPremiumMapping
+from apps.prices.models import (
+    PricingPlan, 
+    PricingPlanCoverMapping, 
+    PricingPlanExtendedPremiumMapping,
+    Obligation
+)
 from rest_framework.permissions import AllowAny
 from apps.prices.serializers import (
     PricingPlanSerializer,
     PricingPlanBulkUploadSerializer,
     PricingPlanCoverMappingSerializer, 
     DependentPricingSerializer,
-    PricingPlanExtendedPremiumMappingSerializer
+    PricingPlanExtendedPremiumMappingSerializer,
+    ObligationSerializer
 )
 
 from rest_framework_bulk import (
@@ -26,6 +32,11 @@ from apps.prices.main_members_pricing_methods import get_main_member_premium
 
 
 # Create your views here.
+class ObligationViewSet(ModelViewSet):
+    queryset = Obligation.objects.all()
+    serializer_class = ObligationSerializer
+
+
 class PricingPlanViewSet(ModelViewSet):
     queryset = PricingPlan.objects.all()
     serializer_class = PricingPlanSerializer
@@ -65,7 +76,6 @@ class PricingPlanExtendedPremiumMappingAPIView(ListBulkCreateUpdateDestroyAPIVie
 class PricingPlanCoverMappingAPIView(ListBulkCreateUpdateDestroyAPIView):
     queryset = PricingPlanCoverMapping.objects.all()
     serializer_class = PricingPlanCoverMappingSerializer
-
 
 
 class MainMemberPricingAPIView(APIView):

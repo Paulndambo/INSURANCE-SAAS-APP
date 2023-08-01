@@ -26,7 +26,7 @@ class DependentModelViewSet(ModelViewSet):
         user = self.request.user
 
         user_role = user.role
-        print(f"Role: {user_role}, Username: {user.username}, Email: {user.email}")
+        
         if policy_id:
             if user_role == "individual":  # individual
                 scheme_group = SchemeGroup.objects.get(policy_id=policy_id)
@@ -56,7 +56,7 @@ class BeneficiaryModelViewSet(ModelViewSet):
         user = self.request.user
 
         user_role = user.role
-        print(f"Role: {user_role}, Username: {user.username}, Email: {user.email}")
+    
         if policy_id:
             if user_role == "individual":  # individual
                 scheme_group = SchemeGroup.objects.get(policy_id=policy_id)

@@ -9,11 +9,13 @@ from apps.prices.views import (
     ExtendedDependentPricingAPIView,
     ExtendedCoverLevelsAPIView,
     MainMemberPricingAPIView,
-    PricingPlanAPIView
+    PricingPlanAPIView,
+    ObligationViewSet
 )
 
 router = DefaultRouter()
 router.register("pricing-plans", PricingPlanViewSet, basename="pricing-plans")
+router.register("obligations", ObligationViewSet, basename="obligations")
 #router.register("pricing-plan-api", PricingPlanAPIView, basename="pricing-plan-api")
 
 

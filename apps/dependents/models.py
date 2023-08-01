@@ -11,6 +11,7 @@ from apps.policies.models import Policy
 class Beneficiary(AbstractBaseModel):
     policy = models.ForeignKey(Policy, on_delete=models.CASCADE, null=True)
     relative = models.ForeignKey(PolicyHolderRelative, on_delete=models.CASCADE, null=True)
+    relationship = models.CharField(max_length=255, null=True)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=255, null=True)
@@ -20,6 +21,7 @@ class Beneficiary(AbstractBaseModel):
     address = models.TextField(null=True)
     is_deleted = models.BooleanField(default=False)
     date_of_birth = models.DateField(null=True)
+
     membership = models.ForeignKey("users.Membership", on_delete=models.SET_NULL, null=True, blank=True)
     schemegroup = models.ForeignKey("schemes.SchemeGroup", on_delete=models.SET_NULL, null=True, blank=True)
     guardian_or_trustee_first_name = models.CharField(max_length=255, null=True)

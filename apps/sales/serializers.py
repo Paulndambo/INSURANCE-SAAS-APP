@@ -6,7 +6,7 @@ from rest_framework_bulk import (
     BulkSerializerMixin,
     ListBulkCreateUpdateDestroyAPIView,
 )
-from apps.sales.credit_life_methods.purchase_credit_life_policy import CreditLifePolicyOnboardingMixin
+
 
 class BulkTemporaryMemberDataSerializer(serializers.Serializer):
     onboarding_mode = serializers.CharField(max_length=255)
@@ -104,28 +104,13 @@ class RetailPolicyPurchaseSerializer(serializers.Serializer):
     
 
 class CreditLifePolicyPurchaseSerializer(serializers.Serializer):
-    seller_details = serializers.JSONField()
+    agent_details = serializers.JSONField()
     policy_details = serializers.JSONField()
     members = serializers.JSONField()
     obligations = serializers.JSONField()
     beneficiaries = serializers.JSONField()
+    scheme_group = serializers.JSONField()
+    quote_details = serializers.JSONField()
 
-    def create_credit_life_policy(self):
-        seller_details = self.data.get("seller_details")
-        member_details = self.data.get("members")
-        policy_details = self.data.get("policy_details")
-        obligations = self.data.get("obligations")
-        beneficiaries = self.data.get("beneficiaries")
-
-        try:
-            mixin = CreditLifePolicyOnboardingMixin(
-                seller_details=seller_details,
-                member_details=member_details,
-                policy_details=policy_details,
-                obligations=obligations,
-                beneficiaries=beneficiaries
-            )
-            mixin.run()
-        except Exception as e:
-            raise e
+    
 

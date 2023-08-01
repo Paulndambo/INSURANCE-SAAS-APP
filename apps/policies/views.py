@@ -14,7 +14,7 @@ from apps.policies.serializers import (
 
 # Create your views here.
 class PolicyModelViewSet(ModelViewSet):
-    queryset = Policy.objects.all()
+    queryset = Policy.objects.all().order_by("-created")
     serializer_class = PolicySerializer
 
     def get_serializer_context(self):
