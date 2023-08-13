@@ -151,16 +151,19 @@ class UserModelViewSet(ModelViewSet):
 class MembershipViewSet(ModelViewSet):
     queryset = Membership.objects.all()
     serializer_class = MembershipSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        scheme_group_id = self.kwargs.get("scheme_group_pk")
-        if scheme_group_id:
-            return self.queryset.filter(scheme_group_id=scheme_group_id)
+        scheme_group = self.request.query_params.get("scheme_group")
+        policy = self.request.query_params.get("policy")
+        
+        if scheme_group and policy:
+            return self.queryset.filter(policy=policy, scheme_group_id=scheme_group)
+        elif scheme_group:
+            return self.queryset.filter(scheme_group_id=scheme_group)
         else:
             return self.queryset
 
-    def get_serializer_context(self):
-        return {"request": self.request}
 
 
 class ProfileModelViewSet(ModelViewSet):

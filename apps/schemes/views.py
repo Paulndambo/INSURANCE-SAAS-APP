@@ -22,8 +22,14 @@ class SchemeGroupModelViewSet(ModelViewSet):
 
     def get_queryset(self):
         scheme_pk = self.kwargs.get("scheme_pk")
+        policy_id = self.request.query_params.get("policy_id")
+        print("*************Policy ID**********")
+        print(policy_id)
+        print("*************Policy ID**********")
         if scheme_pk:
             return self.queryset.filter(scheme_id=self.kwargs["scheme_pk"])
+        if policy_id:
+            return self.queryset.filter(policy__id=int(policy_id))
         else:
             return self.queryset
 

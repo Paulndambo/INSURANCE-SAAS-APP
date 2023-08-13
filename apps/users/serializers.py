@@ -127,6 +127,8 @@ class IndividualRegisterSerializer(serializers.ModelSerializer):
 
 
 class MembershipSerializer(serializers.ModelSerializer):
+    profile = serializers.ReadOnlyField(source="get_profile")
+    membership_config = serializers.ReadOnlyField(source="get_membership_configuration")
     class Meta:
         model = Membership
         fields = "__all__"

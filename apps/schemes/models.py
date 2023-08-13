@@ -55,7 +55,7 @@ class Scheme(AbstractBaseModel):
 
 class SchemeGroup(AbstractBaseModel):
     scheme = models.ForeignKey(Scheme, on_delete=models.CASCADE)
-    policy = models.OneToOneField(Policy, on_delete=models.CASCADE, null=True)
+    policy = models.OneToOneField(Policy, on_delete=models.CASCADE, null=True, related_name="schemegroups")
     name = models.CharField(max_length=255, null=True, blank=True)
     payment_method = models.CharField(max_length=255, choices=PAYMENT_METHODS)
     period_type = models.CharField(max_length=255, choices=PAYMENT_PERIOD_CHOICES)

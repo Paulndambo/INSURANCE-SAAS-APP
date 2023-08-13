@@ -3,10 +3,12 @@ from apps.policies.models import Policy, PolicyCancellation, Cycle, CycleStatusU
 
 
 class PolicySerializer(serializers.ModelSerializer):
+    scheme_group_detais = serializers.ReadOnlyField(source="scheme_group")
     class Meta:
         model = Policy
         fields = "__all__"
 
+    
 
 class PolicyCancellationSerializer(serializers.ModelSerializer):
     class Meta:

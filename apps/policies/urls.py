@@ -8,8 +8,6 @@ from apps.policies.views import (
     CycleStatusModelViewSet
     # PolicyStatusUpdatesViewSet,
 )
-from apps.dependents.views import DependentModelViewSet, BeneficiaryModelViewSet
-
 
 router = routers.DefaultRouter()
 router.register("policies", PolicyModelViewSet, basename="policies")
@@ -20,12 +18,6 @@ router.register("cycles", CycleModelViewSet, basename="cycles")
 router.register("cycles-status-updates", CycleStatusModelViewSet, basename="cycles-status-updates")
 # router.register("policy-status-updates", PolicyStatusUpdatesViewSet, basename="policy-status-updates")
 
-policies_router = routers.NestedDefaultRouter(router, "policies", lookup="policy")
-policies_router.register("dependents", DependentModelViewSet, basename="dependents")
-policies_router.register("beneficiaries", BeneficiaryModelViewSet, basename="beneficiaries")
-
-
 urlpatterns = [
     path("", include(router.urls)),
-    path("", include(policies_router.urls)),
 ]

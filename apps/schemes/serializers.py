@@ -12,3 +12,5 @@ class SchemeGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = SchemeGroup
         fields = "__all__"
+
+    

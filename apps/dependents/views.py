@@ -20,25 +20,19 @@ class DependentModelViewSet(ModelViewSet):
         return { "request": self.request }
 
     def get_queryset(self):
-        scheme_group_id = self.kwargs.get("scheme_group_pk")
-        membership_id = self.kwargs.get("membership_pk")
-        policy_id = self.kwargs.get("policy_pk")
+        
+        policy = self.request.query_params.get("policy")
+        scheme_group = self.request.query_params.get("scheme_group")
+        membership = self.request.query_params.get("membership")
+
         user = self.request.user
 
         user_role = user.role
         
-        if policy_id:
-            if user_role == "individual":  # individual
-                scheme_group = SchemeGroup.objects.get(policy_id=policy_id)
-                membership = Membership.objects.filter(user=user, scheme_group=scheme_group, policy_id=policy_id).first()
-                if membership:
-                    return self.queryset.filter(schemegroup=scheme_group, membership=membership)
-                return []
-            else:
-                return self.queryset.filter(policy_id=policy_id)
-        if scheme_group_id and membership_id:
-            return self.queryset.filter(schemegroup_id=scheme_group_id, membership_id=membership_id)
+        if policy and scheme_group and membership:
+            return self.queryset.filter(policy=policy, schemegroup=scheme_group, membership=membership)
         return self.queryset
+            
 
 
 class BeneficiaryModelViewSet(ModelViewSet):
@@ -50,25 +44,16 @@ class BeneficiaryModelViewSet(ModelViewSet):
         return { "request": self.request }
 
     def get_queryset(self):
-        scheme_group_id = self.kwargs.get("scheme_group_pk")
-        membership_id = self.kwargs.get("membership_pk")
-        policy_id = self.kwargs.get("policy_pk")
+        policy = self.request.query_params.get("policy")
+        scheme_group = self.request.query_params.get("scheme_group")
+        membership = self.request.query_params.get("membership")
+        
         user = self.request.user
 
         user_role = user.role
     
-        if policy_id:
-            if user_role == "individual":  # individual
-                scheme_group = SchemeGroup.objects.get(policy_id=policy_id)
-                membership = Membership.objects.filter(
-                    user=user, scheme_group=scheme_group, policy_id=policy_id).first()
-                if membership:
-                    return self.queryset.filter(schemegroup=scheme_group, membership=membership)
-                return []
-            else:
-                return self.queryset.filter(policy_id=policy_id)
-        if scheme_group_id and membership_id:
-            return self.queryset.filter(schemegroup_id=scheme_group_id, membership_id=membership_id)
+        if policy and scheme_group and membership:
+            return self.queryset.filter(policy=policy, schemegroup=scheme_group, membership=membership)
         return self.queryset
         
 
