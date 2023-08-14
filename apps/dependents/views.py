@@ -14,7 +14,7 @@ from apps.users.models import Membership
 class DependentModelViewSet(ModelViewSet):
     queryset = Dependent.objects.all()
     serializer_class = DependentSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get_serializer_context(self):
         return { "request": self.request }
@@ -38,7 +38,7 @@ class DependentModelViewSet(ModelViewSet):
 class BeneficiaryModelViewSet(ModelViewSet):
     queryset = Beneficiary.objects.all()
     serializer_class = BeneficiarySerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get_serializer_context(self):
         return { "request": self.request }

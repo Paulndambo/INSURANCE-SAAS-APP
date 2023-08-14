@@ -151,7 +151,7 @@ class UserModelViewSet(ModelViewSet):
 class MembershipViewSet(ModelViewSet):
     queryset = Membership.objects.all()
     serializer_class = MembershipSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         scheme_group = self.request.query_params.get("scheme_group")
