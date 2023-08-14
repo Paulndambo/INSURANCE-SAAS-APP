@@ -14,3 +14,6 @@ class SchemeGroupSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     
+
+
+    

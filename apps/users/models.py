@@ -66,10 +66,6 @@ class Membership(AbstractBaseModel):
     def __str__(self):
         return self.user.username
 
-
-
-    def name(self):
-        return "Paul Ndambo"
     
     def get_profile(self):
         user = self.user
