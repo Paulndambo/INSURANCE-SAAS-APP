@@ -25,12 +25,22 @@ class DependentModelViewSet(ModelViewSet):
         scheme_group = self.request.query_params.get("scheme_group")
         membership = self.request.query_params.get("membership")
 
-        user = self.request.user
+        dependent_type = self.request.query_params.get("dependent_type")
 
-        user_role = user.role
-        
-        if policy and scheme_group and membership:
-            return self.queryset.filter(policy=policy, schemegroup=scheme_group, membership=membership)
+        #user = self.request.user
+        print(f"Dependent Type: {dependent_type}")
+
+        #user_role = user.role
+
+        if dependent_type:
+            if dependent_type == "extended":
+                dependents = self.queryset.filter(dependent_type=dependent_type.lower())
+            elif dependent_type == "dependent":
+                dependents = self.queryset.filter(dependent_type__in=["child", "spouse", "stillborn"])
+
+            if policy and scheme_group and membership:
+                return dependents.filter(policy=policy, schemegroup=scheme_group, membership=membership)
+
         return self.queryset
             
 
@@ -48,9 +58,9 @@ class BeneficiaryModelViewSet(ModelViewSet):
         scheme_group = self.request.query_params.get("scheme_group")
         membership = self.request.query_params.get("membership")
         
-        user = self.request.user
+        #user = self.request.user
 
-        user_role = user.role
+        #user_role = user.role
     
         if policy and scheme_group and membership:
             return self.queryset.filter(policy=policy, schemegroup=scheme_group, membership=membership)
