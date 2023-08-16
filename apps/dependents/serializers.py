@@ -5,9 +5,11 @@ from apps.schemes.models import SchemeGroup
 
 
 class BeneficiarySerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = Beneficiary
         fields = "__all__"
+
 
     def create(self, validated_data):
         membership = self.context.get("membership_pk")
@@ -27,9 +29,14 @@ class BeneficiarySerializer(serializers.ModelSerializer):
 
 
 class DependentSerializer(serializers.ModelSerializer):
+    relative = serializers.SerializerMethodField()
     class Meta:
         model = Dependent
         fields = "__all__"
+
+    
+    def get_relative(self, obj):
+        return obj.relative.relative_name
 
 
     def create(self, validated_data):

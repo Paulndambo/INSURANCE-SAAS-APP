@@ -6,8 +6,6 @@ from apps.dependents.models import Beneficiary, Dependent, FamilyMemberPricing
 from apps.dependents.serializers import BeneficiarySerializer, DependentSerializer, FamilyMemberPricingSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
-from apps.schemes.models import SchemeGroup
-from apps.users.models import Membership
 
 
 # Create your views here.
@@ -29,8 +27,6 @@ class DependentModelViewSet(ModelViewSet):
 
         #user = self.request.user
         print(f"Dependent Type: {dependent_type}")
-
-        #user_role = user.role
 
         if dependent_type:
             if dependent_type == "extended":
@@ -57,10 +53,7 @@ class BeneficiaryModelViewSet(ModelViewSet):
         policy = self.request.query_params.get("policy")
         scheme_group = self.request.query_params.get("scheme_group")
         membership = self.request.query_params.get("membership")
-        
-        #user = self.request.user
 
-        #user_role = user.role
     
         if policy and scheme_group and membership:
             return self.queryset.filter(policy=policy, schemegroup=scheme_group, membership=membership)
