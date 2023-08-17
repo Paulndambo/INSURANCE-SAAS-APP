@@ -36,7 +36,7 @@ class DependentSerializer(serializers.ModelSerializer):
 
     
     def get_relative(self, obj):
-        return obj.relative.relative_name
+        return obj.relative.relative_name if obj.relative else None
 
 
     def create(self, validated_data):

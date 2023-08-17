@@ -177,14 +177,21 @@ class PolicyPurchaseAPIView(generics.CreateAPIView):
     def post(self, request, *args, **kwargs):
         data = request.data
         serializer = self.serializer_class(data=data)
+
         if serializer.is_valid(raise_exception=True):
             scheme_type = data.get("scheme_group")["scheme"]
+
+            print(f"Scheme Type: {scheme_type}")
+
             if scheme_type.lower() == "Retail Scheme".lower():
                 retail_mixin = SalesFlowBulkRetailMemberOnboardingMixin(data=serializer.validated_data)
                 retail_mixin.run()
             elif scheme_type.lower() == "Group Scheme".lower():
                 group_mixin = SalesFlowBulkGroupMembersOnboardingMixin(data=serializer.validated_data)
                 group_mixin.run()
+            elif scheme_type.lower() == "credit scheme":
+                credit_life_mixin = CreditLifePolicyOnboardingMixin(data=serializer.validated_data)
+                credit_life_mixin.run()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

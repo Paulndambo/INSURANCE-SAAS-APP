@@ -30,6 +30,8 @@ from apps.prices.models import PricingPlan
 from apps.entities.models import SalesAgent
 
 
+
+
 class SalesFlowBulkRetailMemberOnboardingMixin(object):
     def __init__(self, data):
         self.data = data
@@ -163,10 +165,11 @@ class SalesFlowBulkRetailMemberOnboardingMixin(object):
                         is_additional_family_member=False,
                         first_name=dependent.get("first_name"),
                         last_name=dependent.get("last_name"),
-                        id_number=dependent.get("id_number"),
+                        id_number=dependent.get("id_number") if dependent.get("id_number") else dependent.get("identification_number"),
                         cover_level=dependent.get("cover_level"),
                         date_of_birth=dependent.get("date_of_birth"),
                         gender=dependent.get("gender"),
+                        email=dependent.get("email"),
                         add_on_premium=0,
                         is_deleted=False,
                         age_metric="years",
@@ -191,9 +194,10 @@ class SalesFlowBulkRetailMemberOnboardingMixin(object):
                         is_additional_family_member=True,
                         first_name=dependent.get("first_name"),
                         last_name=dependent.get("last_name"),
-                        id_number=dependent.get("id_number"),
+                        id_number=dependent.get("id_number") if dependent.get("id_number") else dependent.get("identification_number"),
                         cover_level=dependent.get("cover_level"),
                         gender=dependent.get("gender"),
+                        email=dependent.get("email"),
                         add_on_premium=dependent.get("add_on_premium"),
                         date_of_birth=dependent.get("date_of_birth"),
                         is_deleted=False,
@@ -214,9 +218,11 @@ class SalesFlowBulkRetailMemberOnboardingMixin(object):
                         last_name=beneficiary.get("last_name"),
                         membership=membership,
                         schemegroup=scheme_group,
+                        gender=beneficiary.get("gender"),
+                        email=beneficiary.get("email"),
                         date_of_birth=beneficiary.get("date_of_birth"),
                         phone_number=beneficiary.get("phone_number"),
-                        id_number=beneficiary.get("id_number")
+                        id_number=beneficiary.get("id_number") if beneficiary.get("id_number") else beneficiary.get("identification_number")
                     ))
 
                 Beneficiary.objects.bulk_create(beneficiaries_list)

@@ -129,9 +129,19 @@ class IndividualRegisterSerializer(serializers.ModelSerializer):
 class MembershipSerializer(serializers.ModelSerializer):
     profile = serializers.ReadOnlyField(source="get_profile")
     membership_config = serializers.ReadOnlyField(source="get_membership_configuration")
+    status = serializers.SerializerMethodField()
+    email = serializers.SerializerMethodField()
+
     class Meta:
         model = Membership
         fields = "__all__"
+
+    def get_status(self, obj):
+        cycle = obj.cycles.first()
+        return cycle.status
+
+    def get_email(self, obj):
+        return obj.user.email
 
     """
     def create(self, validated_data):
