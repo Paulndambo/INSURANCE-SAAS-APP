@@ -209,11 +209,12 @@ class SalesFlowBulkRetailMemberOnboardingMixin(object):
             if beneficiaries:
                 beneficiaries_list = []
                 for beneficiary in beneficiaries:
-                    relative = PolicyHolderRelative.objects.get(relative_name="Beneficiary")
+                    relationship=beneficiary.get("relationship")
+                    relative = PolicyHolderRelative.objects.get(relative_name=[relationship, relationship.capitalize(), relationship.lower()])
                     beneficiaries_list.append(Beneficiary(
                         policy=policy,
                         relative=relative,
-                        relationship=beneficiary.get("relationship"),
+                        relationship=relationship,
                         first_name=beneficiary.get("first_name"),
                         last_name=beneficiary.get("last_name"),
                         membership=membership,

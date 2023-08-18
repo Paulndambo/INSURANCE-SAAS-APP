@@ -90,6 +90,7 @@ class PolicyPurchaseSerializer(serializers.Serializer):
     dependents = serializers.JSONField()
     extended_dependents = serializers.JSONField()
     beneficiaries = serializers.JSONField()
+    obligations = serializers.JSONField()
 
 
 

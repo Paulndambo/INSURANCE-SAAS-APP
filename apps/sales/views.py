@@ -186,12 +186,17 @@ class PolicyPurchaseAPIView(generics.CreateAPIView):
             if scheme_type.lower() == "Retail Scheme".lower():
                 retail_mixin = SalesFlowBulkRetailMemberOnboardingMixin(data=serializer.validated_data)
                 retail_mixin.run()
+
             elif scheme_type.lower() == "Group Scheme".lower():
                 group_mixin = SalesFlowBulkGroupMembersOnboardingMixin(data=serializer.validated_data)
                 group_mixin.run()
+
+
             elif scheme_type.lower() == "credit scheme":
                 credit_life_mixin = CreditLifePolicyOnboardingMixin(data=serializer.validated_data)
                 credit_life_mixin.run()
+                #print(serializer.data)
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
