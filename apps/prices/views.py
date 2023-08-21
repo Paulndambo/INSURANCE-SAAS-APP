@@ -37,6 +37,16 @@ class ObligationViewSet(ModelViewSet):
     serializer_class = ObligationSerializer
 
 
+    def get_queryset(self):
+        policy = self.request.query_params.get("policy")
+        membership = self.request.query_params.get("membership")
+
+        if policy and membership:
+            return self.queryset.filter(policy_id=policy, membership=membership)
+        else:
+            return []
+
+
 class PricingPlanViewSet(ModelViewSet):
     queryset = PricingPlan.objects.all()
     serializer_class = PricingPlanSerializer
