@@ -5,8 +5,9 @@ from apps.policies.views import (
     PolicyModelViewSet,
     PolicyCancellationViewSet,
     CycleModelViewSet,
-    CycleStatusModelViewSet
+    CycleStatusModelViewSet,
     # PolicyStatusUpdatesViewSet,
+    PolicyStatusUpdateViewSet
 )
 
 router = routers.DefaultRouter()
@@ -16,7 +17,7 @@ router.register(
 )
 router.register("cycles", CycleModelViewSet, basename="cycles")
 router.register("cycles-status-updates", CycleStatusModelViewSet, basename="cycles-status-updates")
-# router.register("policy-status-updates", PolicyStatusUpdatesViewSet, basename="policy-status-updates")
+router.register("policy-status-updates", PolicyStatusUpdateViewSet, basename="policy-status-updates")
 
 urlpatterns = [
     path("", include(router.urls)),

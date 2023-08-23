@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from apps.policies.models import Policy, PolicyCancellation, Cycle, CycleStatusUpdates
+from apps.policies.models import Policy, PolicyStatusUpdates, PolicyCancellation, Cycle, CycleStatusUpdates
 
 
 class PolicySerializer(serializers.ModelSerializer):
@@ -32,4 +32,10 @@ class CycleSerializer(serializers.ModelSerializer):
 class CycleStatusUpdatesSerializer(serializers.ModelSerializer):
     class Meta:
         model = CycleStatusUpdates
+        fields = "__all__"
+
+
+class PolicyStatusUpdatesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PolicyStatusUpdates
         fields = "__all__"
