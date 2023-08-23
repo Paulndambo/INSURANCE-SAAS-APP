@@ -2,10 +2,9 @@ PAYMENT_METHODS = (
     ("cash", "Cash"),
     ("debit_order", "Debit Order"),
     ("stop_order", "Stop Order"),
-    ("manual", "Manual"),
     ("off_platform", "Off Platform"),
-    ("payu", "Payu"),
-    ("paygate", "Pay Gate"),
+    ("mpesa", "Mpesa"),
+    ("manual", "Manual"),
 )
 
 

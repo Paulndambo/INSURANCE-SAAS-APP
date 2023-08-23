@@ -5,7 +5,7 @@ from datetime import datetime
 from apps.schemes.models import Scheme, SchemeGroup
 from apps.policies.models import Policy, PolicyDetails, PolicyHolder, Cycle
 from apps.users.models import User, Profile, Membership, MembershipConfiguration
-from apps.payments.models import PolicyPayment, PolicyPremium
+from apps.payments.models import PolicyPremium
 from apps.prices.models import PricingPlan
 
 
@@ -124,10 +124,7 @@ class BulkGroupMembersOnboardingMixin(object):
                 **create_membership_pemium(policy, total_premium, membership)
             )
             print(f"Policy Premium: {policy_premium.id} Created Successfully!!!")
-            policy_payment = PolicyPayment.objects.create(
-                **create_payment(policy, membership, total_premium)
-            )
-            print(f"Policy Payment: {policy_payment.id} Created Successfully!!")
+            
 
 
             """

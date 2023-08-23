@@ -25,7 +25,7 @@ from apps.users.models import (
     PolicyHolderRelative
 )
 from apps.dependents.models import Dependent, Beneficiary
-from apps.payments.models import PolicyPayment, PolicyPremium
+from apps.payments.models import PolicyPremium
 from apps.prices.models import PricingPlan
 from apps.entities.models import SalesAgent
 
@@ -130,8 +130,7 @@ class SalesFlowBulkGroupMembersOnboardingMixin(object):
 
             policy_premium = PolicyPremium.objects.create(**create_membership_pemium(policy, premium, membership))
             print(f"Policy Premium: {policy_premium.id} Created Successfully!!!")
-            policy_payment = PolicyPayment.objects.create(**create_payment(policy, membership, premium))
-            print(f"Policy Payment: {policy_payment.id} Created Successfully!!")
+            
 
 
             membership_configuration = MembershipConfiguration.objects.filter(membership=membership, beneficiary__isnull=True).first()

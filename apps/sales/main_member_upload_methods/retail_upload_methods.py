@@ -23,7 +23,7 @@ from apps.users.models import (
     Membership,
     MembershipConfiguration,
 )
-from apps.payments.models import PolicyPayment, PolicyPremium
+from apps.payments.models import PolicyPremium
 from apps.prices.models import PricingPlan
 
 
@@ -121,9 +121,6 @@ class BulkRetailMemberOnboardingMixin(object):
             total_premium = pricing_plan.total_premium
             policy_premium = PolicyPremium.objects.create(**create_membership_pemium(policy, total_premium, membership))
             print(f"Policy Premium: {policy_premium.id} Created Successfully!!!")
-            policy_payment = PolicyPayment.objects.create(**create_payment(policy, membership, total_premium))
-            print(f"Policy Payment: {policy_payment.id} Created Successfully!!")
-
 
             membership_configuration = MembershipConfiguration.objects.filter(membership=membership, beneficiary__isnull=True).first()
             if membership_configuration:
