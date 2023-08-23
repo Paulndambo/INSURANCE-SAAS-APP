@@ -53,6 +53,14 @@ class Policy(AbstractBaseModel):
     def __str__(self):
         return self.policy_number
 
+    @property
+    def scheme_group(self):
+        return {
+            "id": self.schemegroups.id,
+            "pricing_plan": self.schemegroups.pricing_group.name,
+            "description": self.schemegroups.description 
+        }
+
 
 CANCELLATION_STATUS_CHOICES = (
     ("confirmed", "Confirmed"),

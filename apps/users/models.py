@@ -65,6 +65,7 @@ class Membership(AbstractBaseModel):
 
     def __str__(self):
         return self.user.username
+
     
     def get_profile(self):
         user = self.user
@@ -72,9 +73,10 @@ class Membership(AbstractBaseModel):
         if profile:
             user_profile = {
                 "name": f"{profile.first_name} {profile.last_name}",
-                "phone_number": profile.phone if profile.phone else profile.phone1,
-                "postal_address": profile.address if profile.address else profile.address1,
-                "identification_number": profile.id_number if profile.id_number else profile.passport_number,
+                "phone_number": profile.phone_number,
+                "postal_address": profile.postal_address,
+                "physical_address": profile.physical_address,
+                "id_number": profile.id_number,
                 "date_of_birth": profile.date_of_birth,
                 "gender": profile.gender,
                 "occupation": profile.occupation,
@@ -84,7 +86,7 @@ class Membership(AbstractBaseModel):
             return user_profile
         
     def get_membership_configuration(self):
-        membership_config = self.membershipconfigs.filter(beneficiary__isnull=True).first()
+        membership_config = self.membershipconfigs.filter(beneficiary__isnull=True).values().first()
         if membership_config:
             return membership_config
         else:

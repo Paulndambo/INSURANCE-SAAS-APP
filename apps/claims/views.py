@@ -48,6 +48,13 @@ class ClaimModelViewSet(ModelViewSet):
     queryset = Claim.objects.all()
     serializer_class = ClaimSerializer
 
+    def get_queryset(self):
+        policy = self.request.query_params.get("policy")
+
+        if policy:
+            return self.queryset.filter(policy_id=policy)
+        return self.queryset
+
 
 class ClaimDocumentModelViewSet(ModelViewSet):
     queryset = ClaimDocument.objects.all()

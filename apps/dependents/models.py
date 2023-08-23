@@ -6,11 +6,29 @@ from apps.core.models import AbstractBaseModel
 from apps.users.models import PolicyHolderRelative, MembershipConfiguration
 from apps.policies.models import Policy
 
+DEPENDENT_TYPE = (
+    ("main_member", "Main Member"),
+    ("spouse", "Spouse"),
+    ("child", "Child"),
+    ("parent", "Parent"),
+    ("extended", "Additional/Extended Family Member"),
+    ("stillborn", "Stillborn"),
+)
+
+AGE_METRIC_CHOICES = (
+    ("weeks", "Weeks"),
+    ("months", "Months"),
+    ("years", "Years"),
+)
+
+GENDER_CHOICES = (("female", "Female"), ("male", "Male"))
+
 
 # Create your models here.
 class Beneficiary(AbstractBaseModel):
     policy = models.ForeignKey(Policy, on_delete=models.CASCADE, null=True)
     relative = models.ForeignKey(PolicyHolderRelative, on_delete=models.CASCADE, null=True)
+    relationship = models.CharField(max_length=255, null=True)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=255, null=True)
@@ -20,6 +38,7 @@ class Beneficiary(AbstractBaseModel):
     address = models.TextField(null=True)
     is_deleted = models.BooleanField(default=False)
     date_of_birth = models.DateField(null=True)
+    gender=models.CharField(max_length=255, choices=GENDER_CHOICES, null=True)
     membership = models.ForeignKey("users.Membership", on_delete=models.SET_NULL, null=True, blank=True)
     schemegroup = models.ForeignKey("schemes.SchemeGroup", on_delete=models.SET_NULL, null=True, blank=True)
     guardian_or_trustee_first_name = models.CharField(max_length=255, null=True)
@@ -32,22 +51,7 @@ class Beneficiary(AbstractBaseModel):
 
 
 class Dependent(AbstractBaseModel):
-    DEPENDENT_TYPE = (
-        ("main_member", "Main Member"),
-        ("spouse", "Spouse"),
-        ("child", "Child"),
-        ("parent", "Parent"),
-        ("extended", "Additional/Extended Family Member"),
-        ("stillborn", "Stillborn"),
-    )
 
-    AGE_METRIC_CHOICES = (
-        ("weeks", "Weeks"),
-        ("months", "Months"),
-        ("years", "Years"),
-    )
-
-    GENDER_CHOICES = (("female", "Female"), ("male", "Male"))
     policy = models.ForeignKey(Policy, on_delete=models.CASCADE, null=True)
     schemegroup = models.ForeignKey("schemes.SchemeGroup", on_delete=models.SET_NULL, null=True, blank=True)
     membership = models.ForeignKey("users.Membership", null=True, on_delete=models.CASCADE)
@@ -67,6 +71,7 @@ class Dependent(AbstractBaseModel):
     date_of_birth = models.DateField()
     guid = models.CharField(max_length=200, null=True)
     id_number = models.CharField(max_length=255, null=True)
+    email = models.EmailField(null=True)
     passport_number = models.CharField(max_length=255, null=True)
     add_on_premium = models.DecimalField(
         max_digits=20, decimal_places=2, null=True, blank=True

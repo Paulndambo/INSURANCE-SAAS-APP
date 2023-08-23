@@ -21,9 +21,11 @@ class SchemeGroupModelViewSet(ModelViewSet):
     serializer_class = SchemeGroupSerializer
 
     def get_queryset(self):
-        scheme_pk = self.kwargs.get("scheme_pk")
-        if scheme_pk:
-            return self.queryset.filter(scheme_id=self.kwargs["scheme_pk"])
+        scheme = self.request.query_params.get("scheme")
+        
+        if scheme:
+            return self.queryset.filter(scheme_id=scheme)
+        
         else:
             return self.queryset
 

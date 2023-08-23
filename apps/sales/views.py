@@ -10,11 +10,13 @@ from apps.sales.share_data_upload_methods.data_construction_methods import (
     new_paid_member_data_constructor,
     new_cancelled_member_data_constructor
 )
-from apps.sales.tasks import onboard_sales_flow_member_task
 
 
-from apps.sales.sales_flow_methods.retail_sales_flow_member import (
+from apps.sales.sales_flow_methods.retail_policy_purchase import (
     SalesFlowBulkRetailMemberOnboardingMixin
+)
+from apps.sales.sales_flow_methods.group_policy_purchase import (
+    SalesFlowBulkGroupMembersOnboardingMixin
 )
 
 
@@ -40,6 +42,7 @@ from apps.sales.models import (
     TemporaryPaidMemberData
 )
 from apps.users.models import User
+from apps.sales.credit_life_methods.purchase_credit_life_policy import CreditLifePolicyOnboardingMixin
 
 # Create your views here.
 
@@ -174,9 +177,26 @@ class PolicyPurchaseAPIView(generics.CreateAPIView):
     def post(self, request, *args, **kwargs):
         data = request.data
         serializer = self.serializer_class(data=data)
+
         if serializer.is_valid(raise_exception=True):
-            retail_mixin = SalesFlowBulkRetailMemberOnboardingMixin(data)
-            retail_mixin.run()
+            scheme_type = data.get("scheme_group")["scheme"]
+
+            print(f"Scheme Type: {scheme_type}")
+
+            if scheme_type.lower() == "Retail Scheme".lower():
+                retail_mixin = SalesFlowBulkRetailMemberOnboardingMixin(data=serializer.validated_data)
+                retail_mixin.run()
+
+            elif scheme_type.lower() == "Group Scheme".lower():
+                group_mixin = SalesFlowBulkGroupMembersOnboardingMixin(data=serializer.validated_data)
+                group_mixin.run()
+
+
+            elif scheme_type.lower() == "credit scheme":
+                credit_life_mixin = CreditLifePolicyOnboardingMixin(data=serializer.validated_data)
+                credit_life_mixin.run()
+                #print(serializer.data)
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -200,11 +220,8 @@ class CreditLifePolicyPurchaseAPIView(generics.CreateAPIView):
         data = request.data
         serializer = self.serializer_class(data=data)
         if serializer.is_valid(raise_exception=True):
-            user_email = serializer.validated_data["members"].get("email")
-            user = User.objects.filter(email=user_email).first()
-            if user:
-                return Response({"failed": f"User with email: {user_email} already exists, try another email please"}, status=status.HTTP_400_BAD_REQUEST)
-            serializer.create_credit_life_policy()
+            credit_life_mixin = CreditLifePolicyOnboardingMixin(data=serializer.validated_data)
+            credit_life_mixin.run()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     

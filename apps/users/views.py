@@ -46,8 +46,6 @@ from apps.users.models import (
 )
 
 
-
-
 class GetAuthToken(ObtainAuthToken):
     """
     ---
@@ -153,16 +151,19 @@ class UserModelViewSet(ModelViewSet):
 class MembershipViewSet(ModelViewSet):
     queryset = Membership.objects.all()
     serializer_class = MembershipSerializer
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
-        scheme_group_id = self.kwargs.get("scheme_group_pk")
-        if scheme_group_id:
-            return self.queryset.filter(scheme_group_id=scheme_group_id)
+        scheme_group = self.request.query_params.get("scheme_group")
+        policy = self.request.query_params.get("policy")
+        
+        if scheme_group and policy:
+            return self.queryset.filter(policy=policy, scheme_group_id=scheme_group)
+        elif scheme_group:
+            return self.queryset.filter(scheme_group_id=scheme_group)
         else:
             return self.queryset
 
-    def get_serializer_context(self):
-        return {"request": self.request}
 
 
 class ProfileModelViewSet(ModelViewSet):
@@ -182,13 +183,12 @@ class PolicyHolderRelativeViewSet(ModelViewSet):
 
     def get_queryset(self):
         dependent_type = self.request.query_params.get("dependent_type")
-        print(f"Dependent Type: {dependent_type}")
         if dependent_type:
             if dependent_type.lower() == "dependent":
                 return self.queryset.filter(use_type__in=["Dependent", "dependent"])
             elif dependent_type.lower() == "extended":
                 return self.queryset.filter(use_type__in=["extended", "Extended"])
             elif dependent_type.lower() == "beneficiary":
-                return self.queryset.filter(use_type__in=["Beneficiary", "beneficiary"])
+                return self.queryset.exclude(use_type__in=["Beneficiary", "beneficiary"])
         else:
             return self.queryset

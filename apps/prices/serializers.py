@@ -1,10 +1,19 @@
 from rest_framework import serializers
-from apps.prices.models import PricingPlan, PricingPlanCoverMapping, PricingPlanExtendedPremiumMapping
+from apps.prices.models import (
+    PricingPlan, 
+    PricingPlanCoverMapping, 
+    PricingPlanExtendedPremiumMapping,
+    Obligation
+)
 
 from rest_framework_bulk import (
     BulkSerializerMixin,
 )
 
+class ObligationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Obligation
+        fields = "__all__"
 
 class PricingPlanSerializer(serializers.ModelSerializer):
     class Meta:
