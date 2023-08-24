@@ -48,21 +48,27 @@ class BankStatementPaymentAPIView(generics.CreateAPIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        data = request.data
-        serializer = self.serializer_class(data=data)
-        
-        if serializer.is_valid(raise_exception=True):
-            statement_file = serializer.validated_data.get("statement_file")
-            data = csv_to_json(statement_file)
+        try:
+            data = request.data
+            serializer = self.serializer_class(data=data)
+            
+            if serializer.is_valid(raise_exception=True):
+                statement_file = serializer.validated_data.get("statement_file")
+                data = csv_to_json(statement_file)
 
-            if len(data) > 10:
-                write_multiple_bank_statements(json.loads(data))
-            else:
-                bank_statement_mixin = BankStatementPaymentProcessMixin(data=data)
-                bank_statement_mixin.run()
+                statements_data = json.loads(data)
 
-            return Response({"msg": "Bank statements uploaded successfully!"}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                if len(statements_data) > 10:
+                    write_multiple_bank_statements(statements_data)
+                else:
+                    bank_statement_mixin = BankStatementPaymentProcessMixin(data=statements_data)
+                    bank_statement_mixin.run()
+
+                return Response({"msg": "Bank statements uploaded successfully!"}, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
+        except Exception as e:
+            raise e
 
 
 
@@ -78,6 +84,7 @@ class PolicyPremiumViewSet(ModelViewSet):
         if policy:
             return self.queryset.filter(policy_id=policy)
         return self.queryset
+
 
 
 class BankStatementAPIView(generics.ListAPIView):

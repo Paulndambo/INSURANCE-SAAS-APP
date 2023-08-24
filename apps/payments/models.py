@@ -29,7 +29,9 @@ class BankStatement(AbstractBaseModel):
     policy_number = models.CharField(max_length=255, null=True)
     statement = models.JSONField(null=True)
     processed = models.BooleanField(default=False)
-    
+
+    def __str__(self):
+        return self.policy_number
 
 
 class PolicyPremium(AbstractBaseModel):
@@ -44,7 +46,6 @@ class PolicyPremium(AbstractBaseModel):
     policy = models.ForeignKey(Policy, on_delete=models.CASCADE, related_name="policypremiums")
     membership = models.ForeignKey("users.Membership", on_delete=models.CASCADE, null=True, related_name="membershipprems")
     bank_statement = models.ForeignKey("payments.BankStatement", on_delete=models.CASCADE, null=True)
-    #payments = models.ManyToManyField(PolicyPayment, related_name="premiums")
     balance = models.FloatField()
     expected_payment = models.FloatField()
     expected_date = models.DateField()

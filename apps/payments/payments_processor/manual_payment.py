@@ -4,6 +4,7 @@ from django.db.models import Q
 from apps.policies.models import Policy
 from apps.payments.models import PolicyPremium, PolicyPayment
 from apps.users.models import Profile, Membership
+from apps.payments.payments_processor.shared_functions import get_premium_in_range
 
 
 date_today = datetime.now().date()
@@ -35,6 +36,7 @@ class ManualPaymentProcessingMixin(object):
             profile = Profile.objects.get(id_number=id_number)
             policy = Policy.objects.get(policy_number=policy_number)
             membership = Membership.objects.get(policy=policy, user=profile.user)
+
 
             policy_premium = None
 
