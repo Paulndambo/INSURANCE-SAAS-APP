@@ -48,11 +48,12 @@ class PolicyPremium(AbstractBaseModel):
     bank_statement = models.ForeignKey("payments.BankStatement", on_delete=models.CASCADE, null=True)
     balance = models.FloatField()
     expected_payment = models.FloatField()
+    amount_paid = models.FloatField(default=0)
     expected_date = models.DateField()
     status = models.CharField(choices=PAYMENT_STATUS_CHOICES, default="future", max_length=32)
     detailed_balance = models.JSONField(default=list)
     payments_details = models.JSONField(default=list)
-    reference = models.CharField(null=True, max_length=100)
+    reference = models.IntegerField(default=0, null=True)
     retry_on_date = models.DateField(null=True)
     retry_status = models.CharField(choices=RETRY_STAUSES, default="unknown", max_length=32)
 

@@ -57,6 +57,7 @@ class BankStatementPaymentProcessMixin(object):
 
                     policy_premium.status = premium_status
                     policy_premium.balance = policy_premium.balance + float(amount)
+                    policy_premium.amount_paid += float(amount)
                     policy_premium.save()
                     
                     PolicyPayment.objects.create(

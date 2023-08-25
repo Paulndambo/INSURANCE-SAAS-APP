@@ -6,14 +6,16 @@
         "payment_method": "mpesa",
         "description": "Mtaa Bima",
         "pricing_plan": "Mtaa Bima",
-        "cycle_type": "MEMBER"
+        "cycle_type": "MEMBER",
+        "scheme_group_cover": 500000,
+        "scheme_group_premium": 500
     },
     "members": [
         {
-            "id_number": "98765432Y",
-            "first_name": "Paul",
-            "last_name": "Ndambo",
-            "email": "paulndambo1@gmail.com",
+            "id_number": "0005035248086",
+            "first_name": "Tsholofelo",
+            "last_name": "Street",
+            "email": "Street@gmail.com",
             "phone_number": "+254746740960",
             "gender": "Male",
             "city": "Nairobi Municipality",
@@ -24,10 +26,10 @@
             "marital_status": "Single"
         },
         {
-            "id_number": "897654321X",
-            "first_name": "Paulo",
-            "last_name": "Ndamboski",
-            "email": "paulndambo2@gmail.com",
+            "id_number": "8410060979088",
+            "first_name": "Pierre",
+            "last_name": "Steenkamp",
+            "email": "pierre@gmail.com",
             "phone_number": "+254746740960",
             "gender": "Male",
             "city": "Nairobi Municipality",
@@ -53,7 +55,7 @@
             "cover_level": 12500,
             "is_extended_family_member": false,
             "gender": "female",
-            "main_member_id_number": "98765432Y"
+            "main_member_id_number": "0005035248086"
         },
         {
             "first_name": "Joan",
@@ -69,7 +71,7 @@
             "cover_level": 50000,
             "is_extended_family_member": false,
             "gender": "female",
-            "main_member_id_number": "98765432Y"
+            "main_member_id_number": "0005035248086"
         },
         {
             "first_name": "Irene",
@@ -85,7 +87,7 @@
             "cover_level": 50000,
             "is_extended_family_member": false,
             "gender": "female",
-            "main_member_id_number": "897654321X"
+            "main_member_id_number": "8410060979088"
         },
         {
             "first_name": "James",
@@ -101,7 +103,7 @@
             "cover_level": 27000,
             "is_extended_family_member": false,
             "gender": "male",
-            "main_member_id_number": "897654321X"
+            "main_member_id_number": "8410060979088"
         }
     ],
     "extended_dependents": [
@@ -119,7 +121,7 @@
             "is_extended_family_member": true,
             "gender": "male",
             "add_on_premium": 30,
-            "main_member_id_number": "98765432Y"
+            "main_member_id_number": "0005035248086"
         },
         {
             "first_name": "Grandma",
@@ -135,7 +137,7 @@
             "is_extended_family_member": true,
             "gender": "female",
             "add_on_premium": 240,
-            "main_member_id_number": "98765432Y"
+            "main_member_id_number": "0005035248086"
         },
         {
             "first_name": "Auntie",
@@ -151,7 +153,7 @@
             "is_extended_family_member": true,
             "gender": "female",
             "add_on_premium": 40,
-            "main_member_id_number": "897654321X"
+            "main_member_id_number": "8410060979088"
         }
     ],
     "beneficiaries": [
@@ -166,7 +168,7 @@
             "phone_number": "+254746740960",
             "email": "brodeo@gmail.com",
             "relationship_type": "Beneficiary",
-            "main_member_id_number": "98765432Y"
+            "main_member_id_number": "0005035248086"
         },
         {
             "first_name": "Sister",
@@ -179,7 +181,7 @@
             "phone_number": "+254746740960",
             "email": "sisterdoe@gmail.com",
             "relationship_type": "Beneficiary",
-            "main_member_id_number": "98765432Y"
+            "main_member_id_number": "0005035248086"
         },
         {
             "first_name": "Junior",
@@ -192,7 +194,7 @@
             "phone_number": "+254746740960",
             "email": "juniordoe@gmail.com",
             "relationship_type": "Beneficiary",
-            "main_member_id_number": "897654321X"
+            "main_member_id_number": "8410060979088"
         },
         {
             "first_name": "Guardian",
@@ -205,7 +207,7 @@
             "phone_number": "+254746740960",
             "email": "grdoe@gmail.com",
             "relationship_type": "Beneficiary",
-            "main_member_id_number": "897654321X"
+            "main_member_id_number": "8410060979088"
         }
     ],
     "policy_details": {
@@ -218,5 +220,6 @@
     "quote_details": {
         "cover_amount": 2179500,
         "premium": 20310
-    }
+    },
+    "obligations": []
 }

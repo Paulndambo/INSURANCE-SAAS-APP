@@ -78,6 +78,7 @@ class ManualPaymentProcessingMixin(object):
 
                     policy_premium.status = premium_status
                     policy_premium.balance = policy_premium.balance + amount
+                    policy_premium.amount_paid += amount
                     policy_premium.save()
                     
                     PolicyPayment.objects.create(

@@ -66,7 +66,7 @@ class BankStatementPaymentAPIView(generics.CreateAPIView):
 
                 return Response({"msg": "Bank statements uploaded successfully!"}, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-            
+
         except Exception as e:
             raise e
 
@@ -93,7 +93,6 @@ class BankStatementAPIView(generics.ListAPIView):
 
     def get(self, *args, **kwargs):
         policy_number = self.request.query_params.get("policy_number")
-        
         statements = BankStatement.objects.all()
 
         if policy_number:

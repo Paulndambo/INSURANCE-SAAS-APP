@@ -1,7 +1,11 @@
 from django.contrib import admin
 from apps.payments.models import PolicyPremium, PolicyPayment, BankStatement
 # Register your models here.
-admin.site.register(PolicyPremium)
+@admin.register(PolicyPremium)
+class PolicyPremiumAdmin(admin.ModelAdmin):
+    list_display = ["id", "policy", "membership", "expected_date", "expected_payment", "amount_paid", "balance", "reference"]
+
+
 admin.site.register(PolicyPayment)
 
 @admin.register(BankStatement)

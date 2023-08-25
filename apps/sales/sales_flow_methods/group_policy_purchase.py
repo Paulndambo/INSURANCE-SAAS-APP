@@ -57,6 +57,9 @@ class SalesFlowBulkGroupMembersOnboardingMixin(object):
         premium = quote_details.get("premium")
         cover_amount = quote_details.get("cover_amount")
 
+        scheme_group_cover = scheme_group_details.get("scheme_group_cover")
+        scheme_group_premium = scheme_group_details.get("scheme_group_premium")
+
         start_date = policy_details.get("start_date")
 
         sales_agent_email = agent_details.get("email")
@@ -98,6 +101,9 @@ class SalesFlowBulkGroupMembersOnboardingMixin(object):
             username = member.get("email")
             identification_method = 1
 
+            total_add_on_prem = sum([x['add_on_premium'] for x in member_extended_family])
+            membership_premium = total_add_on_prem + scheme_group_premium
+
 
             user = User.objects.filter(email=email).first()
             if not user:
@@ -128,18 +134,17 @@ class SalesFlowBulkGroupMembersOnboardingMixin(object):
             print(f"Membership: {membership.id} Created Successfully!!!")
 
 
-            policy_premium = PolicyPremium.objects.create(**create_membership_pemium(policy, premium, membership))
+            policy_premium = PolicyPremium.objects.create(**create_membership_pemium(policy, membership_premium, membership))
             print(f"Policy Premium: {policy_premium.id} Created Successfully!!!")
             
 
-
             membership_configuration = MembershipConfiguration.objects.filter(membership=membership, beneficiary__isnull=True).first()
             if membership_configuration:
-                membership_configuration.cover_level = cover_amount
+                membership_configuration.cover_level = scheme_group_cover
                 membership_configuration.save()
             else:
                 membership_configuration = MembershipConfiguration.objects.create(
-                    membership=membership, cover_level=cover_amount
+                    membership=membership, cover_level=scheme_group_cover
                 )
             print(f"Membership Config: {membership_configuration.id} Created Successfully!!")
 
