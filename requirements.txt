@@ -8,9 +8,11 @@ django-rest-framework-nested
 djangorestframework-simplejwt
 django-cors-headers
 pillow
-psycopg2-binary
+#psycopg2-binary
 djangorestframework-bulk
 drf-nested-routers
 djoser
 celery
 coreapi
+gunicorn
+whitenoise
