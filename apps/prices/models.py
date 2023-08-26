@@ -1,11 +1,16 @@
 from django.db import models
-from django.core.exceptions import ValidationError
-from django.core.validators import MinValueValidator
+
 
 from apps.core.models import AbstractBaseModel
-from apps.constants.choice_constants import SCHEME_TYPE_CHOICES, OBLIGATION_TYPES
+from apps.constants.choice_constants import SCHEME_TYPE_CHOICES, OBLIGATION_TYPES, PRICING_PLAN_KINDS
 
 # Create your models here.
+class PricingPlanCategory(AbstractBaseModel):
+    name = models.CharField(max_length=255)
+    kind = models.CharField(max_length=255, default="long_term", choices=PRICING_PLAN_KINDS)
+
+    def __str__(self):
+        return self.name
 
 
 class PricingPlan(AbstractBaseModel):
@@ -14,6 +19,7 @@ class PricingPlan(AbstractBaseModel):
     value_added_service = models.DecimalField(max_digits=10, decimal_places=2)
     total_premium = models.DecimalField(max_digits=10, decimal_places=2)
     group = models.CharField(max_length=255, choices=SCHEME_TYPE_CHOICES, null=True, blank=True)
+    category = models.ForeignKey(PricingPlanCategory, on_delete=models.SET_NULL, null=True)
     policy_holder_cover_levels = models.JSONField(default=list)
     dependent_cover_levels = models.JSONField(default=list)
     extended_family_cover_levels = models.JSONField(default=list)
@@ -42,7 +48,7 @@ class PricingPlanExtendedPremiumMapping(AbstractBaseModel):
     extended_premium = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
-        return self.pricing_class
+        return self.pricing_plan
     
 
 class PricingPlanDependentCoverPremiumMapping(AbstractBaseModel):

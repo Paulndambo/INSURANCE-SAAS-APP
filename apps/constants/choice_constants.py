@@ -17,6 +17,11 @@ PAYMENT_PERIOD_CHOICES = (
     ("single", "Single"),
 )
 
+PRICING_PLAN_KINDS = (
+    ("short_term", "Short Term"),
+    ("long_term", "Long Term"),
+)
+
 SCHEME_TYPE_CHOICES = (
     ("retail", "Retail"),
     ("group", "Group"),
