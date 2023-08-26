@@ -2,10 +2,9 @@ PAYMENT_METHODS = (
     ("cash", "Cash"),
     ("debit_order", "Debit Order"),
     ("stop_order", "Stop Order"),
-    ("manual", "Manual"),
     ("off_platform", "Off Platform"),
-    ("payu", "Payu"),
-    ("paygate", "Pay Gate"),
+    ("mpesa", "Mpesa"),
+    ("manual", "Manual"),
 )
 
 
@@ -16,6 +15,11 @@ PAYMENT_PERIOD_CHOICES = (
     ("biannual", "Biannual"),
     ("yearly", "Yearly"),
     ("single", "Single"),
+)
+
+PRICING_PLAN_KINDS = (
+    ("short_term", "Short Term"),
+    ("long_term", "Long Term"),
 )
 
 SCHEME_TYPE_CHOICES = (

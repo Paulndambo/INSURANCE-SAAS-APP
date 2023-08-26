@@ -22,7 +22,7 @@ from apps.users.models import (
     Membership,
     MembershipConfiguration,
 )
-from apps.payments.models import PolicyPayment, PolicyPremium
+from apps.payments.models import PolicyPremium
 from apps.prices.models import PricingPlan
 
 from apps.sales.main_member_upload_methods.new_members_onboarding_functions import (
@@ -166,9 +166,6 @@ class SalesFlowBulkTelesalesUploadMixin(object):
 
             policy_premium = PolicyPremium.objects.create(**create_membership_pemium(policy, premium, membership))
             print(f"Policy Premium: {policy_premium.id} Created Successfully!!!")
-
-            policy_payment = PolicyPayment.objects.create(**create_payment(policy, membership, premium))
-            print(f"Policy Payment: {policy_payment.id} Created Successfully!!")
 
             membership_configuration = MembershipConfiguration.objects.filter(
                 membership=membership, beneficiary__isnull=True).first()

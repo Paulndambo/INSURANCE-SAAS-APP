@@ -10,7 +10,7 @@ from apps.users.models import (
     User, 
     PolicyHolderRelative
 )
-from apps.payments.models import PolicyPayment, PolicyPremium
+from apps.payments.models import PolicyPremium
 from apps.dependents.models import Beneficiary
 from apps.entities.models import SalesAgent
 
@@ -145,7 +145,7 @@ class CreditLifePolicyOnboardingMixin(object):
                 )
             )
             print(f"Policy Premium: {policy_premium.id} Created Successfully!!!")
-            PolicyPayment.objects.create(**create_payment(policy, membership, premium))
+            
 
             beneficiaries_list = []
             if beneficiaries:

@@ -12,7 +12,7 @@ from apps.constants.choice_constants import (
     SUB_ROLE_CHOICES,
     GENDER_CHOICES,
 )
-
+from apps.constants.premium_methods import get_same_date_next_month
 
 class User(AbstractUser, AbstractBaseModel):
     PASSWORD_EXPIRATION_DAYS = 90
@@ -91,6 +91,39 @@ class Membership(AbstractBaseModel):
             return membership_config
         else:
             return None
+
+    def raise_new_policy_premium(self):
+        latest_premium = self.membershipprems.order_by("-expected_date").first()
+
+        if latest_premium:
+            next_expected_date = get_same_date_next_month(latest_premium.expected_date)
+            next_premium_amount = latest_premium.expected_payment
+            next_balance = -abs(latest_premium.balance - next_premium_amount)
+
+            new_reference = latest_premium.reference + 1
+
+            new_premium = self.membershipprems.create(
+                policy=latest_premium.policy,
+                membership=latest_premium.membership,
+                amount_paid=0,
+                expected_payment=next_premium_amount,
+                expected_date=next_expected_date,
+                balance=next_balance,
+                status="future",
+                reference=new_reference
+            )
+
+            #new_premium = PolicyPremium.objects.create(
+            #    policy=latest_premium.policy,
+            #    membership=latest_premium.membership,
+            #    amount_paid=0,
+            #    expected_payment=next_premium_amount,
+            #    expected_date=next_expected_date,
+            #    balance=next_balance,
+            #    status="future"
+            #)
+            
+            print(f"Premium: {new_premium.id} Expected On: {new_premium.expected_date} Created Successfully!!")
 
 
 class MembershipConfiguration(AbstractBaseModel):

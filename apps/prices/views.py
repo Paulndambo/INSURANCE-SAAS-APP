@@ -73,6 +73,7 @@ class PricingPlanAPIView(APIView):
         return Response({})
 
 
+
 class BulkPricingPlanUploadAPIView(ListBulkCreateUpdateDestroyAPIView):
     queryset = PricingPlan.objects.all()
     serializer_class = PricingPlanBulkUploadSerializer

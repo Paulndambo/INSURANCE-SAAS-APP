@@ -26,52 +26,12 @@ class Bank(AbstractBaseModel):
 
 
 class BankStatement(AbstractBaseModel):
-    BANK_STATEMENT_STATUS_CHOICES = (
-        ("mapped", "Mapped"),
-        ("unmapped", "Unmapped"),
-    )
-
-    BANK_STATEMENT_TYPE_CHOICES = {
-        ("bank_statement", "Bank Statement"),
-        ("receipt", "Receipt"),
-    }
-
-    uploaded_file = models.FileField(upload_to="bank_statements/", null=True)
-    status = models.CharField(choices=BANK_STATEMENT_STATUS_CHOICES, default="unmapped", max_length=128)
-    statement_type = models.CharField(max_length=255, choices=BANK_STATEMENT_TYPE_CHOICES, default="bank_statement")
-    description = models.JSONField(null=True)
+    policy_number = models.CharField(max_length=255, null=True)
+    statement = models.JSONField(null=True)
+    processed = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.statement_type
-
-
-class PolicyPayment(AbstractBaseModel):
-    policy = models.ForeignKey(Policy, on_delete=models.CASCADE)
-    membership = models.ForeignKey("users.Membership", on_delete=models.CASCADE, null=True)
-    bank_statement = models.ForeignKey("payments.BankStatement", on_delete=models.CASCADE, null=True)
-    premium = models.FloatField(
-        validators=[
-            MinValueValidator(limit_value=0),
-        ]
-    )
-    vat = models.FloatField(
-        validators=[
-            MinValueValidator(limit_value=0),
-        ],
-        null=True,
-    )
-    state = models.CharField(default="NEW", max_length=255)
-    reference = models.CharField(unique=True, max_length=255, null=True)
-    payment_path = models.CharField(max_length=255, null=True)
-    payment_method = models.CharField(choices=PAYMENT_METHODS, default="Debit Order", max_length=32)
-    payment_due_date = models.DateField(null=True)
-    payment_date = models.DateField(null=True)
-    extra_premium = models.FloatField(default=0)
-    proof_of_payment = models.FileField(upload_to="proof_of_payments/", null=True)
-    premium_reference = models.CharField(null=True, max_length=2)
-
-    def __str__(self):
-        return self.policy.policy_number
+        return self.policy_number
 
 
 class PolicyPremium(AbstractBaseModel):
@@ -86,16 +46,30 @@ class PolicyPremium(AbstractBaseModel):
     policy = models.ForeignKey(Policy, on_delete=models.CASCADE, related_name="policypremiums")
     membership = models.ForeignKey("users.Membership", on_delete=models.CASCADE, null=True, related_name="membershipprems")
     bank_statement = models.ForeignKey("payments.BankStatement", on_delete=models.CASCADE, null=True)
-    payments = models.ManyToManyField(PolicyPayment, related_name="premiums")
     balance = models.FloatField()
     expected_payment = models.FloatField()
+    amount_paid = models.FloatField(default=0)
     expected_date = models.DateField()
     status = models.CharField(choices=PAYMENT_STATUS_CHOICES, default="future", max_length=32)
     detailed_balance = models.JSONField(default=list)
     payments_details = models.JSONField(default=list)
-    reference = models.CharField(null=True, max_length=100)
+    reference = models.IntegerField(default=0, null=True)
     retry_on_date = models.DateField(null=True)
     retry_status = models.CharField(choices=RETRY_STAUSES, default="unknown", max_length=32)
+
+    def __str__(self):
+        return self.policy.policy_number
+
+
+
+class PolicyPayment(AbstractBaseModel):
+    policy = models.ForeignKey(Policy, on_delete=models.CASCADE)
+    membership = models.ForeignKey("users.Membership", on_delete=models.CASCADE, null=True)
+    amount = models.FloatField(validators=[MinValueValidator(limit_value=0),], default=0)
+    state = models.CharField(default="NEW", max_length=255)
+    payment_method = models.CharField(choices=PAYMENT_METHODS, max_length=32)
+    payment_date = models.DateField(null=True)
+    premium = models.ForeignKey("payments.PolicyPremium", on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.policy.policy_number
@@ -136,8 +110,10 @@ class FuturePremiumTracking(AbstractBaseModel):
     membership = models.ForeignKey("users.Membership", on_delete=models.SET_NULL, null=True)
     policy = models.ForeignKey("policies.Policy", on_delete=models.SET_NULL, null=True)
     expected_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True)
+    premium_balance = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     expected_date = models.DateField()
     future_expected_date = models.DateField(null=True)
+    new_reference = models.IntegerField(null=True)
     processed = models.BooleanField(default=False)
 
 

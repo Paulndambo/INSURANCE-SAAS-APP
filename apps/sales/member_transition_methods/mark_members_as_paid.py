@@ -1,7 +1,7 @@
 from apps.users.models import User, Membership, Profile
 from apps.schemes.models import SchemeGroup, Scheme
 from apps.sales.share_data_upload_methods.bulk_upload_methods import get_pricing_plan
-from apps.payments.models import PolicyPayment, PolicyPremium
+from apps.payments.models import PolicyPremium
 from apps.policies.models import Cycle, CycleStatusUpdates
 from apps.prices.models import PricingPlan
 from apps.sales.share_data_upload_methods.upload_data_error_log import create_upload_error_log
