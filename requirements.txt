@@ -12,7 +12,7 @@ pillow
 djangorestframework-bulk
 drf-nested-routers
 djoser
-celery
+celery==5.2
 coreapi
 gunicorn
 whitenoise
