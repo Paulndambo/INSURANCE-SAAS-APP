@@ -46,6 +46,7 @@ class SalesFlowBulkRetailMemberOnboardingMixin(object):
         data = self.data
         scheme = Scheme.objects.get(name="Retail Scheme")
 
+
         members = data["members"]
         dependents = data["dependents"]
         extended_dependents = data["extended_dependents"]
@@ -209,7 +210,7 @@ class SalesFlowBulkRetailMemberOnboardingMixin(object):
                 beneficiaries_list = []
                 for beneficiary in beneficiaries:
                     relationship=beneficiary.get("relationship")
-                    relative = PolicyHolderRelative.objects.get(relative_name=[relationship, relationship.capitalize(), relationship.lower()])
+                    relative = PolicyHolderRelative.objects.filter(relative_name__in=[relationship, relationship.capitalize(), relationship.lower()]).first()
                     beneficiaries_list.append(Beneficiary(
                         policy=policy,
                         relative=relative,
