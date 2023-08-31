@@ -44,7 +44,7 @@ class ObligationViewSet(ModelViewSet):
         if policy and membership:
             return self.queryset.filter(policy_id=policy, membership=membership)
         else:
-            return []
+            return self.queryset
 
 
 class PricingPlanViewSet(ModelViewSet):

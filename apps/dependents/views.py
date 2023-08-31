@@ -46,8 +46,8 @@ class BeneficiaryModelViewSet(ModelViewSet):
     serializer_class = BeneficiarySerializer
     permission_classes = [AllowAny]
 
-    def get_serializer_context(self):
-        return { "request": self.request }
+    #def get_serializer_context(self):
+    #    return { "request": self.request }
 
     def get_queryset(self):
         policy = self.request.query_params.get("policy")

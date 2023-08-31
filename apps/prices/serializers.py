@@ -14,6 +14,7 @@ class ObligationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Obligation
         fields = "__all__"
+        
 
 class PricingPlanSerializer(serializers.ModelSerializer):
     class Meta:

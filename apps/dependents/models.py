@@ -114,7 +114,7 @@ class FamilyMemberPricing(AbstractBaseModel):
         return self.relative_type
     
 
-
+"""
 @receiver(post_save, sender=Beneficiary)
 def create_membership_configuration(sender, instance, created, **kwargs):
     if created:
@@ -122,5 +122,6 @@ def create_membership_configuration(sender, instance, created, **kwargs):
             beneficiary=instance,
             membership=instance.membership,
             cover_level=0,
-            pricing_plan=instance.schemegroup.pricing_group
+            pricing_plan=instance.schemegroup.pricing_plan
         )
+"""

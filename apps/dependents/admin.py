@@ -7,4 +7,4 @@ class DependentAdmin(admin.ModelAdmin):
 
 @admin.register(Beneficiary)
 class BeneficiaryAdmin(admin.ModelAdmin):
-    list_display = ["first_name", "id_number"]
+    list_display = ["first_name", "id_number", "policy", "schemegroup", "membership"]
