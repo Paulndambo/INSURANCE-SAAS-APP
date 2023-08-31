@@ -7,12 +7,8 @@ from apps.users.models import PolicyHolderRelative, MembershipConfiguration
 from apps.policies.models import Policy
 
 DEPENDENT_TYPE = (
-    ("main_member", "Main Member"),
-    ("spouse", "Spouse"),
-    ("child", "Child"),
-    ("parent", "Parent"),
-    ("extended", "Additional/Extended Family Member"),
-    ("stillborn", "Stillborn"),
+    ("dependent", "Dependent"),
+    ("extended", "Extended"),
 )
 
 AGE_METRIC_CHOICES = (
@@ -57,7 +53,7 @@ class Dependent(AbstractBaseModel):
     membership = models.ForeignKey("users.Membership", null=True, on_delete=models.CASCADE)
     membership_configuration = models.ForeignKey("users.MembershipConfiguration", on_delete=models.CASCADE, null=True)
     is_additional_family_member = models.BooleanField(default=False)
-    dependent_type = models.CharField(max_length=200, choices=DEPENDENT_TYPE)
+    dependent_type = models.CharField(max_length=200, choices=DEPENDENT_TYPE, null=True)
     dependent_type_notes = models.TextField(null=True, blank=True)
     cover_level = models.DecimalField(default=0, max_digits=10, decimal_places=2)
     age_min = models.PositiveSmallIntegerField(null=True)
