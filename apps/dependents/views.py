@@ -41,10 +41,10 @@ class DependentModelViewSet(ModelViewSet):
         print(f"Dependent Type: {dependent_type}")
 
         if dependent_type:
-            if dependent_type == "extended":
+            if dependent_type in ["extended", "Extended"]:
                 dependents = self.queryset.filter(dependent_type=dependent_type.lower())
-            elif dependent_type == "dependent":
-                dependents = self.queryset.filter(dependent_type__in=["child", "spouse", "stillborn"])
+            elif dependent_type in ["dependent", "Dependent"]:
+                dependents = self.queryset.filter(dependent_type__in=["Dependent", "dependent"])
 
             if policy and scheme_group and membership:
                 return dependents.filter(policy=policy, schemegroup=scheme_group, membership=membership)
