@@ -1,8 +1,10 @@
 from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import generics, status
+from rest_framework.response import Response
 
 from apps.dependents.models import Beneficiary, Dependent, FamilyMemberPricing
+from apps.users.models import PolicyHolderRelative
 from apps.dependents.serializers import BeneficiarySerializer, DependentSerializer, FamilyMemberPricingSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
@@ -16,6 +18,16 @@ class DependentModelViewSet(ModelViewSet):
 
     def get_serializer_context(self):
         return { "request": self.request }
+
+    def create(self, request, *args, **kwargs):
+        data = request.data
+        print(data)
+        serializer = self.serializer_class(data=data)
+
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def get_queryset(self):
         

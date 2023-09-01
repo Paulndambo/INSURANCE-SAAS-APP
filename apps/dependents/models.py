@@ -59,7 +59,7 @@ class Dependent(AbstractBaseModel):
     age_min = models.PositiveSmallIntegerField(null=True)
     age_max = models.PositiveSmallIntegerField(null=True)
     age_metric = models.CharField(max_length=100, choices=AGE_METRIC_CHOICES)
-    relative = models.ForeignKey(PolicyHolderRelative, on_delete=models.CASCADE, null=True)
+    relative = models.ForeignKey(PolicyHolderRelative, on_delete=models.CASCADE)
     relative_option = models.CharField(max_length=200, null=True)
     first_name = models.CharField(max_length=200, null=True)
     last_name = models.CharField(max_length=200, null=True)
