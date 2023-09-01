@@ -12,7 +12,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 
 # Create your views here.
 class DependentModelViewSet(ModelViewSet):
-    queryset = Dependent.objects.all()
+    queryset = Dependent.objects.all().order_by("-created")
     serializer_class = DependentSerializer
     permission_classes = [AllowAny]
 
