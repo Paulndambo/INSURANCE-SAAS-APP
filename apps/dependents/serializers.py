@@ -30,14 +30,14 @@ class BeneficiarySerializer(serializers.ModelSerializer):
 
 
 class DependentSerializer(serializers.ModelSerializer):
-    #relative = serializers.SerializerMethodField()
+    relative_name = serializers.SerializerMethodField()
     class Meta:
         model = Dependent
         fields = "__all__"
 
     
-    #def get_relative(self, obj):
-    #    return obj.relative.relative_name if obj.relative else None
+    def get_relative_name(self, obj):
+       return obj.relative.relative_name if obj.relative else None
 
     """
     def create(self, validated_data):
