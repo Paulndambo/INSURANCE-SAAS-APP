@@ -49,9 +49,13 @@ class AuthTokenCustomSerializer(AuthTokenSerializer):
         
 
 class UserSerializer(serializers.ModelSerializer):
+    name = serializers.SerializerMethodField()
     class Meta:
         model = User
-        fields = ("id", "username", "email")
+        fields = ("id", "name", "username", "email", "role")
+    
+    def get_name(self, obj):
+        return f"{obj.first_name} {obj.last_name}"
 
 
 class RegisterSerializer(serializers.ModelSerializer):
