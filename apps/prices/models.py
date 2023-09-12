@@ -1,8 +1,10 @@
 from django.db import models
 
-
+from apps.constants.choice_constants import (OBLIGATION_TYPES,
+                                             PRICING_PLAN_KINDS,
+                                             SCHEME_TYPE_CHOICES)
 from apps.core.models import AbstractBaseModel
-from apps.constants.choice_constants import SCHEME_TYPE_CHOICES, OBLIGATION_TYPES, PRICING_PLAN_KINDS
+
 
 # Create your models here.
 class PricingPlanCategory(AbstractBaseModel):
@@ -26,6 +28,7 @@ class PricingPlan(AbstractBaseModel):
 
     def __str__(self):
         return self.name
+
 
 
 class PricingPlanCoverMapping(AbstractBaseModel):

@@ -1,5 +1,8 @@
 from django.test import TestCase
-from apps.prices.models import PricingPlanCoverMapping, PricingPlan
+
+from apps.prices.models import PricingPlan, PricingPlanCoverMapping
+
+
 # Create your tests here.
 class PricingPlansTestCase(TestCase):
     def setUp(self):
