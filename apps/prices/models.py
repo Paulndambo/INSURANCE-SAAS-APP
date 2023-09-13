@@ -88,6 +88,9 @@ class Obligation(AbstractBaseModel):
     obligation_type = models.CharField(max_length=255, choices=OBLIGATION_TYPES)
     credit_reference = models.CharField(max_length=255, null=True)
 
+    def __str__(self):
+        return self.creditor_name
+
 
 ########## Medical Plans Specific Models ##########
 class MedicalCover(AbstractBaseModel):
@@ -104,11 +107,16 @@ class MedicalCoverPricing(AbstractBaseModel):
     medical_cover = models.ForeignKey(MedicalCover, on_delete=models.CASCADE)
     inpatient_cover = models.DecimalField(max_digits=30, decimal_places=2)
     outpatient_cover = models.DecimalField(max_digits=30, decimal_places=2)
-    ph_age_group = models.CharField(max_length=255)
-    ph_premium = models.DecimalField(max_digits=10, decimal_places=2)
+    ph_age_group = models.CharField(max_length=255, null=True)
+    ph_premium = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     spouse_age_group = models.CharField(max_length=255, null=True)
-    spouse_premium = models.DecimalField(max_digits=10, decimal_places=2)
-    child_premium = models.DecimalField(max_digits=10, decimal_places=2)
+    spouse_premium = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    child_premium = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    outpatient_premium = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    inpatient_premium = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     def __str__(self):
         return self.medical_cover.name
+
+
+### Motor Insurance  Specific Models ########

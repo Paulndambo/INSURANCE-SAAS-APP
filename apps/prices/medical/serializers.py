@@ -17,3 +17,15 @@ class MedicalCoverSerializer(serializers.ModelSerializer):
     class Meta:
         model = MedicalCover
         fields = "__all__"
+
+
+class JuniorAfyaSerializer(serializers.Serializer):
+    number_of_children = serializers.IntegerField(default=0)
+    inpatient_cover = serializers.DecimalField(max_digits=20, decimal_places=2)
+    outpatient_cover = serializers.DecimalField(max_digits=20, decimal_places=2)
+    preferred_medical_provider = serializers.CharField(max_length=255)
+    
+
+class SeniorCitizenAfyaSerializer(serializers.Serializer):
+    inpatient_cover = serializers.DecimalField(max_digits=20, decimal_places=2)
+    outpatient_cover = serializers.DecimalField(max_digits=20, decimal_places=2)

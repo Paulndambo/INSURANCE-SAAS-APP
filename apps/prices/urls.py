@@ -1,6 +1,8 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
+from apps.prices.medical.junior_afya_views import JuniorAfyaAPIView
+from apps.prices.medical.senior_citizen_views import SeniorCitizenAfyaAPIView
 from apps.prices.medical.views import (GeneralMedicalCoverAPIView,
                                        MedicalCoverAPIView)
 from apps.prices.views import (BulkPricingPlanUploadAPIView,
@@ -31,4 +33,6 @@ urlpatterns = [
     path("pricing-plan-api/", PricingPlanAPIView.as_view(), name="pricing-plan-api"),
     path("general-medical-plan-pricing/", GeneralMedicalCoverAPIView.as_view(), name="general-medical-plan-pricing"),
     path("medical-policy-pricing/", MedicalCoverAPIView.as_view(), name="medical-policy-pricing"),
+    path("junior-afya-pricing/", JuniorAfyaAPIView.as_view(), name="junior-afya-pricing"),
+    path("senior-citizen-afya-pricing/", SeniorCitizenAfyaAPIView.as_view(), name="senior-citizen-afya-pricing"),
 ]

@@ -3,7 +3,6 @@ from decimal import Decimal
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from apps.prices.medical.serializers import (GeneralMedicalPricingSerializer,
                                              MedicalCoverSerializer)
@@ -18,10 +17,12 @@ class MedicalCoverAPIView(generics.ListAPIView):
         pricing_plan = self.request.query_params.get("pricing_plan")
 
         if pricing_plan:
-            covers = MedicalCover.objects.filter(pricing_plan__name=pricing_plan).first()
+            covers = MedicalCover.objects.filter(
+                pricing_plan__name=pricing_plan).first()
             serializer = self.serializer_class(instance=covers)
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response({"message": "Please supply a pricing plan to get values"}, status=status.HTTP_200_OK)
+
 
 
 class GeneralMedicalCoverAPIView(generics.CreateAPIView):
@@ -54,16 +55,9 @@ class GeneralMedicalCoverAPIView(generics.CreateAPIView):
                 ).first()
 
                 return Response({
-                    "medical_cover": pricing.medical_cover.name,
-                    "inpatient_cover": pricing.inpatient_cover,
-                    "outpatient_cover": pricing.outpatient_cover,
-                    "ph_age_group": pricing.ph_age_group,
-                    "ph_premium": pricing.ph_premium,
-                    "spouse_age_group": pricing.spouse_age_group,
-                    "spouse_premium": pricing.spouse_premium,
-                    "child_premium": pricing.child_premium * number_of_children
+                    "premium_per_month": pricing.ph_premium + pricing.spouse_premium + (pricing.child_premium * number_of_children),
+                    "premium_per_year": (pricing.ph_premium + pricing.spouse_premium + (pricing.child_premium * number_of_children)) * 12
                 })
-
 
             elif spouse_covered and not children_covered:
                 inpatient_cover = Decimal(inpatient_cover)
@@ -77,14 +71,8 @@ class GeneralMedicalCoverAPIView(generics.CreateAPIView):
                 ).first()
 
                 return Response({
-                    "medical_cover": pricing.medical_cover.name,
-                    "inpatient_cover": pricing.inpatient_cover,
-                    "outpatient_cover": pricing.outpatient_cover,
-                    "ph_age_group": pricing.ph_age_group,
-                    "ph_premium": pricing.ph_premium,
-                    "spouse_age_group": pricing.spouse_age_group,
-                    "spouse_premium": pricing.spouse_premium,
-                    "child_premium": 0
+                    "premium_per_month": pricing.ph_premium + pricing.spouse_premium,
+                    "premium_per_year": (pricing.ph_premium + pricing.spouse_premium) * 12
                 })
 
             elif children_covered and not spouse_covered:
@@ -94,19 +82,12 @@ class GeneralMedicalCoverAPIView(generics.CreateAPIView):
                 pricing = MedicalCoverPricing.objects.filter(
                     outpatient_cover=outpatient_cover,
                     inpatient_cover=inpatient_cover,
-                    ph_age_group=ph_age_group,
-        
+                    ph_age_group=ph_age_group
                 ).first()
 
                 return Response({
-                    "medical_cover": pricing.medical_cover.name,
-                    "inpatient_cover": pricing.inpatient_cover,
-                    "outpatient_cover": pricing.outpatient_cover,
-                    "ph_age_group": pricing.ph_age_group,
-                    "ph_premium": pricing.ph_premium,
-                    "spouse_age_group": None,
-                    "spouse_premium": 0,
-                    "child_premium": pricing.child_premium * number_of_children
+                    "premium_per_month": pricing.ph_premium + (pricing.child_premium * number_of_children),
+                    "premium_per_year": (pricing.ph_premium + (pricing.child_premium * number_of_children)) * 12
                 })
 
             return Response({}, status=status.HTTP_201_CREATED)
