@@ -32,6 +32,12 @@ class GeneralMedicalCoverAPIView(generics.CreateAPIView):
     def post(self, request):
         data = request.data
 
+        cover_name = self.request.query_params.get("cover_name")
+        if not cover_name:
+            return Response({"failed": "Please make sure to pass cover_name as a query param"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        medical_cover = MedicalCover.objects.get(name=cover_name)
+        
         serializer = self.serializer_class(data=data)
 
         if serializer.is_valid(raise_exception=True):
@@ -48,47 +54,55 @@ class GeneralMedicalCoverAPIView(generics.CreateAPIView):
                 outpatient_cover = Decimal(outpatient_cover)
 
                 pricing = MedicalCoverPricing.objects.filter(
+                    medical_cover=medical_cover,
                     outpatient_cover=outpatient_cover,
                     inpatient_cover=inpatient_cover,
                     ph_age_group=ph_age_group,
                     spouse_age_group=spouse_age_group
                 ).first()
-
-                return Response({
-                    "premium_per_month": pricing.ph_premium + pricing.spouse_premium + (pricing.child_premium * number_of_children),
-                    "premium_per_year": (pricing.ph_premium + pricing.spouse_premium + (pricing.child_premium * number_of_children)) * 12
-                })
+                if pricing:
+                    return Response({
+                        "premium_per_month": pricing.ph_premium + pricing.spouse_premium + (pricing.child_premium * number_of_children),
+                        "premium_per_year": (pricing.ph_premium + pricing.spouse_premium + (pricing.child_premium * number_of_children)) * 12
+                    })
+                return Response({}, status=status.HTTP_200_OK)
 
             elif spouse_covered and not children_covered:
                 inpatient_cover = Decimal(inpatient_cover)
                 outpatient_cover = Decimal(outpatient_cover)
 
                 pricing = MedicalCoverPricing.objects.filter(
+                    medical_cover=medical_cover,
                     outpatient_cover=outpatient_cover,
                     inpatient_cover=inpatient_cover,
                     ph_age_group=ph_age_group,
                     spouse_age_group=spouse_age_group
                 ).first()
 
-                return Response({
-                    "premium_per_month": pricing.ph_premium + pricing.spouse_premium,
-                    "premium_per_year": (pricing.ph_premium + pricing.spouse_premium) * 12
-                })
+                if pricing:
+                    return Response({
+                        "premium_per_month": pricing.ph_premium + pricing.spouse_premium,
+                        "premium_per_year": (pricing.ph_premium + pricing.spouse_premium) * 12
+                    })
+                return Response({}, status=status.HTTP_200_OK)
 
             elif children_covered and not spouse_covered:
                 inpatient_cover = Decimal(inpatient_cover)
                 outpatient_cover = Decimal(outpatient_cover)
 
                 pricing = MedicalCoverPricing.objects.filter(
+                    medical_cover=medical_cover,
                     outpatient_cover=outpatient_cover,
                     inpatient_cover=inpatient_cover,
                     ph_age_group=ph_age_group
                 ).first()
 
-                return Response({
-                    "premium_per_month": pricing.ph_premium + (pricing.child_premium * number_of_children),
-                    "premium_per_year": (pricing.ph_premium + (pricing.child_premium * number_of_children)) * 12
-                })
+                if pricing:
+                    return Response({
+                        "premium_per_month": pricing.ph_premium + (pricing.child_premium * number_of_children),
+                        "premium_per_year": (pricing.ph_premium + (pricing.child_premium * number_of_children)) * 12
+                    })
+                return Response({}, status=status.HTTP_200_OK)
 
             return Response({}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
