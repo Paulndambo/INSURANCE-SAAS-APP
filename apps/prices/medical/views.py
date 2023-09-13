@@ -1,9 +1,27 @@
+from decimal import Decimal
+
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from apps.prices.medical.serializers import GeneralMedicalPricingSerializer
+from apps.prices.medical.serializers import (GeneralMedicalPricingSerializer,
+                                             MedicalCoverSerializer)
+from apps.prices.models import MedicalCover, MedicalCoverPricing
+
+
+class MedicalCoverAPIView(generics.ListAPIView):
+    queryset = MedicalCover.objects.all()
+    serializer_class = MedicalCoverSerializer
+
+    def get(self, *args, **kwargs):
+        pricing_plan = self.request.query_params.get("pricing_plan")
+
+        if pricing_plan:
+            covers = MedicalCover.objects.filter(pricing_plan__name=pricing_plan).first()
+            serializer = self.serializer_class(instance=covers)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response({"message": "Please supply a pricing plan to get values"}, status=status.HTTP_200_OK)
 
 
 class GeneralMedicalCoverAPIView(generics.CreateAPIView):
@@ -11,19 +29,85 @@ class GeneralMedicalCoverAPIView(generics.CreateAPIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        """
-        age_group = 
-        spouse_covered = 
-        spouse_age_group = 
-        children_covered = 
-        number_of_children = 
-        inpatient_cover = 
-        outpatient_cover = 
-        """
         data = request.data
 
         serializer = self.serializer_class(data=data)
 
         if serializer.is_valid(raise_exception=True):
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            ph_age_group = data.get("ph_age_group")
+            spouse_covered = data.get("spouse_covered")
+            spouse_age_group = data.get("spouse_age_group")
+            children_covered = data.get("children_covered")
+            number_of_children = data.get("number_of_children")
+            inpatient_cover = data.get("inpatient_cover")
+            outpatient_cover = data.get("outpatient_cover")
+
+            if spouse_covered and children_covered:
+                inpatient_cover = Decimal(inpatient_cover)
+                outpatient_cover = Decimal(outpatient_cover)
+
+                pricing = MedicalCoverPricing.objects.filter(
+                    outpatient_cover=outpatient_cover,
+                    inpatient_cover=inpatient_cover,
+                    ph_age_group=ph_age_group,
+                    spouse_age_group=spouse_age_group
+                ).first()
+
+                return Response({
+                    "medical_cover": pricing.medical_cover.name,
+                    "inpatient_cover": pricing.inpatient_cover,
+                    "outpatient_cover": pricing.outpatient_cover,
+                    "ph_age_group": pricing.ph_age_group,
+                    "ph_premium": pricing.ph_premium,
+                    "spouse_age_group": pricing.spouse_age_group,
+                    "spouse_premium": pricing.spouse_premium,
+                    "child_premium": pricing.child_premium * number_of_children
+                })
+
+
+            elif spouse_covered and not children_covered:
+                inpatient_cover = Decimal(inpatient_cover)
+                outpatient_cover = Decimal(outpatient_cover)
+
+                pricing = MedicalCoverPricing.objects.filter(
+                    outpatient_cover=outpatient_cover,
+                    inpatient_cover=inpatient_cover,
+                    ph_age_group=ph_age_group,
+                    spouse_age_group=spouse_age_group
+                ).first()
+
+                return Response({
+                    "medical_cover": pricing.medical_cover.name,
+                    "inpatient_cover": pricing.inpatient_cover,
+                    "outpatient_cover": pricing.outpatient_cover,
+                    "ph_age_group": pricing.ph_age_group,
+                    "ph_premium": pricing.ph_premium,
+                    "spouse_age_group": pricing.spouse_age_group,
+                    "spouse_premium": pricing.spouse_premium,
+                    "child_premium": 0
+                })
+
+            elif children_covered and not spouse_covered:
+                inpatient_cover = Decimal(inpatient_cover)
+                outpatient_cover = Decimal(outpatient_cover)
+
+                pricing = MedicalCoverPricing.objects.filter(
+                    outpatient_cover=outpatient_cover,
+                    inpatient_cover=inpatient_cover,
+                    ph_age_group=ph_age_group,
+        
+                ).first()
+
+                return Response({
+                    "medical_cover": pricing.medical_cover.name,
+                    "inpatient_cover": pricing.inpatient_cover,
+                    "outpatient_cover": pricing.outpatient_cover,
+                    "ph_age_group": pricing.ph_age_group,
+                    "ph_premium": pricing.ph_premium,
+                    "spouse_age_group": None,
+                    "spouse_premium": 0,
+                    "child_premium": pricing.child_premium * number_of_children
+                })
+
+            return Response({}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
