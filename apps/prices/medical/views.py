@@ -17,11 +17,12 @@ class MedicalCoverAPIView(generics.ListAPIView):
         pricing_plan = self.request.query_params.get("pricing_plan")
         cover_name = self.request.query_params.get("cover_name")
 
-        if pricing_plan:
+        if pricing_plan and cover_name:
             covers = MedicalCover.objects.filter(pricing_plan__name=pricing_plan, name=cover_name)
             serializer = self.serializer_class(instance=covers, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response({"message": "Please supply a pricing plan to get values"}, status=status.HTTP_200_OK)
+        covers = MedicalCover.objects.all().values()
+        return Response(covers, status=status.HTTP_200_OK)
 
 
 
