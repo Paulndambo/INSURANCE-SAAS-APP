@@ -1,18 +1,15 @@
-from django.urls import path, include
-from apps.sales.views import (
-    OnboardingAPPAPIView,
-    BulkTemporaryPaidMemberUploadAPIView,
-    OnboardingInitiateAPIView,
-    BulkTemporaryDependentUploadAPIView,
-    BulkTemporaryCancelledMemberUploadAPIView,
-    BulkTemporaryNewMemberUploadAPIView,
-    TemporaryDataHoldingAPIView,
-    FailedUploadDataAPIView,
-    NewMembersAPIView,
-    PolicyPurchaseAPIView,
-    CreditLifePolicyPurchaseAPIView,
-    RetailPolicyPurchaseAPIView
-)
+from django.urls import include, path
+
+from apps.sales.views import (BulkTemporaryCancelledMemberUploadAPIView,
+                              BulkTemporaryDependentUploadAPIView,
+                              BulkTemporaryNewMemberUploadAPIView,
+                              BulkTemporaryPaidMemberUploadAPIView,
+                              CreditLifePolicyPurchaseAPIView,
+                              FailedUploadDataAPIView, NewMembersAPIView,
+                              OnboardingAPPAPIView, OnboardingInitiateAPIView,
+                              PetPolicyPurchaseAPIView, PolicyPurchaseAPIView,
+                              RetailPolicyPurchaseAPIView,
+                              TemporaryDataHoldingAPIView)
 
 urlpatterns = [
     path("", OnboardingAPPAPIView.as_view(), name="get-routes"),
@@ -27,4 +24,5 @@ urlpatterns = [
     path("policy-purchase/", PolicyPurchaseAPIView.as_view(), name="policy-purchase"),
     path("retail-policy-purchase/", RetailPolicyPurchaseAPIView.as_view(), name="retail-policy-purchase"),
     path("credit-life-policy-purchase/", CreditLifePolicyPurchaseAPIView.as_view(), name="credit-life-policy-purchase"),
+    path("pet-policy-purchase/", PetPolicyPurchaseAPIView.as_view(), name="pet-policy-purchase"),
 ]

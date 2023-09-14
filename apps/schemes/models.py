@@ -35,6 +35,8 @@ class Scheme(AbstractBaseModel):
             prefix = "CLB_"
         elif pricing_group.lower() == "Mtaa Bima".lower():
             prefix = "MTB_"
+        elif pricing_group.lower() == "Pet Bima".lower():
+            prefix = "PET_"
         
         policies = Policy.objects.filter(policy_number__startswith=prefix).order_by('-policy_number_counter')
         

@@ -1,0 +1,52 @@
+{
+    "scheme_group": {
+        "scheme": "Pet Scheme",
+        "name": "Pet Bima",
+        "period_frequency": "monthly",
+        "payment_method": "mpesa",
+        "description": "Pet Bima",
+        "pricing_plan": "Pet Bima",
+        "cycle_type": "MEMBER",
+        "scheme_group_cover": 76500,
+        "scheme_group_premium": 3547
+    },
+    "members": [
+        {
+            "id_number": "2001014800086",
+            "first_name": "Johnson",
+            "last_name": "Jonhz",
+            "email": "johnz@gmail.com",
+            "phone_number": "+254746740960",
+            "gender": "Male",
+            "city": "Nairobi Municipality",
+            "country": "Kenya",
+            "date_of_birth": "1994-06-22",
+            "physical_address": "228-90119",
+            "postal_address": "228-90119",
+            "marital_status": "Single"
+        }
+    ],
+    "pets": [
+        {
+            "name": "Jimmy",
+            "gender": "male",
+            "date_of_birth": "2020-10-10",
+            "pet_type": "dog",
+            "size": "medium",
+            "color": "Brown",
+            "description": "My dog is brown in color",
+            "breed": 1
+        }
+    ],
+    "policy_details": {
+        "start_date": "2023-09-30",
+        "tcs": "Accept"
+    },
+    "agent_details": {
+        "email": "paulkadabo@gmail.com"
+    },
+    "quote_details": {
+        "cover_amount": 76500,
+        "premium": 3547
+    }
+}
