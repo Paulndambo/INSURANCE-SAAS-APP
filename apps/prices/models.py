@@ -98,6 +98,11 @@ class MedicalCover(AbstractBaseModel):
     name = models.CharField(max_length=255)
     inpatient_cover_amounts = models.JSONField(default=list)
     outpatient_cover_amounts = models.JSONField(default=list)
+    description = models.TextField(null=True)
+    age_limit_description = models.TextField(null=True)
+    providers = models.TextField(null=True)
+    inpatient_cover_limits = models.TextField(null=True)
+    outpatient_cover_limits = models.TextField(null=True)
 
     def __str__(self):
         return self.name
