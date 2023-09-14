@@ -1,20 +1,27 @@
 from django.db import transaction
 
 from apps.prices.models import PricingPlan, PricingPlanSchemeMapping
+from apps.sales.family_member_upload_methods.beneficiaries_upload_methods import \
+    beneficiary_object_constructor
+from apps.sales.family_member_upload_methods.dependents_upload_methods import \
+    dependent_object_constructor
+from apps.sales.family_member_upload_methods.extended_family_members_upload import \
+    extended_dependent_object_constructor
+from apps.sales.main_member_upload_methods.group_upload_methods import \
+    BulkGroupMembersOnboardingMixin
+from apps.sales.main_member_upload_methods.retail_upload_methods import \
+    BulkRetailMemberOnboardingMixin
+from apps.sales.main_member_upload_methods.telesales_upload_methods import \
+    BulkTelesalesUploadMixin
+from apps.sales.member_transition_methods.mark_members_as_cancelled import \
+    mark_members_as_cancelled
+from apps.sales.member_transition_methods.mark_members_as_lapsed import \
+    mark_policy_members_as_lapsed
+from apps.sales.member_transition_methods.mark_members_as_paid import \
+    mark_members_as_paid
+from apps.sales.share_data_upload_methods.bulk_upload_methods import \
+    get_pricing_plan
 from apps.schemes.models import Scheme
-
-from apps.sales.share_data_upload_methods.bulk_upload_methods import get_pricing_plan
-from apps.sales.member_transition_methods.mark_members_as_paid import mark_members_as_paid
-from apps.sales.member_transition_methods.mark_members_as_cancelled import mark_members_as_cancelled
-from apps.sales.member_transition_methods.mark_members_as_lapsed import mark_policy_members_as_lapsed
-from apps.sales.family_member_upload_methods.beneficiaries_upload_methods import beneficiary_object_constructor
-from apps.sales.family_member_upload_methods.dependents_upload_methods import dependent_object_constructor
-from apps.sales.family_member_upload_methods.extended_family_members_upload import extended_dependent_object_constructor
-
-
-from apps.sales.main_member_upload_methods.retail_upload_methods import BulkRetailMemberOnboardingMixin
-from apps.sales.main_member_upload_methods.group_upload_methods import BulkGroupMembersOnboardingMixin
-from apps.sales.main_member_upload_methods.telesales_upload_methods import BulkTelesalesUploadMixin
 
 
 class BulkMembersOnboardingMixin(object):

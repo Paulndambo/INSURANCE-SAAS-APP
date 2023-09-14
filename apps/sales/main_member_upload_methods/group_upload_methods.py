@@ -1,20 +1,21 @@
-from django.db import transaction
 from datetime import datetime
 
+from django.db import transaction
+
+from apps.payments.models import PolicyPremium
+from apps.policies.models import Cycle, Policy, PolicyDetails, PolicyHolder
+from apps.prices.models import PricingPlan
+from apps.sales.main_member_upload_methods.new_members_onboarding_functions import (
+    create_membership, create_membership_pemium, create_payment, create_policy,
+    create_policy_holder, create_profile, create_scheme_group, create_user)
+from apps.sales.share_data_upload_methods.bulk_upload_methods import \
+    get_pricing_plan
+from apps.sales.share_data_upload_methods.member_transition_methods import (
+    get_membership_policy_holder, get_membership_profile)
 # Apps Imports
 from apps.schemes.models import Scheme, SchemeGroup
-from apps.policies.models import Policy, PolicyDetails, PolicyHolder, Cycle
-from apps.users.models import User, Profile, Membership, MembershipConfiguration
-from apps.payments.models import PolicyPremium
-from apps.prices.models import PricingPlan
-
-
-from apps.sales.share_data_upload_methods.bulk_upload_methods import get_pricing_plan
-from apps.sales.main_member_upload_methods.new_members_onboarding_functions import (
-    create_policy, create_scheme_group, create_profile, 
-    create_policy_holder, create_user, create_membership, create_payment, create_membership_pemium
-)
-from apps.sales.share_data_upload_methods.member_transition_methods import get_membership_profile, get_membership_policy_holder
+from apps.users.models import (Membership, MembershipConfiguration, Profile,
+                               User)
 
 
 class BulkGroupMembersOnboardingMixin(object):
@@ -125,8 +126,6 @@ class BulkGroupMembersOnboardingMixin(object):
             )
             print(f"Policy Premium: {policy_premium.id} Created Successfully!!!")
             
-
-
             """
             : Membership Configuration 
             : => Used to link Membership to Beneficiaries & Dependents & Cover Levels

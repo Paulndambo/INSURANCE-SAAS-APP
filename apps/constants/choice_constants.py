@@ -26,6 +26,7 @@ SCHEME_TYPE_CHOICES = (
     ("retail", "Retail"),
     ("group", "Group"),
     ("credit", "Credit"),
+    ("pet", "Pet"),
     ("funeral", "funeral"),
 )
 

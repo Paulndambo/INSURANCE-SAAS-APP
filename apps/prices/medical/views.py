@@ -17,9 +17,8 @@ class MedicalCoverAPIView(generics.ListAPIView):
         pricing_plan = self.request.query_params.get("pricing_plan")
 
         if pricing_plan:
-            covers = MedicalCover.objects.filter(
-                pricing_plan__name=pricing_plan).first()
-            serializer = self.serializer_class(instance=covers)
+            covers = MedicalCover.objects.filter(pricing_plan__name=pricing_plan)
+            serializer = self.serializer_class(instance=covers, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response({"message": "Please supply a pricing plan to get values"}, status=status.HTTP_200_OK)
 

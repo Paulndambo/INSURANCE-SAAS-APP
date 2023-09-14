@@ -1,15 +1,13 @@
 from django.db import models
+
+from apps.constants.choice_constants import (CYCLE_CHOICE_TYPES,
+                                             PAYMENT_METHODS,
+                                             PAYMENT_PERIOD_CHOICES,
+                                             SCHEME_TYPE_CHOICES)
 from apps.core.models import AbstractBaseModel
 from apps.policies.models import Policy
-
-from apps.constants.choice_constants import (
-    PAYMENT_METHODS,
-    PAYMENT_PERIOD_CHOICES,
-    CYCLE_CHOICE_TYPES,
-    SCHEME_TYPE_CHOICES
-)
-
-from apps.sales.share_data_upload_methods.bulk_upload_methods import get_product_id_from_pricing_plan, get_policy_number_prefix
+from apps.sales.share_data_upload_methods.bulk_upload_methods import (
+    get_policy_number_prefix, get_product_id_from_pricing_plan)
 
 
 class Scheme(AbstractBaseModel):
