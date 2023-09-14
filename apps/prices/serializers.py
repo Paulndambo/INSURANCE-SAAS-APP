@@ -14,11 +14,16 @@ class ObligationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Obligation
         fields = "__all__"
+        
 
 class PricingPlanSerializer(serializers.ModelSerializer):
+    category_name = serializers.SerializerMethodField()
     class Meta:
         model = PricingPlan
         fields = "__all__"
+
+    def get_category_name(self, obj):
+        return obj.category.name
 
 class PricingPlanExtendedPremiumMappingSerializer(BulkSerializerMixin, serializers.ModelSerializer):
     class Meta(object):

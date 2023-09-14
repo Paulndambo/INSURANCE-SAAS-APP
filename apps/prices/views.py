@@ -1,34 +1,23 @@
-from django.shortcuts import render
 from django.db.models import Q
-from apps.prices.models import (
-    PricingPlan, 
-    PricingPlanCoverMapping, 
-    PricingPlanExtendedPremiumMapping,
-    Obligation
-)
-from rest_framework.permissions import AllowAny
-from apps.prices.serializers import (
-    PricingPlanSerializer,
-    PricingPlanBulkUploadSerializer,
-    PricingPlanCoverMappingSerializer, 
-    DependentPricingSerializer,
-    PricingPlanExtendedPremiumMappingSerializer,
-    ObligationSerializer
-)
-
-from rest_framework_bulk import (
-    ListBulkCreateUpdateDestroyAPIView,
-)
-
-from rest_framework.viewsets import ModelViewSet
+from django.shortcuts import render
 from rest_framework import generics, status
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
+from rest_framework_bulk import ListBulkCreateUpdateDestroyAPIView
 
 from apps.constants.shared_methods import calculate_age, date_format_method
 from apps.constants.type_checking_methods import check_if_value_is_date
 from apps.constants.utils import CustomPagination
 from apps.prices.main_members_pricing_methods import get_main_member_premium
+from apps.prices.models import (Obligation, PricingPlan,
+                                PricingPlanCoverMapping,
+                                PricingPlanExtendedPremiumMapping)
+from apps.prices.serializers import (
+    DependentPricingSerializer, ObligationSerializer,
+    PricingPlanBulkUploadSerializer, PricingPlanCoverMappingSerializer,
+    PricingPlanExtendedPremiumMappingSerializer, PricingPlanSerializer)
 
 
 # Create your views here.
@@ -44,7 +33,7 @@ class ObligationViewSet(ModelViewSet):
         if policy and membership:
             return self.queryset.filter(policy_id=policy, membership=membership)
         else:
-            return []
+            return self.queryset
 
 
 class PricingPlanViewSet(ModelViewSet):

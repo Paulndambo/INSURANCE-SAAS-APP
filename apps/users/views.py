@@ -183,6 +183,7 @@ class PolicyHolderRelativeViewSet(ModelViewSet):
 
     def get_queryset(self):
         dependent_type = self.request.query_params.get("dependent_type")
+        
         if dependent_type:
             if dependent_type.lower() == "dependent":
                 return self.queryset.filter(use_type__in=["Dependent", "dependent"])

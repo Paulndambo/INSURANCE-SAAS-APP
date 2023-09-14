@@ -22,4 +22,4 @@ admin.site.register(MembershipStatusUpdates)
 
 @admin.register(PolicyHolderRelative)
 class PolicyHolderRelativeAdmin(admin.ModelAdmin):
-    list_display = ["id", "relative_name", "relative_key"]
+    list_display = ["id", "relative_name", "relative_key", "use_type"]

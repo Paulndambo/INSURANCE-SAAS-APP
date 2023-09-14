@@ -10,7 +10,7 @@ class BeneficiarySerializer(serializers.ModelSerializer):
         model = Beneficiary
         fields = "__all__"
 
-
+    """
     def create(self, validated_data):
         membership = self.context.get("membership_pk")
         scheme_group = self.context.get("scheme_group_pk")
@@ -26,19 +26,20 @@ class BeneficiarySerializer(serializers.ModelSerializer):
         return Beneficiary.objects.create(
             **validated_data
         )
+    """
 
 
 class DependentSerializer(serializers.ModelSerializer):
-    relative = serializers.SerializerMethodField()
+    relative_name = serializers.SerializerMethodField()
     class Meta:
         model = Dependent
         fields = "__all__"
 
     
-    def get_relative(self, obj):
-        return obj.relative.relative_name if obj.relative else None
+    def get_relative_name(self, obj):
+       return obj.relative.relative_name if obj.relative else None
 
-
+    """
     def create(self, validated_data):
         membership = self.context.get("membership_pk")
         scheme_group = self.context.get("scheme_group_pk")
@@ -54,6 +55,7 @@ class DependentSerializer(serializers.ModelSerializer):
         return Dependent.objects.create(
             **validated_data
         )
+    """
 
 
 class FamilyMemberPricingSerializer(serializers.ModelSerializer):

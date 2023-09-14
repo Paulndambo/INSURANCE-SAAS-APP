@@ -26,6 +26,7 @@ SCHEME_TYPE_CHOICES = (
     ("retail", "Retail"),
     ("group", "Group"),
     ("credit", "Credit"),
+    ("funeral", "funeral"),
 )
 
 OBLIGATION_TYPES = (
@@ -41,7 +42,7 @@ CYCLE_CHOICE_TYPES = (
 
 ROLE_CHOICES = (
     ("None", "Without role"),
-    ("admin", "C2S Admin"),
+    ("admin", "Admin"),
     ("insurer", "Insurer"),
     ("corporate", "Corporate"),
     ("merchant", "Merchant"),

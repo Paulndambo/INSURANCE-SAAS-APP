@@ -1,8 +1,10 @@
 from django.db import models
 
-
+from apps.constants.choice_constants import (OBLIGATION_TYPES,
+                                             PRICING_PLAN_KINDS,
+                                             SCHEME_TYPE_CHOICES)
 from apps.core.models import AbstractBaseModel
-from apps.constants.choice_constants import SCHEME_TYPE_CHOICES, OBLIGATION_TYPES, PRICING_PLAN_KINDS
+
 
 # Create your models here.
 class PricingPlanCategory(AbstractBaseModel):
@@ -26,6 +28,7 @@ class PricingPlan(AbstractBaseModel):
 
     def __str__(self):
         return self.name
+
 
 
 class PricingPlanCoverMapping(AbstractBaseModel):
@@ -84,3 +87,36 @@ class Obligation(AbstractBaseModel):
     inception_date = models.DateField(null=True)
     obligation_type = models.CharField(max_length=255, choices=OBLIGATION_TYPES)
     credit_reference = models.CharField(max_length=255, null=True)
+
+    def __str__(self):
+        return self.creditor_name
+
+
+########## Medical Plans Specific Models ##########
+class MedicalCover(AbstractBaseModel):
+    pricing_plan = models.ForeignKey("prices.PricingPlan", on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+    inpatient_cover_amounts = models.JSONField(default=list)
+    outpatient_cover_amounts = models.JSONField(default=list)
+
+    def __str__(self):
+        return self.name
+
+
+class MedicalCoverPricing(AbstractBaseModel):
+    medical_cover = models.ForeignKey(MedicalCover, on_delete=models.CASCADE)
+    inpatient_cover = models.DecimalField(max_digits=30, decimal_places=2)
+    outpatient_cover = models.DecimalField(max_digits=30, decimal_places=2)
+    ph_age_group = models.CharField(max_length=255, null=True)
+    ph_premium = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    spouse_age_group = models.CharField(max_length=255, null=True)
+    spouse_premium = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    child_premium = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    outpatient_premium = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    inpatient_premium = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
+    def __str__(self):
+        return self.medical_cover.name
+
+
+### Motor Insurance  Specific Models ########
