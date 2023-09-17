@@ -1,11 +1,9 @@
 from rest_framework import serializers
-from apps.sales.models import FailedUploadData, TemporaryDataHolding, TemporaryMemberData
+from rest_framework_bulk import (BulkListSerializer, BulkSerializerMixin,
+                                 ListBulkCreateUpdateDestroyAPIView)
 
-from rest_framework_bulk import (
-    BulkListSerializer,
-    BulkSerializerMixin,
-    ListBulkCreateUpdateDestroyAPIView,
-)
+from apps.sales.models import (FailedUploadData, TemporaryDataHolding,
+                               TemporaryMemberData)
 
 
 class BulkTemporaryMemberDataSerializer(serializers.Serializer):
@@ -114,4 +112,10 @@ class CreditLifePolicyPurchaseSerializer(serializers.Serializer):
     quote_details = serializers.JSONField()
 
     
-
+class PetPolicyPurchaseSerializer(serializers.Serializer):
+    agent_details = serializers.JSONField()
+    policy_details = serializers.JSONField()
+    scheme_group = serializers.JSONField()
+    members = serializers.JSONField()
+    pets = serializers.JSONField()
+    quote_details = serializers.JSONField()

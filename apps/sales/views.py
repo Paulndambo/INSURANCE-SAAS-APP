@@ -1,50 +1,34 @@
 from django.shortcuts import render
 from rest_framework import generics, status
-from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
-
+from rest_framework.response import Response
 from rest_framework.views import APIView
-from apps.sales.share_data_upload_methods.data_construction_methods import (
-    new_member_data_constructor,
-    new_family_member_data_constructor,
-    new_paid_member_data_constructor,
-    new_cancelled_member_data_constructor
-)
 
-
-from apps.sales.sales_flow_methods.retail_policy_purchase import (
-    SalesFlowBulkRetailMemberOnboardingMixin
-)
-from apps.sales.sales_flow_methods.group_policy_purchase import (
+from apps.sales.credit_life_methods.purchase_credit_life_policy import \
+    CreditLifePolicyOnboardingMixin
+from apps.sales.models import (FailedUploadData, TemporaryCancelledMemberData,
+                               TemporaryDataHolding, TemporaryDependentImport,
+                               TemporaryMemberData, TemporaryPaidMemberData)
+from apps.sales.pet_insure_methods.mixins import PetPolicyPurchaseMixin
+from apps.sales.sales_flow_methods.group_policy_purchase import \
     SalesFlowBulkGroupMembersOnboardingMixin
-)
-
-
+from apps.sales.sales_flow_methods.retail_policy_purchase import \
+    SalesFlowBulkRetailMemberOnboardingMixin
 from apps.sales.serializers import (
-    BulkTemporaryPaidMemberDataBulkSerializer,
-    BulkTemporaryMemberCancellationUploadSerializer,
     BulkTemporaryDependentUploadSerializer,
-    TemporaryDataHoldingSerializer,
-    FailedUploadDataSerializer,
+    BulkTemporaryMemberCancellationUploadSerializer,
     BulkTemporaryMemberDataSerializer,
-    NewMembersSerializer,
-    PolicyPurchaseSerializer,
-    CreditLifePolicyPurchaseSerializer,
-    RetailPolicyPurchaseSerializer
-)
-
-from apps.sales.models import (
-    FailedUploadData, 
-    TemporaryDataHolding, 
-    TemporaryMemberData,
-    TemporaryDependentImport,
-    TemporaryCancelledMemberData,
-    TemporaryPaidMemberData
-)
-from apps.users.models import User
-from apps.sales.credit_life_methods.purchase_credit_life_policy import CreditLifePolicyOnboardingMixin
+    BulkTemporaryPaidMemberDataBulkSerializer,
+    CreditLifePolicyPurchaseSerializer, FailedUploadDataSerializer,
+    NewMembersSerializer, PetPolicyPurchaseSerializer,
+    PolicyPurchaseSerializer, RetailPolicyPurchaseSerializer,
+    TemporaryDataHoldingSerializer)
+from apps.sales.share_data_upload_methods.data_construction_methods import (
+    new_cancelled_member_data_constructor, new_family_member_data_constructor,
+    new_member_data_constructor, new_paid_member_data_constructor)
 
 # Create your views here.
+
 
 class OnboardingAPPAPIView(APIView):
     permission_classes = [AllowAny]
@@ -78,11 +62,10 @@ class BulkTemporaryNewMemberUploadAPIView(generics.ListCreateAPIView):
         return Response({"message": "Data Uploaded Successfully"}, status=status.HTTP_201_CREATED)
 
 
-
 class NewMembersAPIView(generics.ListAPIView):
     queryset = TemporaryMemberData.objects.all()
     serializer_class = NewMembersSerializer
-        
+
 
 class OnboardingInitiateAPIView(APIView):
     permission_classes = [AllowAny]
@@ -112,7 +95,7 @@ class BulkTemporaryPaidMemberUploadAPIView(generics.ListCreateAPIView):
         except Exception as e:
             raise e
         return Response({"message": "Data loaded successfully, onboarding should start soon, check back on the platform"}, status=status.HTTP_201_CREATED)
-        
+
 
 class BulkTemporaryDependentUploadAPIView(generics.ListCreateAPIView):
     serializer_class = BulkTemporaryDependentUploadSerializer
@@ -130,7 +113,7 @@ class BulkTemporaryDependentUploadAPIView(generics.ListCreateAPIView):
                 )
             TemporaryDependentImport.objects.bulk_create(new_family_members)
         except Exception as e:
-            raise e 
+            raise e
         return Response({"message": "Data loaded successfully, onboarding should start soon, check back on the platform"}, status=status.HTTP_201_CREATED)
 
 
@@ -150,13 +133,13 @@ class BulkTemporaryCancelledMemberUploadAPIView(generics.ListCreateAPIView):
                         **new_cancelled_member_data_constructor(member)
                     )
                 )
-            TemporaryCancelledMemberData.objects.bulk_create(new_cancelled_members)
+            TemporaryCancelledMemberData.objects.bulk_create(
+                new_cancelled_members)
         except Exception as e:
             raise e
-        
+
         return Response({"message": "Data loaded successfully, onboarding should start soon, check on the platform later"}, status=status.HTTP_201_CREATED)
 
-        
 
 class TemporaryDataHoldingAPIView(generics.ListCreateAPIView):
     queryset = TemporaryDataHolding.objects.all()
@@ -184,18 +167,20 @@ class PolicyPurchaseAPIView(generics.CreateAPIView):
             print(f"Scheme Type: {scheme_type}")
 
             if scheme_type.lower() == "Retail Scheme".lower():
-                retail_mixin = SalesFlowBulkRetailMemberOnboardingMixin(data=serializer.validated_data)
+                retail_mixin = SalesFlowBulkRetailMemberOnboardingMixin(
+                    data=serializer.validated_data)
                 retail_mixin.run()
 
             elif scheme_type.lower() == "Group Scheme".lower():
-                group_mixin = SalesFlowBulkGroupMembersOnboardingMixin(data=serializer.validated_data)
+                group_mixin = SalesFlowBulkGroupMembersOnboardingMixin(
+                    data=serializer.validated_data)
                 group_mixin.run()
 
-
             elif scheme_type.lower() == "credit scheme":
-                credit_life_mixin = CreditLifePolicyOnboardingMixin(data=serializer.validated_data)
+                credit_life_mixin = CreditLifePolicyOnboardingMixin(
+                    data=serializer.validated_data)
                 credit_life_mixin.run()
-                #print(serializer.data)
+                # print(serializer.data)
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -211,8 +196,7 @@ class RetailPolicyPurchaseAPIView(generics.CreateAPIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    
-    
+
 class CreditLifePolicyPurchaseAPIView(generics.CreateAPIView):
     serializer_class = CreditLifePolicyPurchaseSerializer
 
@@ -220,8 +204,22 @@ class CreditLifePolicyPurchaseAPIView(generics.CreateAPIView):
         data = request.data
         serializer = self.serializer_class(data=data)
         if serializer.is_valid(raise_exception=True):
-            credit_life_mixin = CreditLifePolicyOnboardingMixin(data=serializer.validated_data)
+            credit_life_mixin = CreditLifePolicyOnboardingMixin(
+                data=serializer.validated_data)
             credit_life_mixin.run()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
+
+class PetPolicyPurchaseAPIView(generics.CreateAPIView):
+    serializer_class = PetPolicyPurchaseSerializer
+    permission_classes = [AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        serializer = self.serializer_class(data=data)
+        if serializer.is_valid(raise_exception=True):
+            pet_mixin = PetPolicyPurchaseMixin(data=data)
+            pet_mixin.run()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

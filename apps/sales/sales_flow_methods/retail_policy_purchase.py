@@ -1,35 +1,22 @@
+from datetime import date, datetime
+
 from django.db import connection, transaction
-from datetime import datetime, date
 
-
-from apps.sales.share_data_upload_methods.date_formatting_methods import date_format_method
+from apps.dependents.models import Beneficiary, Dependent
+from apps.entities.models import SalesAgent
+from apps.payments.models import PolicyPremium
+from apps.policies.models import Cycle, Policy, PolicyDetails, PolicyHolder
+from apps.prices.models import PricingPlan
 from apps.sales.main_member_upload_methods.new_members_onboarding_functions import (
-    create_policy, create_scheme_group, create_profile,
-    create_policy_holder, create_user, create_membership, 
-    create_payment, create_membership_pemium, create_retail_scheme_group
-)
-
+    create_membership, create_membership_pemium, create_payment, create_policy,
+    create_policy_holder, create_profile, create_retail_scheme_group,
+    create_scheme_group, create_user)
+from apps.sales.share_data_upload_methods.date_formatting_methods import \
+    date_format_method
 # Apps Imports
 from apps.schemes.models import Scheme, SchemeGroup
-from apps.policies.models import (
-    Policy,
-    PolicyDetails,
-    PolicyHolder,
-    Cycle,
-)
-from apps.users.models import (
-    User,
-    Profile,
-    Membership,
-    MembershipConfiguration,
-    PolicyHolderRelative
-)
-from apps.dependents.models import Dependent, Beneficiary
-from apps.payments.models import PolicyPremium
-from apps.prices.models import PricingPlan
-from apps.entities.models import SalesAgent
-
-
+from apps.users.models import (Membership, MembershipConfiguration,
+                               PolicyHolderRelative, Profile, User)
 
 
 class SalesFlowBulkRetailMemberOnboardingMixin(object):
