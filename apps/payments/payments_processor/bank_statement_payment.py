@@ -1,11 +1,9 @@
-from datetime import datetime, timedelta
-from django.db.models import Q
-
+from apps.payments.models import BankStatement, PolicyPayment
+from apps.payments.payments_processor.shared_functions import \
+    get_premium_in_range
 from apps.policies.models import Policy
-from apps.payments.models import PolicyPremium, PolicyPayment, BankStatement
-from apps.users.models import Profile, Membership
+from apps.users.models import Membership, Profile
 
-from apps.payments.payments_processor.shared_functions import get_premium_in_range
 
 class BankStatementPaymentProcessMixin(object):
     

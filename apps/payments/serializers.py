@@ -1,5 +1,7 @@
 from rest_framework import serializers
-from apps.payments.models import PolicyPremium, BankStatement, PolicyPayment
+
+from apps.payments.models import BankStatement, PolicyPayment, PolicyPremium
+
 
 class PolicyPremiumSerializer(serializers.ModelSerializer):
     class Meta:
@@ -29,3 +31,12 @@ class ManualPolicyPaymentSerializer(serializers.Serializer):
 
 class BankStatementPaymentSerializer(serializers.Serializer):
     statement_file = serializers.FileField(max_length=None, allow_empty_file=False)
+
+
+class LipaNaMpesaSerializer(serializers.Serializer):
+    phone_number = serializers.CharField(max_length=15)
+    amount = serializers.IntegerField(default=0)
+    
+
+class LipaNaMpesaCallbackSerializer(serializers.Serializer):
+    body = serializers.JSONField(required=False)

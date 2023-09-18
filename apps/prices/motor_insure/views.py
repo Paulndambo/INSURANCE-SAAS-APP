@@ -16,7 +16,6 @@ class GeneralMotorInsuranceAPIView(generics.CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         data = request.data
-        #vehicle_type = data.get("vehicle_type")
         serializer = self.serializer_class(data=data)
 
         if serializer.is_valid(raise_exception=True):
@@ -25,5 +24,8 @@ class GeneralMotorInsuranceAPIView(generics.CreateAPIView):
 
             premium = get_motor_vehicle_policy_premium(vehicle_price, year_of_manufacture)
             monthly_premium = premium / 12
-            return Response({"monthly_premium": f"{monthly_premium:.2f}", "yearly_premium": f"{premium:.2f}"})
+            return Response(
+                {"monthly_premium": f"{monthly_premium:.2f}", 
+                "yearly_premium": f"{premium:.2f}"},
+            )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
