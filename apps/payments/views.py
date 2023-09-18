@@ -7,12 +7,12 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from apps.payments.models import BankStatement, PolicyPayment, PolicyPremium
-from apps.payments.payments_processor.bank_statement_payment import \
+from apps.payments.bank_statements.bank_statement_payment import \
     BankStatementPaymentProcessMixin
-from apps.payments.payments_processor.bank_statements_writer import \
+from apps.payments.bank_statements.bank_statements_writer import \
     write_multiple_bank_statements
-from apps.payments.payments_processor.csv_to_json_processor import csv_to_json
-from apps.payments.payments_processor.manual_payment import \
+from apps.payments.bank_statements.csv_to_json_processor import csv_to_json
+from apps.payments.manual_payments.manual_payment import \
     ManualPaymentProcessingMixin
 from apps.payments.serializers import (BankStatementPaymentSerializer,
                                        BankStatementSerializer,
