@@ -1,16 +1,24 @@
 from django.contrib import admin
-from .models import User, Profile, PolicyHolderRelative, PolicyHolder, Membership, MembershipConfiguration, MembershipStatusUpdates
+
+from .models import (Membership, MembershipConfiguration,
+                     MembershipStatusUpdates, PolicyHolder,
+                     PolicyHolderRelative, Profile, User)
+
 
 # Register your models here.
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     list_display = ["username", "email", "role"]
-admin.site.register(Profile)
+
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ["first_name", "last_name", "user", "id_number", "gender"]
+
 admin.site.register(PolicyHolder)
 
 @admin.register(Membership)
 class MembershipAdmin(admin.ModelAdmin):
-    list_display = ["id", "user", "scheme_group", "policy"]
+    list_display = ["id", "user", "scheme_group", "policy", "membership_premium"]
 
 
 @admin.register(MembershipConfiguration)

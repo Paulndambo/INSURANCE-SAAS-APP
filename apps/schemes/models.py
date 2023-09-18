@@ -4,10 +4,9 @@ from apps.constants.choice_constants import (CYCLE_CHOICE_TYPES,
                                              PAYMENT_METHODS,
                                              PAYMENT_PERIOD_CHOICES,
                                              SCHEME_TYPE_CHOICES)
+from apps.constants.policy_number_generator import get_policy_number_prefix
 from apps.core.models import AbstractBaseModel
 from apps.policies.models import Policy
-from apps.sales.share_data_upload_methods.bulk_upload_methods import (
-    get_policy_number_prefix, get_product_id_from_pricing_plan)
 
 
 class Scheme(AbstractBaseModel):
@@ -26,17 +25,7 @@ class Scheme(AbstractBaseModel):
 
     def get_policy_number(self, pricing_group) -> dict:
         
-        prefix = ''
-        if pricing_group.lower() == "Family Bima".lower():
-            prefix = "FB_"
-        elif pricing_group.lower() == "Elimu Bima".lower():
-            prefix = "EB_"
-        elif pricing_group.lower() == "Credit Bima".lower():
-            prefix = "CLB_"
-        elif pricing_group.lower() == "Mtaa Bima".lower():
-            prefix = "MTB_"
-        elif pricing_group.lower() == "Pet Bima".lower():
-            prefix = "PET_"
+        prefix = get_policy_number_prefix(pricing_group)
         
         policies = Policy.objects.filter(policy_number__startswith=prefix).order_by('-policy_number_counter')
         

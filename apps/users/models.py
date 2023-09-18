@@ -1,18 +1,16 @@
-from django.db import models
-from apps.core.models import AbstractBaseModel
-from django.conf import settings
-
-from django.utils.translation import gettext_lazy as _
-from rest_framework.authtoken.models import Token
-from django.contrib.auth.models import AbstractUser
 import uuid
 
-from apps.constants.choice_constants import (
-    ROLE_CHOICES,
-    SUB_ROLE_CHOICES,
-    GENDER_CHOICES,
-)
+from django.conf import settings
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+from django.utils.translation import gettext_lazy as _
+from rest_framework.authtoken.models import Token
+
+from apps.constants.choice_constants import (GENDER_CHOICES, ROLE_CHOICES,
+                                             SUB_ROLE_CHOICES)
 from apps.constants.premium_methods import get_same_date_next_month
+from apps.core.models import AbstractBaseModel
+
 
 class User(AbstractUser, AbstractBaseModel):
     PASSWORD_EXPIRATION_DAYS = 90

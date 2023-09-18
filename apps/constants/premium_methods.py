@@ -1,5 +1,5 @@
-from datetime import date
 from dateutil.relativedelta import relativedelta
+
 
 def get_same_date_next_month(expected_date):
     next_month = expected_date + relativedelta(months=1)

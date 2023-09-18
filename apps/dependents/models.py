@@ -3,8 +3,8 @@ from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
 from apps.core.models import AbstractBaseModel
-from apps.users.models import PolicyHolderRelative, MembershipConfiguration
 from apps.policies.models import Policy
+from apps.users.models import MembershipConfiguration, PolicyHolderRelative
 
 DEPENDENT_TYPE = (
     ("dependent", "Dependent"),

@@ -78,6 +78,7 @@ PAYMENT_STATUS_CHOICES = (
     ("partial", "Partial"),
     ("future", "Future"),
     ("pending", "Pending"),
+    ("overpayment", "Over Payment"),
 )
 
 ACCOUNT_TYPES = (

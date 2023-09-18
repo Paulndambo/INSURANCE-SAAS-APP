@@ -17,7 +17,7 @@ class ManualPaymentProcessingMixin(object):
 
     def run(self):
         self.__process_manual_payment()
-        
+
 
     def __process_manual_payment(self):
         try: 
@@ -29,9 +29,6 @@ class ManualPaymentProcessingMixin(object):
             premium = data.get("premium")
             id_number = data.get("id_number")
 
-            passed_date = datetime.strptime(payment_date, '%Y-%m-%d') if payment_date else date_today
-            first_day = passed_date.replace(day=1)
-            last_day = first_day.replace(month=first_day.month % 12 + 1, day=1) - timedelta(days=1)
 
             profile = Profile.objects.get(id_number=id_number)
             policy = Policy.objects.get(policy_number=policy_number)
@@ -43,8 +40,7 @@ class ManualPaymentProcessingMixin(object):
             if premium:
                 policy_premium = PolicyPremium.objects.get(id=premium)
             else:
-                
-                policy_premium = get_premium_in_range(passed_date, membership)
+                policy_premium, passed_date = get_premium_in_range(payment_date, membership)
 
                 
             if policy_premium:
@@ -58,12 +54,13 @@ class ManualPaymentProcessingMixin(object):
                         payment_method="manual",
                         state="EARLY PAYMENT"
                     )
-
                 else:
                     premium_status = ''
                     balance = policy_premium.balance + amount
                     if balance == 0 or balance == 0.0:
                         premium_status = 'paid'
+                    elif balance > 0:
+                        premium_status = "overpayment"
                     else:
                         premium_status = 'partial'
 
