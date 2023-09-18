@@ -43,10 +43,10 @@ class GeneralMedicalCoverAPIView(generics.CreateAPIView):
 
         if serializer.is_valid(raise_exception=True):
             ph_age_group = data.get("ph_age_group")
-            spouse_covered = data.get("spouse_covered")
+            spouse_covered = True if data.get("spouse_covered") else False
             spouse_age_group = data.get("spouse_age_group")
             children_covered = data.get("children_covered")
-            number_of_children = data.get("number_of_children")
+            number_of_children = True if data.get("number_of_children") else False
             inpatient_cover = data.get("inpatient_cover")
             outpatient_cover = data.get("outpatient_cover")
 

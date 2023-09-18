@@ -16,7 +16,6 @@ class GeneralMotorInsuranceAPIView(generics.CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         data = request.data
-        #vehicle_type = data.get("vehicle_type")
         serializer = self.serializer_class(data=data)
 
         if serializer.is_valid(raise_exception=True):

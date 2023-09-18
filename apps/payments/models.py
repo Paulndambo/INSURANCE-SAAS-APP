@@ -1,17 +1,13 @@
-from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.db import models
 
+from apps.constants.choice_constants import (ACCOUNT_TYPES, PAYMENT_METHODS,
+                                             PAYMENT_PERIOD_CHOICES,
+                                             PAYMENT_STATUS_CHOICES)
 from apps.core.models import AbstractBaseModel
 from apps.policies.models import Policy
-from apps.users.models import Membership
 from apps.schemes.models import SchemeGroup
-
-from apps.constants.choice_constants import (
-    PAYMENT_PERIOD_CHOICES,
-    PAYMENT_METHODS,
-    PAYMENT_STATUS_CHOICES,
-    ACCOUNT_TYPES,
-)
+from apps.users.models import Membership
 
 
 # Create your models here.
@@ -119,3 +115,33 @@ class FuturePremiumTracking(AbstractBaseModel):
 
 class CollectedPayment(AbstractBaseModel):
     pass
+
+
+class MpesaResponseData(AbstractBaseModel):
+    response_data = models.JSONField(default=dict)
+    response_description = models.CharField(max_length=1000)
+    response_code = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.response_code
+
+
+class MpesaTransaction(AbstractBaseModel):
+    product = models.ForeignKey("products.Product", on_delete=models.SET_NULL, null=True)
+    MerchantRequestID = models.CharField(max_length=255)
+    CheckoutRequestID = models.CharField(max_length=255)
+    ResultCode = models.IntegerField(default=0)
+    ResultDesc = models.CharField(max_length=1000)
+    Amount = models.DecimalField(max_digits=10, decimal_places=2)
+    TransactionTimeStamp = models.CharField(max_length=255, null=True)
+    TransactionDate = models.DateTimeField()
+    PhoneNumber = models.CharField(max_length=255)
+    MpesaReceiptNumber = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.MpesaReceiptNumber
+
+    
+    def save(self, *args, **kwargs) -> None:
+        self.TransactionDate = convert_timestamp_to_datetime(self.TransactionTimeStamp)
+        return super().save(*args, **kwargs)

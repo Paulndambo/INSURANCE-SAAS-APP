@@ -1,11 +1,12 @@
 from datetime import datetime, timedelta
+
 from django.db.models import Q
 
+from apps.payments.models import PolicyPayment, PolicyPremium
+from apps.payments.payments_processor.shared_functions import \
+    get_premium_in_range
 from apps.policies.models import Policy
-from apps.payments.models import PolicyPremium, PolicyPayment
-from apps.users.models import Profile, Membership
-from apps.payments.payments_processor.shared_functions import get_premium_in_range
-
+from apps.users.models import Membership, Profile
 
 date_today = datetime.now().date()
 

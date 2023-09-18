@@ -1,5 +1,7 @@
 from datetime import datetime, timedelta
+
 from django.db.models import Q
+
 from apps.payments.models import PolicyPremium
 
 date_today = datetime.now().date()

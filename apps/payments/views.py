@@ -1,29 +1,25 @@
-from django.shortcuts import render
 import json
 
-from rest_framework.viewsets import ModelViewSet
-from rest_framework.permissions import AllowAny
+from django.shortcuts import render
 from rest_framework import generics, status
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
 
-from apps.payments.models import (
-    PolicyPremium,
-    BankStatement,
-    PolicyPayment
-)
-from apps.payments.serializers import (
-    PolicyPremiumSerializer,
-    ManualPolicyPaymentSerializer,
-    BankStatementPaymentSerializer,
-    BankStatementSerializer,
-    PolicyPaymentSerializer
-)
-
-from apps.payments.payments_processor.manual_payment import ManualPaymentProcessingMixin
-from apps.payments.payments_processor.bank_statement_payment import BankStatementPaymentProcessMixin
-
+from apps.payments.models import BankStatement, PolicyPayment, PolicyPremium
+from apps.payments.payments_processor.bank_statement_payment import \
+    BankStatementPaymentProcessMixin
+from apps.payments.payments_processor.bank_statements_writer import \
+    write_multiple_bank_statements
 from apps.payments.payments_processor.csv_to_json_processor import csv_to_json
-from apps.payments.payments_processor.bank_statements_writer import write_multiple_bank_statements
+from apps.payments.payments_processor.manual_payment import \
+    ManualPaymentProcessingMixin
+from apps.payments.serializers import (BankStatementPaymentSerializer,
+                                       BankStatementSerializer,
+                                       ManualPolicyPaymentSerializer,
+                                       PolicyPaymentSerializer,
+                                       PolicyPremiumSerializer)
+
 
 # Create your views here.
 class ManualPolicyPaymentAPIView(generics.CreateAPIView):
