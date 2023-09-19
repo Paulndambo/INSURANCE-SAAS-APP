@@ -6,17 +6,19 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from apps.payments.models import BankStatement, PolicyPayment, PolicyPremium
+from apps.constants.csv_to_json_processor import csv_to_json
 from apps.payments.bank_statements.bank_statement_payment import \
     BankStatementPaymentProcessMixin
 from apps.payments.bank_statements.bank_statements_writer import \
     write_multiple_bank_statements
-from apps.payments.bank_statements.csv_to_json_processor import csv_to_json
 from apps.payments.manual_payments.manual_payment import \
     ManualPaymentProcessingMixin
+from apps.payments.models import BankStatement, PolicyPayment, PolicyPremium
+from apps.payments.payments_handler import DynamicPaymentsHandlingMixin
 from apps.payments.serializers import (BankStatementPaymentSerializer,
                                        BankStatementSerializer,
                                        ManualPolicyPaymentSerializer,
+                                       MultipleManualPaymentSerializer,
                                        PolicyPaymentSerializer,
                                        PolicyPremiumSerializer)
 
@@ -96,3 +98,22 @@ class BankStatementAPIView(generics.ListAPIView):
 
         serializer = self.serializer_class(instance=statements, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class DynamicManualPaymentsAPIView(generics.CreateAPIView):
+    serializer_class = MultipleManualPaymentSerializer
+
+
+    def get_serializer_class(self):
+        return super().get_serializer_class()
+
+    def post(self, request):
+        data = request.data
+
+        serializer = self.serializer_class(data=data)
+        if serializer.is_valid(raise_exception=True):
+            mixin = DynamicPaymentsHandlingMixin(data=data)
+            mixin.run()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors)
+        

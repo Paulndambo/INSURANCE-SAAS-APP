@@ -28,6 +28,7 @@ class ManualPaymentProcessingMixin(object):
             payment_date = data.get("payment_date")
             premium = data.get("premium")
             id_number = data.get("id_number")
+            payment_type = data.get("payment_type")
 
 
             profile = Profile.objects.get(id_number=id_number)
@@ -40,7 +41,7 @@ class ManualPaymentProcessingMixin(object):
             if premium:
                 policy_premium = PolicyPremium.objects.get(id=premium)
             else:
-                policy_premium, passed_date = get_premium_in_range(payment_date, membership)
+                policy_premium = membership.membershipprems.filter(status__in=["unpaid", "pending"]).order_by("expected_date").first()
 
                 
             if policy_premium:
@@ -49,7 +50,7 @@ class ManualPaymentProcessingMixin(object):
                     PolicyPayment.objects.create(
                         policy=policy,
                         amount=amount,
-                        payment_date=passed_date,
+                        payment_date=payment_date,
                         membership=membership,
                         payment_method="manual",
                         state="EARLY PAYMENT"
@@ -61,7 +62,7 @@ class ManualPaymentProcessingMixin(object):
                         premium_status = 'paid'
                     elif balance > 0:
                         premium_status = "overpayment"
-                    else:
+                    elif balance < 0:
                         premium_status = 'partial'
 
                     policy_premium.status = premium_status
@@ -73,18 +74,17 @@ class ManualPaymentProcessingMixin(object):
                         policy=policy,
                         premium=policy_premium,
                         amount=amount,
-                        payment_date=passed_date,
+                        payment_date=payment_date,
                         membership=membership,
                         payment_method="manual",
                         state="SUCCESSFUL"
                     )
-                    
             else:
                 print("*********We could not find an unpaid premium for the customer***********")
                 PolicyPayment.objects.create(
                     policy=policy,
                     amount=amount,
-                    payment_date=passed_date,
+                    payment_date=payment_date,
                     membership=membership,
                     payment_method="manual",
                     state="EARLY PAYMENT"

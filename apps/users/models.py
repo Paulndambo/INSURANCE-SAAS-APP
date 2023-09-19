@@ -65,6 +65,14 @@ class Membership(AbstractBaseModel):
         return self.user.username
 
     
+    def pay_oldest_unpaid_premium(self):
+        oldest_premium = self.membershipprems.filter(status__in=["unpaid", "pending"]).first()
+        oldest_premium.status = "paid"
+        oldest_premium.amount_paid = oldest_premium.expected_payment
+        oldest_premium.balance += oldest_premium.expected_payment
+        oldest_premium.save()
+
+    
     def get_profile(self):
         user = self.user
         profile = Profile.objects.filter(user=user).first()
@@ -110,16 +118,6 @@ class Membership(AbstractBaseModel):
                 status="future",
                 reference=new_reference
             )
-
-            #new_premium = PolicyPremium.objects.create(
-            #    policy=latest_premium.policy,
-            #    membership=latest_premium.membership,
-            #    amount_paid=0,
-            #    expected_payment=next_premium_amount,
-            #    expected_date=next_expected_date,
-            #    balance=next_balance,
-            #    status="future"
-            #)
             
             print(f"Premium: {new_premium.id} Expected On: {new_premium.expected_date} Created Successfully!!")
 
