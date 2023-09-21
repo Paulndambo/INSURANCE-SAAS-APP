@@ -40,7 +40,8 @@ class BankStatementPaymentProcessMixin(object):
                 amount=amount,
                 processed=False,
                 payment_date=payment_date,
-                payment_type="bank_statement"
+                payment_type="bank_statement",
+                balance=amount
             ))
   
                

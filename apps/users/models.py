@@ -113,7 +113,7 @@ class Membership(AbstractBaseModel):
         if latest_premium:
             next_expected_date = get_same_date_next_month(latest_premium.expected_date)
             next_premium_amount = latest_premium.expected_payment
-            next_balance = -abs(latest_premium.balance - next_premium_amount)
+            next_balance = -abs(latest_premium.balance - next_premium_amount) if latest_premium.balance < 0 else -abs(latest_premium.expected_payment)
 
             new_reference = latest_premium.reference + 1
 
@@ -121,7 +121,7 @@ class Membership(AbstractBaseModel):
                 policy=latest_premium.policy,
                 membership=latest_premium.membership,
                 amount_paid=0,
-                expected_payment=next_premium_amount,
+                expected_payment=latest_premium.expected_payment,
                 expected_date=next_expected_date,
                 balance=next_balance,
                 status="future",

@@ -29,4 +29,4 @@ class FuturePremiumTrackingAdmin(admin.ModelAdmin):
 
 @admin.register(PaymentLog)
 class PaymentLogAdmin(admin.ModelAdmin):
-    list_display = ["id_number", "policy", "membership", "amount", "payment_date", "payment_type", "processed"]
+    list_display = ["id_number", "policy", "membership", "amount", "balance", "payment_date", "payment_type", "processed"]

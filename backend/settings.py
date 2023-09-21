@@ -190,3 +190,4 @@ REST_FRAMEWORK = {
 CORS_ALLOW_ALL_ORIGINS = True
 
 BASE_BACKEND_URL ="https://baf3-105-163-157-41.ngrok-free.app"
+

@@ -53,7 +53,8 @@ class DynamicPaymentsHandlingMixin(object):
                 amount=amount,
                 payment_date=payment_date,
                 payment_type="manual",
-                processed=False
+                processed=False,
+                balance=amount
             ))
 
         if payments_list:
@@ -70,7 +71,8 @@ class DynamicPaymentsHandlingMixin(object):
             payment_date=payment_date,
             payment_type="manual",
             amount=amount,
-            processed=False
+            processed=False,
+            balance=amount
         )
 
     def __dynamic_payments_handling(self):

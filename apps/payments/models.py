@@ -156,6 +156,7 @@ class PaymentLog(AbstractBaseModel):
     policy = models.ForeignKey("policies.Policy", on_delete=models.SET_NULL, null=True)
     membership = models.ForeignKey("users.Membership", on_delete=models.CASCADE, null=True)
     amount = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    balance = models.DecimalField(max_digits=20, decimal_places=2, default=0)
     payment_date = models.DateField(null=True)
     payment_type = models.CharField(max_length=255, choices=PAYMENT_TYPE_CHOICES, null=True)
     processed = models.BooleanField(default=False)

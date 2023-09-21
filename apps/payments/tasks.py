@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 
 from django.conf import settings
 
+from apps.core.queue_system.publisher import BasePublisher
 from apps.payments.models import (FuturePremiumTracking, PaymentLog,
                                   PolicyPremium)
 from apps.policies.models import Policy
@@ -14,11 +15,16 @@ date_today = datetime.now().date()
 
 @app.task(name="process_policy_payments")
 def process_policy_payments():
-    payments_to_process = PaymentLog.objects.filter(processed=False).values_list("id", flat=True)[:100]
+    payments_to_process = list(PaymentLog.objects.filter(processed=False).values_list("id", flat=True)[:100])
 
-    print(payments_to_process)
+    publisher = BasePublisher(
+        routing_key="process_policy_payments", 
+        body={
+            "payment_ids": payments_to_process
+        }
+    )
+    publisher.run()
 
-    
 
 @app.task(name="track_premiums_expected_today")
 def track_premiums_expected_today():
