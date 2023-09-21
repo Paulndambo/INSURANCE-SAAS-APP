@@ -11,7 +11,7 @@ class PricingPlanAdmin(admin.ModelAdmin):
 
 @admin.register(PricingPlanCategory)
 class PricingPlanCategoryAdmin(admin.ModelAdmin):
-    list_display = ["name", "kind"]
+    list_display = ["id", "name", "kind"]
 
 
 @admin.register(MedicalCover)

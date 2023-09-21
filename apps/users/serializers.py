@@ -1,24 +1,26 @@
-from apps.users.models import User
-from rest_framework import serializers
-from django.utils.translation import gettext_lazy as _
-from django.contrib.auth import authenticate
+import datetime
 
+from django.contrib.auth import authenticate
+from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
+from rest_framework import serializers
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.exceptions import AuthenticationFailed
 
-from apps.users.models import (
-    User,
-    Membership,
-    PolicyHolder,
-    Profile,
-    PolicyHolderRelative,
-    MembershipConfiguration
-)
 from apps.constants.token_generator import generate_unique_key
-from django.utils import timezone
-import datetime
+from apps.users.models import (Membership, MembershipConfiguration,
+                               PolicyHolder, PolicyHolderRelative, Profile,
+                               User)
 
 
+from rest_framework_bulk import (
+    BulkSerializerMixin,
+)
+
+class PolicyHolderRelativeMappingSerializer(BulkSerializerMixin, serializers.ModelSerializer):
+    class Meta(object):
+        model = PolicyHolderRelative
+        fields = "__all__"
 
 class AuthTokenCustomSerializer(AuthTokenSerializer):
 

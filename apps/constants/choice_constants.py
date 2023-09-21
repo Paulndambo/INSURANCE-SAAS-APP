@@ -81,6 +81,14 @@ PAYMENT_STATUS_CHOICES = (
     ("overpayment", "Over Payment"),
 )
 
+PAYMENT_TYPE_CHOICES = (
+    ("bank", "Bank"),
+    ("card", "Card"),
+    ("mpesa", "Mpesa"),
+    ("manual", "Manual"),
+    ("bank_statement", "Bank Statement"),
+)
+
 ACCOUNT_TYPES = (
     ("cheque", "Cheque"),
     ("savings", "Savings"),

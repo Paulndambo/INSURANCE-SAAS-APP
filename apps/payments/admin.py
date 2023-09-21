@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from apps.payments.models import (BankStatement, FuturePremiumTracking,
                                   MpesaResponseData, MpesaTransaction,
-                                  PolicyPayment, PolicyPremium)
+                                  PaymentLog, PolicyPayment, PolicyPremium)
 
 # Register your models here.
 admin.site.register(MpesaResponseData)
@@ -25,3 +25,8 @@ class BankStatementAdmin(admin.ModelAdmin):
 @admin.register(FuturePremiumTracking)
 class FuturePremiumTrackingAdmin(admin.ModelAdmin):
     list_display = ["policy", "membership", "processed"]
+
+
+@admin.register(PaymentLog)
+class PaymentLogAdmin(admin.ModelAdmin):
+    list_display = ["id_number", "policy", "membership", "amount", "payment_date", "payment_type", "processed"]

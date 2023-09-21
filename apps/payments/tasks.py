@@ -1,12 +1,24 @@
-from django.conf import settings
-from backend.celery import app
-from apps.payments.models import PolicyPremium, FuturePremiumTracking
-from apps.policies.models import Policy
 from datetime import datetime, timedelta
-from apps.sales.share_data_upload_methods.bulk_upload_methods import get_same_date_next_month
 
+from django.conf import settings
+
+from apps.payments.models import (FuturePremiumTracking, PaymentLog,
+                                  PolicyPremium)
+from apps.policies.models import Policy
+from apps.sales.share_data_upload_methods.bulk_upload_methods import \
+    get_same_date_next_month
+from backend.celery import app
 
 date_today = datetime.now().date()
+
+
+@app.task(name="process_policy_payments")
+def process_policy_payments():
+    payments_to_process = PaymentLog.objects.filter(processed=False).values_list("id", flat=True)[:100]
+
+    print(payments_to_process)
+
+    
 
 @app.task(name="track_premiums_expected_today")
 def track_premiums_expected_today():

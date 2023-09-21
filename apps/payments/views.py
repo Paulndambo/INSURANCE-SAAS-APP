@@ -24,23 +24,6 @@ from apps.payments.serializers import (BankStatementPaymentSerializer,
 
 
 # Create your views here.
-class ManualPolicyPaymentAPIView(generics.CreateAPIView):
-    serializer_class = ManualPolicyPaymentSerializer
-    permission_classes = [AllowAny]
-
-
-    def post(self, request):
-        data = request.data
-        serializer = self.serializer_class(data=data)
-
-        if serializer.is_valid(raise_exception=True):
-            mixin = ManualPaymentProcessingMixin(data=data)
-            mixin.run()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-
 class BankStatementPaymentAPIView(generics.CreateAPIView):
     serializer_class = BankStatementPaymentSerializer
     permission_classes = [AllowAny]
@@ -55,12 +38,8 @@ class BankStatementPaymentAPIView(generics.CreateAPIView):
                 data = csv_to_json(statement_file)
 
                 statements_data = json.loads(data)
-
-                if len(statements_data) > 10:
-                    write_multiple_bank_statements(statements_data)
-                else:
-                    bank_statement_mixin = BankStatementPaymentProcessMixin(data=statements_data)
-                    bank_statement_mixin.run()
+                bank_statement_mixin = BankStatementPaymentProcessMixin(data=statements_data)
+                bank_statement_mixin.run()
 
                 return Response({"msg": "Bank statements uploaded successfully!"}, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -71,7 +50,7 @@ class BankStatementPaymentAPIView(generics.CreateAPIView):
 
 
 class PolicyPremiumViewSet(ModelViewSet):
-    queryset = PolicyPremium.objects.all()
+    queryset = PolicyPremium.objects.all().order_by("-expected_date")
     serializer_class = PolicyPremiumSerializer
     permission_classes = [AllowAny]
 
@@ -100,12 +79,9 @@ class BankStatementAPIView(generics.ListAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+
 class DynamicManualPaymentsAPIView(generics.CreateAPIView):
     serializer_class = MultipleManualPaymentSerializer
-
-
-    def get_serializer_class(self):
-        return super().get_serializer_class()
 
     def post(self, request):
         data = request.data
@@ -117,3 +93,17 @@ class DynamicManualPaymentsAPIView(generics.CreateAPIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors)
         
+
+class ManualPolicyPaymentAPIView(generics.CreateAPIView):
+    serializer_class = ManualPolicyPaymentSerializer
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        data = request.data
+        serializer = self.serializer_class(data=data)
+
+        if serializer.is_valid(raise_exception=True):
+            mixin = DynamicPaymentsHandlingMixin(data=data)
+            mixin.run()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

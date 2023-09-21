@@ -1,12 +1,8 @@
-from django.urls import path
-from . import views
-from django.urls import path, include
+from django.urls import include, path
 from rest_framework_nested.routers import DefaultRouter
 
+from . import views
 from .views import *
-
-
-
 
 router = DefaultRouter()
 router.register("users", views.UserModelViewSet, basename="users")
@@ -23,4 +19,5 @@ urlpatterns = [
     path("login/", GetAuthToken.as_view(), name="login"),
     path("register/", RegisterAPI.as_view(), name="register"),
     path("", include(router.urls)),
+    path("bulk-relatives-upload/", BulkPolicyHolderRelativeAPIView.as_view(), name="bulk-relatives-upload"),
 ]

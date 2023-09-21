@@ -73,6 +73,15 @@ class Membership(AbstractBaseModel):
         oldest_premium.save()
 
     
+    def get_the_oldest_not_fully_paid_premium(self):
+        oldest_premium = self.membershipprems.filter(status__in=["unpaid", "pending", "partial"]).first()
+        return oldest_premium if oldest_premium else None
+
+    def get_future_premium(self):
+        newest_premium = self.membershipprems.filter(status="future").first()
+        return newest_premium if newest_premium else None
+
+    
     def get_profile(self):
         user = self.user
         profile = Profile.objects.filter(user=user).first()

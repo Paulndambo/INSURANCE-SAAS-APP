@@ -6,15 +6,17 @@
         "payment_method": "debit_order",
         "description": "Family Bima",
         "pricing_plan": "Family Bima",
-        "cycle_type": "MEMBER"
+        "cycle_type": "MEMBER",
+        "scheme_group_cover": 359000,
+        "scheme_group_premium": 1456
     },
     "members": [
         {
-            "id_number": "36335171XX",
-            "first_name": "Paul",
-            "last_name": "Ndambo",
-            "email": "paul+f11505@click2sure.co.za",
-            "phone_number": "0621530807",
+            "id_number": "9905027771188",
+            "first_name": "Hagos",
+            "last_name": "Petros",
+            "email": "HagosPetros@armyspy.com",
+            "phone_number": "0834750320",
             "gender": "Male",
             "city": "Matuu",
             "country": "Kenya",
@@ -39,12 +41,12 @@
             "cover_level": 12500,
             "is_extended_family_member": false,
             "gender": "male",
-            "main_member_id_number": "36335171"
+            "main_member_id_number": "9905027771188"
         },
         {
             "first_name": "Jane",
             "last_name": "Doe",
-            "identification_number": "782299290",
+            "id_number": "782299290",
             "date_of_birth": "1998-06-16",
             "postal_address": "228",
             "physical_address": "228",
@@ -55,7 +57,7 @@
             "cover_level": 50000,
             "is_extended_family_member": false,
             "gender": "female",
-            "main_member_id_number": "36335171"
+            "main_member_id_number": "9905027771188"
         }
     ],
     "extended_dependents": [
@@ -73,7 +75,7 @@
             "is_extended_family_member": true,
             "gender": "female",
             "add_on_premium": 50,
-            "main_member_id_number": "36335171"
+            "main_member_id_number": "9905027771188"
         },
         {
             "first_name": "Grandpa",
@@ -89,7 +91,7 @@
             "is_extended_family_member": true,
             "gender": "male",
             "add_on_premium": 170,
-            "main_member_id_number": "36335171"
+            "main_member_id_number": "9905027771188"
         },
         {
             "first_name": "Aunty",
@@ -105,14 +107,14 @@
             "is_extended_family_member": true,
             "gender": "female",
             "add_on_premium": 50,
-            "main_member_id_number": "36335171"
+            "main_member_id_number": "9905027771188"
         }
     ],
     "beneficiaries": [
         {
             "first_name": "MaryAnn",
             "last_name": "Doe",
-            "identification_number": "5678978999",
+            "id_number": "5678978999",
             "date_of_birth": "2023-07-13",
             "postal_address": "228",
             "physical_address": "228",
@@ -120,12 +122,12 @@
             "phone_number": "+254745491093",
             "email": "maryann@gmail.com",
             "relationship_type": "Beneficiary",
-            "main_member_id_number": "36335171"
+            "main_member_id_number": "9905027771188"
         },
         {
             "first_name": "James",
             "last_name": "Kioko",
-            "identification_number": "67898789992",
+            "id_number": "67898789992",
             "date_of_birth": "2023-07-13",
             "postal_address": "228",
             "physical_address": "228",
@@ -133,7 +135,7 @@
             "phone_number": "+254745491093",
             "email": "james@gmail.com",
             "relationship_type": "Beneficiary",
-            "main_member_id_number": "678993900"
+            "main_member_id_number": "9905027771188"
         }
     ],
     "policy_details": {
@@ -141,6 +143,11 @@
         "tcs": "Accept"
     },
     "agent_details": {
-        "email": "paulkadabo@gmail.com"
-    }
+        "email": "agents@smarture.co.ke"
+    },
+    "quote_details": {
+        "cover_amount": 1000000,
+        "premium": 75000
+    },
+    "obligations": []
 }

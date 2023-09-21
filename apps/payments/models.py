@@ -3,7 +3,8 @@ from django.db import models
 
 from apps.constants.choice_constants import (ACCOUNT_TYPES, PAYMENT_METHODS,
                                              PAYMENT_PERIOD_CHOICES,
-                                             PAYMENT_STATUS_CHOICES)
+                                             PAYMENT_STATUS_CHOICES,
+                                             PAYMENT_TYPE_CHOICES)
 from apps.constants.shared_methods import convert_timestamp_to_datetime
 from apps.core.models import AbstractBaseModel
 from apps.policies.models import Policy
@@ -151,10 +152,12 @@ class MpesaTransaction(AbstractBaseModel):
 
 
 class PaymentLog(AbstractBaseModel):
+    id_number = models.CharField(max_length=255, null=True)
     policy = models.ForeignKey("policies.Policy", on_delete=models.SET_NULL, null=True)
-    membership = models.ForeignKey("users.Membership", on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=20, decimal_places=2)
-    payment_date = models.DateField()
+    membership = models.ForeignKey("users.Membership", on_delete=models.CASCADE, null=True)
+    amount = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    payment_date = models.DateField(null=True)
+    payment_type = models.CharField(max_length=255, choices=PAYMENT_TYPE_CHOICES, null=True)
     processed = models.BooleanField(default=False)
 
     def __str__(self):
