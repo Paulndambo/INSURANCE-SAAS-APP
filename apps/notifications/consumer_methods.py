@@ -22,14 +22,15 @@ class NotificationConsumer:
                 print("Future Block Executed!!")
                 membership_premium = payment.membership.get_future_premium()
 
-            
+
             if membership_premium:
+                print(f"Policy: {membership_premium.policy}, Exp. Amount: {membership_premium.expected_payment}, Exp. Date: {membership_premium.expected_date}")
                 payment_amount = float(payment.balance)
 
                 membership_updated_balance = membership_premium.balance + payment_amount
                 membership_premium.amount_paid += payment_amount
                 membership_premium.balance += payment_amount
-                
+
                 if membership_updated_balance == 0 or membership_updated_balance == 0.0:
                     membership_premium.status = "paid"
                     payment.processed = True
@@ -47,6 +48,12 @@ class NotificationConsumer:
                     payment.balance -= Decimal(membership_premium.expected_payment)
                     payment.processed = True
                     payment.save()
+
+                ## Update next premium, the future on
+                latest_future_premium = payment.membership.get_future_premium()
+                if latest_future_premium:
+                    latest_future_premium.balance += payment_amount
+                    latest_future_premium.save()
 
                 membership_premium.save()
                     

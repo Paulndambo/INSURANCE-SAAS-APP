@@ -43,7 +43,7 @@ def track_premiums_expected_today():
                 policy=premium.policy,
                 expected_amount=premium.expected_payment,
                 expected_date=premium.expected_date,
-                premium_balance= -abs(premium.balance - premium.expected_payment),
+                premium_balance= -abs(premium.expected_payment),
                 future_expected_date=get_same_date_next_month(premium.expected_date),
                 new_reference = premium.reference + 1
             )
@@ -85,5 +85,3 @@ def raise_future_premiums():
             print("No premiums to process")
     except Exception as e:
         raise e
-
-

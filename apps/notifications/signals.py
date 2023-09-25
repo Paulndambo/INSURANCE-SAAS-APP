@@ -1,12 +1,11 @@
 """Model Signals"""
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
-
-from apps.users.models import Membership, MembershipConfiguration, User
-from apps.policies.models import Cycle, CycleStatusUpdates
-from apps.dependents.models import Beneficiary
-
 from rest_framework.authtoken.models import Token
+
+from apps.dependents.models import Beneficiary
+from apps.policies.models import Cycle, CycleStatusUpdates
+from apps.users.models import Membership, MembershipConfiguration, User
 
 """
 @receiver(post_save, sender=Beneficiary)

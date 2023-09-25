@@ -67,8 +67,8 @@ SUB_ROLE_CHOICES = (
 
 
 GENDER_CHOICES = (
-    ("male", "Male"),
-    ("female", "Female"),
+    ("Male", "Male"),
+    ("Female", "Female"),
 )
 
 

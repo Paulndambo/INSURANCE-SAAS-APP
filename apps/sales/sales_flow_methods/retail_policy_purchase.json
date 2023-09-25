@@ -7,15 +7,15 @@
         "description": "Family Bima",
         "pricing_plan": "Family Bima",
         "cycle_type": "MEMBER",
-        "scheme_group_cover": 359000,
-        "scheme_group_premium": 1456
+        "scheme_group_cover": 35000,
+        "scheme_group_premium": 350
     },
     "members": [
         {
-            "id_number": "9905027771188",
-            "first_name": "Hagos",
-            "last_name": "Petros",
-            "email": "HagosPetros@armyspy.com",
+            "id_number": "9905027771181",
+            "first_name": "Roko",
+            "last_name": "Vlahovic",
+            "email": "roko@armyspy.com",
             "phone_number": "0834750320",
             "gender": "Male",
             "city": "Matuu",
@@ -41,7 +41,7 @@
             "cover_level": 12500,
             "is_extended_family_member": false,
             "gender": "male",
-            "main_member_id_number": "9905027771188"
+            "main_member_id_number": "9905027771181"
         },
         {
             "first_name": "Jane",
@@ -57,7 +57,7 @@
             "cover_level": 50000,
             "is_extended_family_member": false,
             "gender": "female",
-            "main_member_id_number": "9905027771188"
+            "main_member_id_number": "9905027771181"
         }
     ],
     "extended_dependents": [
@@ -75,7 +75,7 @@
             "is_extended_family_member": true,
             "gender": "female",
             "add_on_premium": 50,
-            "main_member_id_number": "9905027771188"
+            "main_member_id_number": "9905027771181"
         },
         {
             "first_name": "Grandpa",
@@ -91,7 +91,7 @@
             "is_extended_family_member": true,
             "gender": "male",
             "add_on_premium": 170,
-            "main_member_id_number": "9905027771188"
+            "main_member_id_number": "9905027771181"
         },
         {
             "first_name": "Aunty",
@@ -107,7 +107,7 @@
             "is_extended_family_member": true,
             "gender": "female",
             "add_on_premium": 50,
-            "main_member_id_number": "9905027771188"
+            "main_member_id_number": "9905027771181"
         }
     ],
     "beneficiaries": [
@@ -122,7 +122,7 @@
             "phone_number": "+254745491093",
             "email": "maryann@gmail.com",
             "relationship_type": "Beneficiary",
-            "main_member_id_number": "9905027771188"
+            "main_member_id_number": "9905027771181"
         },
         {
             "first_name": "James",
@@ -135,7 +135,7 @@
             "phone_number": "+254745491093",
             "email": "james@gmail.com",
             "relationship_type": "Beneficiary",
-            "main_member_id_number": "9905027771188"
+            "main_member_id_number": "9905027771181"
         }
     ],
     "policy_details": {

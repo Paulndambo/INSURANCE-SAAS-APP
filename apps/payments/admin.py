@@ -24,7 +24,7 @@ class BankStatementAdmin(admin.ModelAdmin):
 
 @admin.register(FuturePremiumTracking)
 class FuturePremiumTrackingAdmin(admin.ModelAdmin):
-    list_display = ["policy", "membership", "processed"]
+    list_display = ["policy", "membership", "expected_amount", "premium_balance", "future_expected_date", "new_reference", "processed"]
 
 
 @admin.register(PaymentLog)

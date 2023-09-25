@@ -94,7 +94,7 @@ def create_profile(user, first_name, last_name, identification_method, id_number
         "physical_address": postal_address,
         "phone_number": phone_number,
         "work_phone": phone_number,
-        "gender":gender,
+        "gender": gender,
         "date_of_birth": date_of_birth
     }
     
