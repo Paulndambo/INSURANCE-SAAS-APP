@@ -85,3 +85,18 @@ def raise_future_premiums():
             print("No premiums to process")
     except Exception as e:
         raise e
+
+
+def missed_payment_notification():
+    eight_days_from_today = date_today + timedelta(days=8)
+
+    missed_premiums = PolicyPremium.objects.filter(status__in=["unpaid", "pending"])
+
+    for missed_premium in missed_premiums:
+        """Get all unpaid premiums belonging to membership"""
+        all_unpaid_premiums = missed_premium.membership.get_unpaid_premiums()
+
+        print("****************************************Start of Premiums List********************************")
+        for premium in all_unpaid_premiums:
+            print(f"Policy: {premium.policy}, Membership: {premium.membership}, Expected Date: {premium.expected_date}")
+        print("****************************************End of Premiums List********************************")
