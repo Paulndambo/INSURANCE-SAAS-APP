@@ -25,47 +25,39 @@ class CustomerPolicySerializer(serializers.ModelSerializer):
     def get_membership_details(self, obj):
         user = self.context["request"].user
         membership = user.usermembership.filter(policy=obj).values()
-        print(membership)
         return membership
 
     def get_premiums(self, obj):
         user = self.context["request"].user
         membership = user.usermembership.filter(policy=obj).first()
-        print(membership)
         return membership.membershipprems.values()
 
     def get_payments(self, obj):
         user = self.context["request"].user
         membership = user.usermembership.filter(policy=obj).first()
-        print(membership)
         return membership.membershippayments.values()
 
     def get_claims(self, obj):
         user = self.context["request"].user
         membership = user.usermembership.filter(policy=obj).first()
-        print(membership)
         return membership.membershipclaims.values()
 
     def get_payment_logs(self, obj):
         user = self.context["request"].user
         membership = user.usermembership.filter(policy=obj).first()
-        print(membership)
         return membership.paymentlogs.values()
 
     def get_dependents(self, obj):
         user = self.context["request"].user
         membership = user.usermembership.filter(policy=obj).first()
-        print(membership)
         return membership.dependents.filter(dependent_type__in=["Dependent", "dependent"]).values()
 
     def get_beneficiaries(self, obj):
         user = self.context["request"].user
         membership = user.usermembership.filter(policy=obj).first()
-        print(membership)
         return membership.beneficiaries.values()
 
     def get_extended_dependents(self, obj):
         user = self.context["request"].user
         membership = user.usermembership.filter(policy=obj).first()
-        print(membership)
         return membership.dependents.filter(dependent_type__in=["Extended", "extended"]).values()

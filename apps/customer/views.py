@@ -5,7 +5,6 @@ from rest_framework.viewsets import ModelViewSet
 from apps.dependents.models import Beneficiary, Dependent
 from apps.dependents.serializers import (BeneficiarySerializer,
                                          DependentSerializer)
-from apps.payments.models import PaymentLog, PolicyPayment, PolicyPremium
 
 
 # Create your views here.
@@ -39,5 +38,4 @@ class CustomerBeneficiariesViewSet(ModelViewSet):
     def get_queryset(self):
         user = self.request.user
         memberships = user.usermembership.all()
-        print(memberships)
         return self.queryset.filter(membership__in=memberships)
