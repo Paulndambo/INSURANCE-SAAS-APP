@@ -1,5 +1,10 @@
 from django.contrib import admin
+
 from apps.entities.models import Brokerage, SalesAgent
+
 # Register your models here.
 admin.site.register(Brokerage)
-admin.site.register(SalesAgent)
+
+@admin.register(SalesAgent)
+class SalesAgentAdmin(admin.ModelAdmin):
+    list_display = ["user", "broker", "phone_number"]

@@ -1,11 +1,13 @@
-import pika
-import os
 import json
+import os
 
-BROKER_URL = "amqp://guest:guest@localhost:5672/"
+import pika
 
-from apps.notifications.routing_keys import ROUTING_KEYS
+BROKER_URL = "amqps://qiqdvcyl:KPtRQ1jnfpuF7NNuAaVi9tynarNPc6XH@hummingbird.rmq.cloudamqp.com/qiqdvcyl"
+
 from apps.notifications.consumer_methods import NotificationConsumer
+from apps.notifications.routing_keys import ROUTING_KEYS
+
 
 class BaseConsumer(object):
     exchange = "test_exchange"

@@ -1,11 +1,11 @@
 """Models Imports"""
-from apps.users.models import PolicyHolderRelative
-from apps.sales.models import FailedUploadData
 from apps.dependents.models import Beneficiary
-
+from apps.sales.models import FailedUploadData
+from apps.users.models import PolicyHolderRelative
 
 """Custom Methods Imports"""
-from apps.sales.share_data_upload_methods.bulk_upload_methods import get_membership, get_identification_numbers
+from apps.sales.share_data_upload_methods.bulk_upload_methods import (
+    get_identification_numbers, get_membership)
 
 
 def beneficiary_object_constructor(data):

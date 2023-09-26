@@ -1,5 +1,5 @@
-from apps.sales.share_data_upload_methods.bulk_upload_methods import get_next_month_first_date
 from datetime import datetime
+
 
 def create_policy(pn_data, start_date, sales_agent, premium, cover_amount):
     policy_object = {
@@ -94,7 +94,7 @@ def create_profile(user, first_name, last_name, identification_method, id_number
         "physical_address": postal_address,
         "phone_number": phone_number,
         "work_phone": phone_number,
-        "gender":gender,
+        "gender": gender,
         "date_of_birth": date_of_birth
     }
     

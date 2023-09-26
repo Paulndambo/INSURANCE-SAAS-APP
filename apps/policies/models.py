@@ -1,15 +1,14 @@
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+
+from apps.constants.choice_constants import (CANCELLATION_ORIGIN,
+                                             CYCLE_STATUS_CHOICES,
+                                             PAYMENT_PERIOD_CHOICES,
+                                             POLICY_STATUS_CHOICES,
+                                             POLICY_SUB_STATUS_CHOICES)
 from apps.core.models import AbstractBaseModel
-from apps.users.models import PolicyHolder
 from apps.products.models import Product
-from django.core.validators import MinValueValidator, MaxValueValidator
-from apps.constants.choice_constants import (
-    POLICY_STATUS_CHOICES, 
-    POLICY_SUB_STATUS_CHOICES, 
-    PAYMENT_PERIOD_CHOICES, 
-    CYCLE_STATUS_CHOICES,
-    CANCELLATION_ORIGIN
-)
+from apps.users.models import PolicyHolder
 from apps.users.utils import is_fake_email
 
 
@@ -209,6 +208,6 @@ class PolicyStatusUpdates(AbstractBaseModel):
     Keep all status updates of policies.
     """
 
-    policy = models.ForeignKey(Policy, on_delete=models.CASCADE)
+    policy = models.ForeignKey(Policy, on_delete=models.CASCADE, related_name="policystatusupdates")
     previous_status = models.CharField(max_length=255, choices=POLICY_STATUS_CHOICES)
     next_status = models.CharField(max_length=255, choices=POLICY_STATUS_CHOICES)

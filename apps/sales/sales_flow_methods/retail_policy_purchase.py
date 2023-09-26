@@ -148,11 +148,11 @@ class SalesFlowBulkRetailMemberOnboardingMixin(object):
                         schemegroup=scheme_group,
                         membership=membership,
                         membership_configuration=membership_configuration,
-                        dependent_type=relationship.lower(),
+                        dependent_type="dependent",
                         is_additional_family_member=False,
                         first_name=dependent.get("first_name"),
                         last_name=dependent.get("last_name"),
-                        id_number=dependent.get("id_number") if dependent.get("id_number") else dependent.get("identification_number"),
+                        id_number=dependent.get("id_number"),
                         cover_level=dependent.get("cover_level"),
                         date_of_birth=dependent.get("date_of_birth"),
                         gender=dependent.get("gender"),
@@ -181,7 +181,7 @@ class SalesFlowBulkRetailMemberOnboardingMixin(object):
                         is_additional_family_member=True,
                         first_name=dependent.get("first_name"),
                         last_name=dependent.get("last_name"),
-                        id_number=dependent.get("id_number") if dependent.get("id_number") else dependent.get("identification_number"),
+                        id_number=dependent.get("id_number"),
                         cover_level=dependent.get("cover_level"),
                         gender=dependent.get("gender"),
                         email=dependent.get("email"),
@@ -210,7 +210,7 @@ class SalesFlowBulkRetailMemberOnboardingMixin(object):
                         email=beneficiary.get("email"),
                         date_of_birth=beneficiary.get("date_of_birth"),
                         phone_number=beneficiary.get("phone_number"),
-                        id_number=beneficiary.get("id_number") if beneficiary.get("id_number") else beneficiary.get("identification_number")
+                        id_number=beneficiary.get("id_number")
                     ))
 
                 Beneficiary.objects.bulk_create(beneficiaries_list)

@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     "apps.sales",
     "apps.entities",
     "apps.pet_insure",
+
+    "apps.customer",
 ]
 
 MIDDLEWARE = [
@@ -83,23 +85,26 @@ WSGI_APPLICATION = "backend.wsgi.application"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 
-#DATABASES = {
-#    "default": {
-#        "ENGINE": "django.db.backends.postgresql_psycopg2",
-#        "NAME": os.environ.get("POSTGRES_DB", "smartsure"),
-#        "USER": os.environ.get("POSTGRES_USER", "postgres"),
-#        "PASSWORD": os.environ.get("POSTGRES_PASSWORD", "1234"),
-#        "HOST": os.environ.get("DB_HOST", "localhost"),
-#        "PORT": 5432,
-#    }
-#}
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": os.environ.get("POSTGRES_DB", "smartsure"),
+        "USER": os.environ.get("POSTGRES_USER", "postgres"),
+        "PASSWORD": os.environ.get("POSTGRES_PASSWORD", "1234"),
+        "HOST": os.environ.get("DB_HOST", "localhost"),
+        "PORT": 5432,
+    }
+}
 
+"""
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+"""
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -187,3 +192,4 @@ REST_FRAMEWORK = {
 CORS_ALLOW_ALL_ORIGINS = True
 
 BASE_BACKEND_URL ="https://baf3-105-163-157-41.ngrok-free.app"
+

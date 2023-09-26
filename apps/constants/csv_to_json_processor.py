@@ -14,8 +14,6 @@ def csv_to_json(csv_file):
     """
     file_content = csv_file.read()
     
-    # Now you can use file_content as bytes
-    # For example, you can save it to a file on disk
     with open('bank_statement.csv', 'wb') as destination_file:
         destination_file.write(file_content)
 

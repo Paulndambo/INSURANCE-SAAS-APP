@@ -1,0 +1,110 @@
+[
+    {
+      "relative_name": "Child",
+      "relative_key": "child",
+      "degree_of_separation": 1,
+      "use_type": "dependent"
+    },
+    {
+      "relative_name": "Spouse",
+      "relative_key": "spouse",
+      "degree_of_separation": 1,
+      "use_type": "dependent"
+    },
+    {
+      "relative_name": "Stillborn",
+      "relative_key": "stillborn",
+      "degree_of_separation": 1,
+      "use_type": "dependent"
+    },
+    {
+      "relative_name": "Beneficiary",
+      "relative_key": "beneficiary",
+      "degree_of_separation": 1,
+      "use_type": "beneficiary"
+    },
+    {
+      "relative_name": "Grandfather",
+      "relative_key": "grandfather",
+      "degree_of_separation": 1,
+      "use_type": "extended"
+    },
+    {
+      "relative_name": "Grandmother",
+      "relative_key": "grandmother",
+      "degree_of_separation": 1,
+      "use_type": "extended"
+    },
+    {
+      "relative_name": "Uncle",
+      "relative_key": "uncle",
+      "degree_of_separation": 1,
+      "use_type": "extended"
+    },
+    {
+      "relative_name": "Aunt",
+      "relative_key": "aunt",
+      "degree_of_separation": 1,
+      "use_type": "extended"
+    },
+    {
+      "relative_name": "Father",
+      "relative_key": "father",
+      "degree_of_separation": 1,
+      "use_type": "extended"
+    },
+    {
+      "relative_name": "Step Father",
+      "relative_key": "step_father",
+      "degree_of_separation": 1,
+      "use_type": "extended"
+    },
+    {
+      "relative_name": "Step Mother",
+      "relative_key": "step_mother",
+      "degree_of_separation": 1,
+      "use_type": "extended"
+    },
+    {
+      "relative_name": "Mother",
+      "relative_key": "mother",
+      "degree_of_separation": 1,
+      "use_type": "extended"
+    },
+    {
+      "relative_name": "Brother In Law",
+      "relative_key": "brother_in_law",
+      "degree_of_separation": 1,
+      "use_type": "extended"
+    },
+    {
+      "relative_name": "Sister In Law",
+      "relative_key": "sister_in_law",
+      "degree_of_separation": 1,
+      "use_type": "extended"
+    },
+    {
+      "relative_name": "Father In Law",
+      "relative_key": "father_in_law",
+      "degree_of_separation": 1,
+      "use_type": "extended"
+    },
+    {
+      "relative_name": "Mother In Law",
+      "relative_key": "mother_in_law",
+      "degree_of_separation": 1,
+      "use_type": "extended"
+    },
+    {
+      "relative_name": "Guardian",
+      "relative_key": "Guardian",
+      "degree_of_separation": 1,
+      "use_type": "extended"
+    },
+    {
+      "relative_name": "Friend",
+      "relative_key": "friend",
+      "degree_of_separation": 1,
+      "use_type": "extended"
+    }
+  ]

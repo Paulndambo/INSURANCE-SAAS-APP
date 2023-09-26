@@ -3,7 +3,9 @@ from django.db import models
 
 from apps.constants.choice_constants import (ACCOUNT_TYPES, PAYMENT_METHODS,
                                              PAYMENT_PERIOD_CHOICES,
-                                             PAYMENT_STATUS_CHOICES)
+                                             PAYMENT_STATUS_CHOICES,
+                                             PAYMENT_TYPE_CHOICES)
+from apps.constants.shared_methods import convert_timestamp_to_datetime
 from apps.core.models import AbstractBaseModel
 from apps.policies.models import Policy
 from apps.schemes.models import SchemeGroup
@@ -60,12 +62,14 @@ class PolicyPremium(AbstractBaseModel):
 
 class PolicyPayment(AbstractBaseModel):
     policy = models.ForeignKey(Policy, on_delete=models.CASCADE)
-    membership = models.ForeignKey("users.Membership", on_delete=models.CASCADE, null=True)
+    membership = models.ForeignKey("users.Membership", on_delete=models.CASCADE, null=True, related_name="membershippayments")
     amount = models.FloatField(validators=[MinValueValidator(limit_value=0),], default=0)
+    overpayment = models.DecimalField(max_digits=20, decimal_places=2, default=0)
     state = models.CharField(default="NEW", max_length=255)
     payment_method = models.CharField(choices=PAYMENT_METHODS, max_length=32)
     payment_date = models.DateField(null=True)
     premium = models.ForeignKey("payments.PolicyPremium", on_delete=models.SET_NULL, null=True)
+    processed = models.BooleanField(default=False)
 
     def __str__(self):
         return self.policy.policy_number
@@ -145,3 +149,17 @@ class MpesaTransaction(AbstractBaseModel):
     def save(self, *args, **kwargs) -> None:
         self.TransactionDate = convert_timestamp_to_datetime(self.TransactionTimeStamp)
         return super().save(*args, **kwargs)
+
+
+class PaymentLog(AbstractBaseModel):
+    id_number = models.CharField(max_length=255, null=True)
+    policy = models.ForeignKey("policies.Policy", on_delete=models.SET_NULL, null=True)
+    membership = models.ForeignKey("users.Membership", on_delete=models.CASCADE, null=True, related_name="paymentlogs")
+    amount = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    balance = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    payment_date = models.DateField(null=True)
+    payment_type = models.CharField(max_length=255, choices=PAYMENT_TYPE_CHOICES, null=True)
+    processed = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Payment Log for {self.policy} Paid On {self.payment_date}"

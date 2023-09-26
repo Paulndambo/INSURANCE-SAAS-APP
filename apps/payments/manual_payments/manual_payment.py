@@ -1,89 +1,93 @@
-from apps.payments.models import BankStatement, PolicyPayment
-from apps.payments.payments_processor.shared_functions import \
-    get_premium_in_range
+from datetime import datetime, timedelta
+
+from django.db.models import Q
+
+from apps.payments.models import PolicyPayment, PolicyPremium
+from apps.payments.shared_functions import get_premium_in_range
 from apps.policies.models import Policy
 from apps.users.models import Membership, Profile
 
+date_today = datetime.now().date()
 
-class BankStatementPaymentProcessMixin(object):
-    
+
+class ManualPaymentProcessingMixin(object):
     def __init__(self, data):
         self.data = data
 
-    
+
     def run(self):
-        self.__process_bank_statement()
-
-    
-    def __process_bank_statement(self):
-        data = self.data
+        self.__process_manual_payment()
 
 
-        for bank_statement in data:
-            policy_number = bank_statement.get("policy_number")
-            amount = bank_statement.get("amount")
-            id_number = bank_statement.get("id_number")
-            payment_date = bank_statement.get("payment_date")
+    def __process_manual_payment(self):
+        try: 
+            data = self.data
+
+            policy_number = data.get("policy_number")
+            amount = data.get("amount")
+            payment_date = data.get("payment_date")
+            premium = data.get("premium")
+            id_number = data.get("id_number")
+            payment_type = data.get("payment_type")
 
 
             profile = Profile.objects.get(id_number=id_number)
             policy = Policy.objects.get(policy_number=policy_number)
             membership = Membership.objects.get(policy=policy, user=profile.user)
-            
 
-            policy_premium, passed_date = get_premium_in_range(payment_date, membership)
 
+            policy_premium = None
+
+            if premium:
+                policy_premium = PolicyPremium.objects.get(id=premium)
+            else:
+                policy_premium = membership.membershipprems.filter(status__in=["unpaid", "pending"]).order_by("expected_date").first()
+
+                
             if policy_premium:
                 if policy_premium.status == "paid":
                     print("*********We could not find an unpaid premium for the customer***********")
                     PolicyPayment.objects.create(
                         policy=policy,
                         amount=amount,
-                        payment_date=passed_date,
+                        payment_date=payment_date,
                         membership=membership,
                         payment_method="manual",
                         state="EARLY PAYMENT"
                     )
-
                 else:
                     premium_status = ''
-                    balance = policy_premium.balance + float(amount)
+                    balance = policy_premium.balance + amount
                     if balance == 0 or balance == 0.0:
                         premium_status = 'paid'
-                    else:
+                    elif balance > 0:
+                        premium_status = "overpayment"
+                    elif balance < 0:
                         premium_status = 'partial'
 
                     policy_premium.status = premium_status
-                    policy_premium.balance = policy_premium.balance + float(amount)
-                    policy_premium.amount_paid += float(amount)
+                    policy_premium.balance = policy_premium.balance + amount
+                    policy_premium.amount_paid += amount
                     policy_premium.save()
                     
                     PolicyPayment.objects.create(
                         policy=policy,
                         premium=policy_premium,
                         amount=amount,
-                        payment_date=passed_date,
+                        payment_date=payment_date,
                         membership=membership,
                         payment_method="manual",
                         state="SUCCESSFUL"
                     )
-                bank_statement = BankStatement.objects.create(
-                    policy_number=policy_number,
-                    statement=bank_statement,
-                    processed=True
-                )
             else:
                 print("*********We could not find an unpaid premium for the customer***********")
                 PolicyPayment.objects.create(
                     policy=policy,
                     amount=amount,
-                    payment_date=passed_date,
+                    payment_date=payment_date,
                     membership=membership,
                     payment_method="manual",
                     state="EARLY PAYMENT"
                 )  
-                bank_statement = BankStatement.objects.create(
-                    policy_number=policy_number,
-                    statement=bank_statement,
-                    processed=False
-                )
+        except Exception as e:
+            raise e

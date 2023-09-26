@@ -67,8 +67,8 @@ SUB_ROLE_CHOICES = (
 
 
 GENDER_CHOICES = (
-    ("male", "Male"),
-    ("female", "Female"),
+    ("Male", "Male"),
+    ("Female", "Female"),
 )
 
 
@@ -78,6 +78,15 @@ PAYMENT_STATUS_CHOICES = (
     ("partial", "Partial"),
     ("future", "Future"),
     ("pending", "Pending"),
+    ("overpayment", "Over Payment"),
+)
+
+PAYMENT_TYPE_CHOICES = (
+    ("bank", "Bank"),
+    ("card", "Card"),
+    ("mpesa", "Mpesa"),
+    ("manual", "Manual"),
+    ("bank_statement", "Bank Statement"),
 )
 
 ACCOUNT_TYPES = (

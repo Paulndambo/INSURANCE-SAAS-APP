@@ -1,6 +1,7 @@
-from apps.users.utils import is_fake_email
-from apps.users.models import Profile, PolicyHolder
 from django.db.models import Q
+
+from apps.users.models import PolicyHolder, Profile
+from apps.users.utils import is_fake_email
 
 
 def policy_cancellation(policy, reference_reason):

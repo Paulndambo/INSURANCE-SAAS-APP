@@ -1,115 +1,238 @@
 [
     {
-        "name": "MBD Funeral",
-        "group": "retail",
-        "base_premium": 12,
-        "total_premium": 15.23,
-        "value_added_service": 3.23
+      "name": "Family Bima",
+      "base_premium": "0.00",
+      "value_added_service": "0.00",
+      "total_premium": "0.00",
+      "group": "retail",
+      "policy_holder_cover_levels": [
+        {
+          "cover_amount": 150000,
+          "premium": 1500
+        },
+        {
+          "cover_amount": 500000,
+          "premium": 5000
+        },
+        {
+          "cover_amount": 1000000,
+          "premium": 10000
+        }
+      ],
+      "dependent_cover_levels": [
+        {}
+      ],
+      "extended_family_cover_levels": [
+        {}
+      ],
+      "category": 6
     },
     {
-        "name": "Nutun Wellness",
-        "group": "retail",
-        "base_premium": 12,
-        "total_premium": 12,
-        "value_added_service": 0
+      "name": "Mtaa Bima",
+      "base_premium": "0.00",
+      "value_added_service": "0.00",
+      "total_premium": "0.00",
+      "group": "group",
+      "policy_holder_cover_levels": [
+        {
+          "cover_amount": 150000,
+          "premium": 1500
+        },
+        {
+          "cover_amount": 500000,
+          "premium": 5000
+        },
+        {
+          "cover_amount": 1000000,
+          "premium": 10000
+        }
+      ],
+      "dependent_cover_levels": [
+        {}
+      ],
+      "extended_family_cover_levels": [
+        {}
+      ],
+      "category": 6
     },
     {
-
-        "name": "Synergy",
-        "group": "group",
-        "base_premium": 40,
-        "total_premium": 40,
-        "value_added_service": 0
+      "name": "Elimu Bima",
+      "base_premium": "0.00",
+      "value_added_service": "0.00",
+      "total_premium": "0.00",
+      "group": "retail",
+      "policy_holder_cover_levels": [
+        {
+          "cover_amount": 150000,
+          "premium": 1500
+        },
+        {
+          "cover_amount": 500000,
+          "premium": 5000
+        },
+        {
+          "cover_amount": 1000000,
+          "premium": 10000
+        }
+      ],
+      "dependent_cover_levels": [
+        {}
+      ],
+      "extended_family_cover_levels": [
+        {}
+      ],
+      "category": 2
     },
     {
-        "name": "Nutun Kwande Legacy",
-        "group": "group",
-        "base_premium": 40,
-        "total_premium": 40,
-        "value_added_service": 0
+      "name": "Credit Bima",
+      "base_premium": "0.00",
+      "value_added_service": "0.00",
+      "total_premium": "0.00",
+      "group": "credit",
+      "policy_holder_cover_levels": [
+        {}
+      ],
+      "dependent_cover_levels": [
+        {}
+      ],
+      "extended_family_cover_levels": [
+        {}
+      ],
+      "category": 4
     },
     {
-        "name": "Nutun MBD Legal Collections Legacy",
-        "group": "group",
-        "base_premium": 40,
-        "total_premium": 40,
-        "value_added_service": 0
+      "name": "Chama Bima",
+      "base_premium": "500.00",
+      "value_added_service": "0.00",
+      "total_premium": "500.00",
+      "group": "group",
+      "policy_holder_cover_levels": [
+        {
+          "cover_amount": 50000,
+          "premium": 150
+        },
+        {
+          "cover_amount": 100000,
+          "premium": 250
+        },
+        {
+          "cover_amount": 150000,
+          "premium": 350
+        }
+      ],
+      "dependent_cover_levels": [
+        {}
+      ],
+      "extended_family_cover_levels": [
+        {}
+      ],
+      "category": 8
     },
     {
-        "name": "Nutun Business Services SA Legacy",
-        "group": "group",
-        "base_premium": 40,
-        "total_premium": 40,
-        "value_added_service": 0
+      "name": "Car Bima",
+      "base_premium": "30.00",
+      "value_added_service": "0.00",
+      "total_premium": "30.00",
+      "group": "retail",
+      "policy_holder_cover_levels": [
+        {
+          "cover_amount": 700000,
+          "premium": 70
+        },
+        {
+          "cover_amount": 1500000,
+          "premium": 140
+        },
+        {
+          "cover_amount": 3000000,
+          "premium": 1000
+        }
+      ],
+      "dependent_cover_levels": [
+        {}
+      ],
+      "extended_family_cover_levels": [
+        {}
+      ],
+      "category": 5
     },
     {
-        "name": "Nutun Munnik Basson Da Gama Inc Legacy",
-        "group": "group",
-        "base_premium": 40,
-        "total_premium": 40,
-        "value_added_service": 0
+      "name": "Kopa Bima",
+      "base_premium": "80.00",
+      "value_added_service": "0.00",
+      "total_premium": "80.00",
+      "group": "credit",
+      "policy_holder_cover_levels": [
+        {
+          "cover_amount": 150000,
+          "premium": 1500
+        },
+        {
+          "cover_amount": 500000,
+          "premium": 5000
+        },
+        {
+          "cover_amount": 1000000,
+          "premium": 10000
+        }
+      ],
+      "dependent_cover_levels": [
+        {}
+      ],
+      "extended_family_cover_levels": [
+        {}
+      ],
+      "category": 4
     },
     {
-        "name": "Nutun Wellness Legacy",
-        "group": "group",
-        "base_premium": 40,
-        "total_premium": 40,
-        "value_added_service": 0
+      "name": "Medical Bima",
+      "base_premium": "0.00",
+      "value_added_service": "0.00",
+      "total_premium": "0.00",
+      "group": "retail",
+      "policy_holder_cover_levels": [
+        {}
+      ],
+      "dependent_cover_levels": [
+        {}
+      ],
+      "extended_family_cover_levels": [
+        {}
+      ],
+      "category": 1
     },
     {
-        "name": "Nutun Transact Legacy",
-        "group": "group",
-        "base_premium": 40,
-        "total_premium": 40,
-        "value_added_service": 0
+      "name": "Travel Bima",
+      "base_premium": "0.00",
+      "value_added_service": "0.00",
+      "total_premium": "0.00",
+      "group": "retail",
+      "policy_holder_cover_levels": [
+        {}
+      ],
+      "dependent_cover_levels": [
+        {}
+      ],
+      "extended_family_cover_levels": [
+        {}
+      ],
+      "category": 3
     },
     {
-        "name": "Nutun Telesales Funeral",
-        "group": "retail",
-        "base_premium": 40,
-        "total_premium": 40,
-        "value_added_service": 0
-    },
-    {
-        "name": "Nutun Kwande Group Scheme",
-        "group": "group",
-        "base_premium": 40,
-        "total_premium": 40,
-        "value_added_service": 0
-    },
-    {
-        "name": "Nutun MBD Legal Collections Group Scheme",
-        "group": "group",
-        "base_premium": 40,
-        "total_premium": 40,
-        "value_added_service": 0
-    },
-    {
-        "name": "Nutun Business Services SA Group Scheme",
-        "group": "group",
-        "base_premium": 40,
-        "total_premium": 40,
-        "value_added_service": 0
-    },
-    {
-        "name": "Nutun Munnik Basson Da Gama Inc Group Scheme",
-        "group": "group",
-        "base_premium": 40,
-        "total_premium": 40,
-        "value_added_service": 0
-    },
-    {
-        "name": "Nutun Wellness Group Scheme",
-        "group": "group",
-        "base_premium": 40,
-        "total_premium": 40,
-        "value_added_service": 0
-    },
-    {
-        "name": "Nutun Transact Group Scheme",
-        "group": "group",
-        "base_premium": 40,
-        "total_premium": 40,
-        "value_added_service": 0
+      "name": "Pet Bima",
+      "base_premium": "0.00",
+      "value_added_service": "0.00",
+      "total_premium": "0.00",
+      "group": "pet",
+      "policy_holder_cover_levels": [
+        {}
+      ],
+      "dependent_cover_levels": [
+        {}
+      ],
+      "extended_family_cover_levels": [
+        {}
+      ],
+      "category": 9
     }
-]
+  ]

@@ -1,8 +1,9 @@
-import os
-import pika
 import json
+import os
 
-BROKER_URL = "amqp://guest:guest@localhost:5672/"
+import pika
+
+BROKER_URL = "amqps://qiqdvcyl:KPtRQ1jnfpuF7NNuAaVi9tynarNPc6XH@hummingbird.rmq.cloudamqp.com/qiqdvcyl"
 
 class BasePublisher(object):
     def __init__(self, routing_key, body) -> None:

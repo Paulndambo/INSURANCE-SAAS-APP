@@ -1,50 +1,37 @@
 ## Django Imports
-from django.shortcuts import render
 from django.http import JsonResponse
+from django.shortcuts import render
 from django.utils import timezone
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
-from rest_framework import generics
-from rest_framework.views import APIView
-
-
-from .serializers import (
-    RegisterSerializer,
-    ChangePasswordSerializer,
-    ForgotPasswordSerializer,
-)
-from rest_framework import status, generics, permissions
-from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
-
-## Rest Framework Imports
-from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
+from rest_framework import generics, permissions, status
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.decorators import api_view
+from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
+## Rest Framework Imports
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
+from rest_framework_bulk import ListBulkCreateUpdateDestroyAPIView
 
 from apps.constants.utils import CustomPagination
-
+## Model Imports
+from apps.users.models import (Membership, PolicyHolder, PolicyHolderRelative,
+                               Profile, User)
 
 ##Serializer Imports
-from .serializers import (
-    MembershipSerializer,
-    PolicyHolderRelativeSerializer,
-    ProfileSerializer,
-    UserSerializer,
-    IndividualRegisterSerializer,
-    PolicyHolderSerializer,
-    AuthTokenCustomSerializer
-)
+from .serializers import (AuthTokenCustomSerializer, ChangePasswordSerializer,
+                          ForgotPasswordSerializer,
+                          IndividualRegisterSerializer, MembershipSerializer,
+                          PolicyHolderRelativeMappingSerializer,
+                          PolicyHolderRelativeSerializer,
+                          PolicyHolderSerializer, ProfileSerializer,
+                          RegisterSerializer, UserSerializer)
 
-## Model Imports
-from apps.users.models import (
-    User,
-    Membership,
-    Profile,
-    PolicyHolder,
-    PolicyHolderRelative,
-)
 
+class BulkPolicyHolderRelativeAPIView(ListBulkCreateUpdateDestroyAPIView):
+    queryset = PolicyHolderRelative.objects.all()
+    serializer_class = PolicyHolderRelativeMappingSerializer
+    permission_classes = [AllowAny]
 
 class GetAuthToken(ObtainAuthToken):
     """

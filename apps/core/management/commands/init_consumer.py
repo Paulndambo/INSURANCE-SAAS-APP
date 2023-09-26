@@ -1,5 +1,7 @@
 from django.core.management.base import BaseCommand
+
 from apps.core.queue_system.consumer import BaseConsumer
+
 
 class Command(BaseCommand, BaseConsumer):
     consumer_name = "messages"

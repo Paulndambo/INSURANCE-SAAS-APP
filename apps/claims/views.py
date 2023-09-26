@@ -1,23 +1,14 @@
 from django.shortcuts import render
-
-from rest_framework.viewsets import ModelViewSet
-from rest_framework import status, generics
+from rest_framework import generics, status
 from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
 
-from apps.claims.models import (
-    Claim,
-    ClaimDocument,
-    ClaimStatusUpdates,
-    ClaimAdditionalInfo,
-)
-from apps.claims.serializers import (
-    ClaimDocumentSerializer,
-    ClaimSerializer,
-    ClaimStatusUpdatesSerializer,
-    ClaimAdditionalInfoSerializer,
-    LodgeClaimSerializer,
-    HelloSerializer
-)
+from apps.claims.models import (Claim, ClaimAdditionalInfo, ClaimDocument,
+                                ClaimStatusUpdates)
+from apps.claims.serializers import (ClaimAdditionalInfoSerializer,
+                                     ClaimDocumentSerializer, ClaimSerializer,
+                                     ClaimStatusUpdatesSerializer,
+                                     HelloSerializer, LodgeClaimSerializer)
 
 
 # Create your views here.
