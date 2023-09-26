@@ -8,7 +8,7 @@ from .models import (Membership, MembershipConfiguration,
 # Register your models here.
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ["username", "email", "role"]
+    list_display = ["id", "username", "email", "role"]
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):

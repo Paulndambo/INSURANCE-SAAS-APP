@@ -1,8 +1,8 @@
-from django.db import models
 from django.core.validators import MinValueValidator
+from django.db import models
+
 from apps.core.models import AbstractBaseModel
 from apps.users.models import User
-
 
 # Create your models here.
 STATE_CHOICES = (
@@ -47,7 +47,7 @@ class Claim(AbstractBaseModel):
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
     policy_status_when_lodged = models.CharField(max_length=255, null=True)
     proof_of_payment = models.FileField(upload_to="proof_of_payments/", null=True)
-    membership = models.ForeignKey("users.Membership", on_delete=models.CASCADE, null=True)
+    membership = models.ForeignKey("users.Membership", on_delete=models.CASCADE, null=True, related_name="membershipclaims")
     dependent = models.ForeignKey("dependents.Dependent", on_delete=models.SET_NULL, null=True)
 
     def __str__(self):

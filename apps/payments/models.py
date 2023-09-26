@@ -62,7 +62,7 @@ class PolicyPremium(AbstractBaseModel):
 
 class PolicyPayment(AbstractBaseModel):
     policy = models.ForeignKey(Policy, on_delete=models.CASCADE)
-    membership = models.ForeignKey("users.Membership", on_delete=models.CASCADE, null=True)
+    membership = models.ForeignKey("users.Membership", on_delete=models.CASCADE, null=True, related_name="membershippayments")
     amount = models.FloatField(validators=[MinValueValidator(limit_value=0),], default=0)
     overpayment = models.DecimalField(max_digits=20, decimal_places=2, default=0)
     state = models.CharField(default="NEW", max_length=255)
@@ -154,7 +154,7 @@ class MpesaTransaction(AbstractBaseModel):
 class PaymentLog(AbstractBaseModel):
     id_number = models.CharField(max_length=255, null=True)
     policy = models.ForeignKey("policies.Policy", on_delete=models.SET_NULL, null=True)
-    membership = models.ForeignKey("users.Membership", on_delete=models.CASCADE, null=True)
+    membership = models.ForeignKey("users.Membership", on_delete=models.CASCADE, null=True, related_name="paymentlogs")
     amount = models.DecimalField(max_digits=20, decimal_places=2, default=0)
     balance = models.DecimalField(max_digits=20, decimal_places=2, default=0)
     payment_date = models.DateField(null=True)

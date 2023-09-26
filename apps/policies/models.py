@@ -208,6 +208,6 @@ class PolicyStatusUpdates(AbstractBaseModel):
     Keep all status updates of policies.
     """
 
-    policy = models.ForeignKey(Policy, on_delete=models.CASCADE)
+    policy = models.ForeignKey(Policy, on_delete=models.CASCADE, related_name="policystatusupdates")
     previous_status = models.CharField(max_length=255, choices=POLICY_STATUS_CHOICES)
     next_status = models.CharField(max_length=255, choices=POLICY_STATUS_CHOICES)

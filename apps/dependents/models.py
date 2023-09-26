@@ -35,7 +35,7 @@ class Beneficiary(AbstractBaseModel):
     is_deleted = models.BooleanField(default=False)
     date_of_birth = models.DateField(null=True)
     gender=models.CharField(max_length=255, choices=GENDER_CHOICES, null=True)
-    membership = models.ForeignKey("users.Membership", on_delete=models.SET_NULL, null=True, blank=True)
+    membership = models.ForeignKey("users.Membership", on_delete=models.SET_NULL, null=True, blank=True, related_name="beneficiaries")
     schemegroup = models.ForeignKey("schemes.SchemeGroup", on_delete=models.SET_NULL, null=True, blank=True)
     guardian_or_trustee_first_name = models.CharField(max_length=255, null=True)
     guardian_or_trustee_last_name = models.CharField(max_length=255, null=True)
@@ -50,7 +50,7 @@ class Dependent(AbstractBaseModel):
 
     policy = models.ForeignKey(Policy, on_delete=models.CASCADE, null=True)
     schemegroup = models.ForeignKey("schemes.SchemeGroup", on_delete=models.SET_NULL, null=True, blank=True)
-    membership = models.ForeignKey("users.Membership", null=True, on_delete=models.CASCADE)
+    membership = models.ForeignKey("users.Membership", null=True, on_delete=models.CASCADE, related_name="dependents")
     membership_configuration = models.ForeignKey("users.MembershipConfiguration", on_delete=models.CASCADE, null=True)
     is_additional_family_member = models.BooleanField(default=False)
     dependent_type = models.CharField(max_length=200, choices=DEPENDENT_TYPE, null=True)

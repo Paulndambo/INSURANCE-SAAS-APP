@@ -51,20 +51,14 @@ class Membership(AbstractBaseModel):
     member_id = models.UUIDField(default=uuid.uuid4, unique=True)
     description = models.TextField(null=True)
     #price_request = models.ForeignKey('generic_policy_prices.PolicyPriceRequest', null=True, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
-    scheme_group = models.ForeignKey(
-        'schemes.SchemeGroup', on_delete=models.CASCADE, related_name="schemegroupmembers")
-    policy = models.ForeignKey(
-        'policies.Policy', null=True, on_delete=models.CASCADE)
-    membership_status = models.CharField(
-        max_length=255, choices=MEMBERSHIP_STATUS_CHOICES, null=True, blank=True)
-    membership_certificate = models.FileField(
-        upload_to="membership_certificates", null=True, blank=True)
+    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE, related_name="usermembership")
+    scheme_group = models.ForeignKey('schemes.SchemeGroup', on_delete=models.CASCADE, related_name="schemegroupmembers")
+    policy = models.ForeignKey('policies.Policy', null=True, on_delete=models.CASCADE)
+    membership_status = models.CharField(max_length=255, choices=MEMBERSHIP_STATUS_CHOICES, null=True, blank=True)
+    membership_certificate = models.FileField(upload_to="membership_certificates", null=True, blank=True)
     membership_certificate_generated = models.BooleanField(default=False)
-    membership_welcome_letter = models.FileField(
-        upload_to="membership_welcome_letters/", null=True, blank=True)
-    membership_premium = models.DecimalField(
-        max_digits=10, decimal_places=2, default=0)
+    membership_welcome_letter = models.FileField(upload_to="membership_welcome_letters/", null=True, blank=True)
+    membership_premium = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     properties = models.JSONField(default=dict)
 
     def __str__(self):
@@ -166,14 +160,10 @@ class Membership(AbstractBaseModel):
 
 
 class MembershipConfiguration(AbstractBaseModel):
-    membership = models.ForeignKey(
-        Membership, on_delete=models.CASCADE, related_name="membershipconfigs")
-    beneficiary = models.ForeignKey(
-        "dependents.Beneficiary", on_delete=models.CASCADE, blank=True, null=True)
-    pricing_plan = models.ForeignKey(
-        "prices.PricingPlan", on_delete=models.SET_NULL, null=True, blank=True)
-    cover_level = models.DecimalField(
-        max_digits=10, decimal_places=2, null=True)
+    membership = models.ForeignKey(Membership, on_delete=models.CASCADE, related_name="membershipconfigs")
+    beneficiary = models.ForeignKey("dependents.Beneficiary", on_delete=models.CASCADE, blank=True, null=True)
+    pricing_plan = models.ForeignKey("prices.PricingPlan", on_delete=models.SET_NULL, null=True, blank=True)
+    cover_level = models.DecimalField(max_digits=10, decimal_places=2, null=True)
 
     def __str__(self):
         return self.membership.user.email
@@ -208,8 +198,7 @@ class Profile(AbstractBaseModel):
 
 
 class PolicyHolder(AbstractBaseModel):
-    user = models.OneToOneField(
-        User, null=True, on_delete=models.CASCADE, related_name="policyholders")
+    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE, related_name="policyholders")
     name = models.CharField(max_length=255, null=True, blank=True)
     phone_number = models.CharField(max_length=255, null=True, blank=True)
     address = models.CharField(max_length=255, null=True, blank=True)
