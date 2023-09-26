@@ -33,7 +33,7 @@ class ClaimGenericFieldList(AbstractBaseModel):
 
 
 class Claim(AbstractBaseModel):
-    policy = models.ForeignKey("policies.Policy", null=True, on_delete=models.CASCADE)
+    policy = models.ForeignKey("policies.Policy", null=True, on_delete=models.CASCADE, related_name="policyclaims")
     status = models.CharField(max_length=255, default="lodged")
     sub_status = models.CharField(max_length=32, null=True)
     reason = models.TextField()

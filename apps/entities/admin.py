@@ -7,4 +7,4 @@ admin.site.register(Brokerage)
 
 @admin.register(SalesAgent)
 class SalesAgentAdmin(admin.ModelAdmin):
-    list_display = ["user", "broker", "phone_number"]
+    list_display = ["id", "user", "broker", "phone_number"]

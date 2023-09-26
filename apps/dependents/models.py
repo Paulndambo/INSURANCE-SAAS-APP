@@ -22,7 +22,7 @@ GENDER_CHOICES = (("female", "Female"), ("male", "Male"))
 
 # Create your models here.
 class Beneficiary(AbstractBaseModel):
-    policy = models.ForeignKey(Policy, on_delete=models.CASCADE, null=True)
+    policy = models.ForeignKey(Policy, on_delete=models.CASCADE, null=True, related_name="policybeneficiaries")
     relative = models.ForeignKey(PolicyHolderRelative, on_delete=models.CASCADE, null=True)
     relationship = models.CharField(max_length=255, null=True)
     first_name = models.CharField(max_length=255)
@@ -47,8 +47,7 @@ class Beneficiary(AbstractBaseModel):
 
 
 class Dependent(AbstractBaseModel):
-
-    policy = models.ForeignKey(Policy, on_delete=models.CASCADE, null=True)
+    policy = models.ForeignKey(Policy, on_delete=models.CASCADE, null=True, related_name="policydependents")
     schemegroup = models.ForeignKey("schemes.SchemeGroup", on_delete=models.SET_NULL, null=True, blank=True)
     membership = models.ForeignKey("users.Membership", null=True, on_delete=models.CASCADE, related_name="dependents")
     membership_configuration = models.ForeignKey("users.MembershipConfiguration", on_delete=models.CASCADE, null=True)

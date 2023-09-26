@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "apps.pet_insure",
 
     "apps.customer",
+    "apps.sales_agents",
 ]
 
 MIDDLEWARE = [
