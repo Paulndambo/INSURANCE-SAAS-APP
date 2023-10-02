@@ -131,7 +131,9 @@ class MpesaResponseData(AbstractBaseModel):
 
 
 class MpesaTransaction(AbstractBaseModel):
+    payer_id_number = models.CharField(max_length=255, null=True)
     product = models.ForeignKey("products.Product", on_delete=models.SET_NULL, null=True)
+    membership = models.ForeignKey("users.Membership", on_delete=models.SET_NULL, related_name="membershipmpesapayments", null=True)
     MerchantRequestID = models.CharField(max_length=255)
     CheckoutRequestID = models.CharField(max_length=255)
     ResultCode = models.IntegerField(default=0)

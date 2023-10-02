@@ -1,10 +1,10 @@
 from django.shortcuts import render
-from rest_framework.viewsets import ModelViewSet
 from rest_framework import generics, status
 from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
 
 from apps.schemes.models import Scheme, SchemeGroup
-from apps.schemes.serializers import SchemeSerializer, SchemeGroupSerializer
+from apps.schemes.serializers import SchemeGroupSerializer, SchemeSerializer
 
 
 # Create your views here.

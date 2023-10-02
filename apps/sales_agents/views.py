@@ -4,6 +4,8 @@ from rest_framework.viewsets import ModelViewSet
 
 from apps.policies.models import Policy
 from apps.sales_agents.serializers import SalesAgentPolicySerializer
+from apps.schemes.models import SchemeGroup
+from apps.schemes.serializers import SchemeGroupSerializer
 
 
 # Create your views here.
@@ -19,3 +21,11 @@ class SalesAgentPolicyViewSet(ModelViewSet):
             return []
 
         return self.queryset.filter(sold_by__user=user)
+
+
+class SalesAgentSchemeGroupViewSet(ModelViewSet):
+    queryset = SchemeGroup.objects.all()
+    serializer_class = SchemeGroupSerializer
+
+    def get_queryset(self):
+        return self.queryset

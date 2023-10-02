@@ -2,7 +2,8 @@ from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
 from apps.payments.mpesa.views import (LipaNaMpesaAPIView,
-                                       LipaNaMpesaCallbackAPIView)
+                                       LipaNaMpesaCallbackAPIView,
+                                       LipaPremiumNaMpesaAPIView)
 from apps.payments.views import (BankStatementAPIView,
                                  BankStatementPaymentAPIView,
                                  DynamicManualPaymentsAPIView,
@@ -19,5 +20,6 @@ urlpatterns = [
     path("load-bank-statement/", BankStatementPaymentAPIView.as_view(), name="load-bank-statement"),
     path("bank-statements/", BankStatementAPIView.as_view(), name="bank-statements"),
     path("lipa-na-mpesa/", LipaNaMpesaAPIView.as_view(), name="lipa-na-mpesa"),
+    path("lipa-premium/", LipaPremiumNaMpesaAPIView.as_view(), name="lipa-premium"),
     path("lipa-na-mpesa-callback/", LipaNaMpesaCallbackAPIView.as_view(), name="lipa-na-mpesa-callback"),
 ]

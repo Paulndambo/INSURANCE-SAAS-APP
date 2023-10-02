@@ -41,8 +41,8 @@ def mpesa_response(r):
 
 
 MPESA_SHORT_CODE = "174379"
-MPESA_CONSUMER_KEY = "3iHxtjt9AtK4SG20B0cTeLnorOGN7uGW"
-MPESA_CONSUMER_SECRET = "w4lMnnlAXS0He8nU"
+MPESA_CONSUMER_KEY = "cpoEw7Py2G54mwU1eKeoaR4b1XlqXRPk"
+MPESA_CONSUMER_SECRET = "rBzDkBuvU0nxk9av"
 MPESA_CHECKOUT_URL = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
 MPESA_ACCESS_TOKEN_URL = "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials"
 MPESA_PASS_KEY = "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919"

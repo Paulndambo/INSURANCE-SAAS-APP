@@ -6,7 +6,10 @@ from apps.payments.models import (BankStatement, FuturePremiumTracking,
 
 # Register your models here.
 admin.site.register(MpesaResponseData)
-admin.site.register(MpesaTransaction)
+
+@admin.register(MpesaTransaction)
+class MpesaTransactionAdmin(admin.ModelAdmin):
+    list_display = ["MpesaReceiptNumber", "membership", "payer_id_number", "Amount", "ResultDesc"]
 
 @admin.register(PolicyPremium)
 class PolicyPremiumAdmin(admin.ModelAdmin):

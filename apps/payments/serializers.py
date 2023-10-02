@@ -43,6 +43,8 @@ class BankStatementPaymentSerializer(serializers.Serializer):
 class LipaNaMpesaSerializer(serializers.Serializer):
     phone_number = serializers.CharField(max_length=15)
     amount = serializers.IntegerField(default=0)
+    premium = serializers.IntegerField(required=False)
+    id_number = serializers.CharField(max_length=255, required=False)
     
 
 class LipaNaMpesaCallbackSerializer(serializers.Serializer):
