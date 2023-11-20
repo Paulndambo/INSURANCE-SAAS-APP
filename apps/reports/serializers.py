@@ -1,18 +1,12 @@
 from rest_framework import serializers
-from apps.users.models import (
-    Profile,
-    Membership,
-    MembershipConfiguration,
-    User
-)
-from apps.policies.models import (
-    Policy,
-    Cycle,
-    CycleStatusUpdates
-)
-from apps.schemes.models import Scheme, SchemeGroup
-from apps.dependents.models import Dependent, Beneficiary
+
+from apps.dependents.models import Beneficiary, Dependent
+from apps.policies.models import Cycle, CycleStatusUpdates, Policy
 from apps.prices.models import PricingPlan
+from apps.schemes.models import Scheme, SchemeGroup
+from apps.users.models import (Membership, MembershipConfiguration, Profile,
+                               User)
+
 
 class PolicyHolderReportSerializer(serializers.ModelSerializer):
     created = serializers.SerializerMethodField()
